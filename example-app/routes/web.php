@@ -12,8 +12,13 @@ Route::get('/h', function () {
 
 
 });
-Route::get('/add-user', function () {
-    return view('pages.user  ');
+Route::get('/add', function () {
+    return view('pages.add-user  ');
+
+
+});
+Route::get('/manage', function () {
+    return view('pages.manage-user  ');
 
 
 });
