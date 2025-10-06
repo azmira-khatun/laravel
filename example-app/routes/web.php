@@ -17,6 +17,12 @@ Route::get('/add-user', function () {
 
 
 });
+Route::get('/master', function () {
+    return view('master  ');
+
+
+});
+
 
 
 
