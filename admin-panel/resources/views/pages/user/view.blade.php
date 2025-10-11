@@ -1,5 +1,5 @@
 @extends('master')
-@section('page')
+@section('content')
 <div class="card">
 <div class="header pb-5 pt-5 pt-lg-8 d-flex align-items-center" style="min-height: 50px; background-image: url(../assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
   <!-- Mask -->

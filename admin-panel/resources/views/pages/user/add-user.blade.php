@@ -1,6 +1,6 @@
 @extends('master')
 
-@section('page')
+@section('content')
 <div class="card bg-primary-subtle p-5 w-100">
   <!-- Full-width background container -->
   <div class="bg-info-subtle p-5 rounded w-100 mt-5">
