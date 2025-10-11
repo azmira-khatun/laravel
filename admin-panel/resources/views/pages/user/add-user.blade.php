@@ -1,35 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('master')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+@section('page')
+<div class="card bg-primary-subtle p-5 w-100">
+  <!-- Full-width background container -->
+  <div class="bg-info-subtle p-5 rounded w-100 mt-5">
 
-<body>
-    <div class="container mt-5">
-        <h2>User Registration Form</h2>
+    <!-- Centered form inside full-width container -->
+    <div class="d-flex justify-content-center">
+      <form method="POST" action="{{ route('userStore') }}" class="w-100" style="max-width: 500px;">
+        @csrf
+        <h1 class="text-center mb-4">Add Users</h1>
 
-        <form>
-            <div class="mb-3">
-                <label for="exampleInputName" class="form-label">Name</label>
-                <input type="text" class="form-control" id="exampleInputName" aria-describedby="nameHelp">
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputAddress" class="form-label">Address</label>
-                <input type="text" class="form-control" id="exampleInputAddress">
-            </div>
-            <div class="mb-3">
-                <label for="exampleContact" class="form-label">Contact</label>
-                <input type="text" class="form-control" id="exampleContact">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-</body>
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" name="name" class="form-control" required>
+        </div>
 
-</html>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">PASSWORD</label>
+          <input type="number" name="password" class="form-control" required>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary form-control">Submit</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+@endsection
