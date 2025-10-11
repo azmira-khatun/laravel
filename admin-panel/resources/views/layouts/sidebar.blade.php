@@ -55,27 +55,14 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="/add-user" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>
                                     Users
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/add-user" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Add User</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="pages/manage-users.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Manage Users</p>
-                                    </a>
-                                </li>
-                            </ul>
+
                         </li>
 
                         <li class="nav-item">
