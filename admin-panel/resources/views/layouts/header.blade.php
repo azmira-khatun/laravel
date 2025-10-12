@@ -1,69 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
- <link rel="stylesheet" href="http://example.com/assets-admin/plugins/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="http://example.com/assets-admin/plugins/fontawesome/css/all.min.css">
 
- <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
-<link rel="stylesheet" href="{{asset('assets-admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
- <link rel="stylesheet" href="{{asset('assets-admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+  <link rel="stylesheet"
+    href="{{asset('assets-admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
+  <link rel="stylesheet" href="{{asset('assets-admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
 
-<link rel="stylesheet" href="{{asset('assets-admin/plugins/jqvmap/jqvmap.min.css')}}">
+  <link rel="stylesheet" href="{{asset('assets-admin/plugins/jqvmap/jqvmap.min.css')}}">
 
- <link rel="stylesheet" href="{{asset('assets-admin/dist/css/adminlte.min.css')}}">
-<style>
-
+  <link rel="stylesheet" href="{{asset('assets-admin/dist/css/adminlte.min.css')}}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
     /* Navbar background primary color & text white */
-  .main-header.navbar {
-      background-color: #007bff !important; /* Primary color */
-      color: #ffffff !important;            /* Text white */
-  }
-
-  /* Navbar links & icons white */
-  .main-header .nav-link,
-  .main-header .navbar-nav .nav-item .nav-link i,
-  .main-header .navbar-nav .nav-item .badge {
+    .main-header.navbar {
+      background-color: #9dc6f1ff !important;
+      /* Primary color */
       color: #ffffff !important;
-  }
+      /* Text white */
+    }
 
-  /* Navbar search input background & text */
-  .main-header .form-control-navbar {
+    /* Navbar links & icons white */
+    .main-header .nav-link,
+    .main-header .navbar-nav .nav-item .nav-link i,
+    .main-header .navbar-nav .nav-item .badge {
+      color: #ffffff !important;
+    }
+
+    /* Navbar search input background & text */
+    .main-header .form-control-navbar {
       background-color: rgba(255, 255, 255, 0.2) !important;
-      color: #ffffff !important;
-  }
+      color: #ced5dbff !important;
+    }
 
-  /* Navbar search button icon white */
-  .main-header .btn-navbar i {
+    /* Navbar search button icon white */
+    .main-header .btn-navbar i {
       color: #ffffff !important;
-  }
+    }
+
     /* Sidebar-er Background Color */
-    .main-sidebar, .sidebar-dark .nav-sidebar > .nav-item > .nav-link.active, .sidebar-dark .nav-sidebar > .nav-item:hover > .nav-link {
-      background-color: #2dbde093 !important;
+    .main-sidebar,
+    .sidebar-dark .nav-sidebar>.nav-item>.nav-link.active,
+    .sidebar-dark .nav-sidebar>.nav-item:hover>.nav-link {
+      background-color: #e6f7f893 !important;
     }
 
 
-    .main-sidebar .nav-link, .main-sidebar .user-panel > .info > a, .main-sidebar .brand-text, .main-sidebar .brand-link .image, .main-sidebar .nav-icon {
-      color: #FFFFFF !important;
+    .main-sidebar .nav-link,
+    .main-sidebar .user-panel>.info>a,
+    .main-sidebar .brand-text,
+    .main-sidebar .brand-link .image,
+    .main-sidebar .nav-icon {
+      color: #130c0cff !important;
     }
 
     /* Search input box-er background transparent ebong text white korar jonne */
     .sidebar-search .form-control-sidebar {
-        background-color: transparent !important;
-        color: #FFFFFF !important;
+      background-color: transparent !important;
+      color: #FFFFFF !important;
     }
 
     /* Sidebar-er brand link-er bottom border-ti halka kore dilam */
     .brand-link {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
-
   </style>
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{asset('assets-admin/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
@@ -72,6 +83,7 @@
   <!-- summernote -->
   <link rel="stylesheet" href="{{asset('assets-admin/plugins/summernote/summernote-bs4.min.css')}}">
 </head>
+
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 
-<div class="wrapper">
+  <div class="wrapper">

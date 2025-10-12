@@ -7,7 +7,6 @@ Route::get('/', function () {
     return view('master');
 });
 
-Route::get('/home', [HomeController::class, 'index']);
 Route::get('/add-user', [UserController::class, 'index']);
 Route::get('/userCreate', [UserController::class, 'create'])->name('userCreate');
 
