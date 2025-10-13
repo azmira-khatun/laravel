@@ -71,8 +71,8 @@
                             <span class="badge badge-info right">6</span>
                         </p>
                     </a>
-
                 </li>
+
                 <li class="nav-item">
                     <a href="/add-user" class="nav-link">
                         <i class="bi bi-cart-check-fill"></i>
