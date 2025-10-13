@@ -23,12 +23,12 @@
   <link rel="stylesheet" href="{{asset('assets-admin/dist/css/adminlte.min.css')}}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <style>
-    /* Navbar background primary color & text white */
+    /* 🔹 Navbar color change */
     .main-header.navbar {
-      background-color: #9dc6f1ff !important;
-      /* Primary color */
+      background-color: #9dc6f1 !important;
+      /* তোমার পছন্দের রঙ */
       color: #ffffff !important;
-      /* Text white */
+      /* টেক্সট সাদা */
     }
 
     /* Navbar links & icons white */
@@ -48,6 +48,32 @@
     .main-header .btn-navbar i {
       color: #ffffff !important;
     }
+
+    /* 🔹 Sidebar search box input field background change */
+    .form-control-sidebar {
+      background-color: #ffffff !important;
+      /* তোমার পছন্দের রঙ */
+      color: #000000 !important;
+      /* টেক্সট কালো */
+      border: 1px solid #ccc !important;
+      /* হালকা বর্ডার চাইলে */
+    }
+
+    /* 🔹 Search button (icon area) background & icon color change */
+    .btn-sidebar {
+      background-color: #9dc6f1 !important;
+      /* তোমার পছন্দমতো রঙ */
+      color: #000000 !important;
+      /* আইকন কালার */
+      border: none !important;
+    }
+
+    /* Optional: placeholder color light gray */
+    .form-control-sidebar::placeholder {
+      color: #666 !important;
+    }
+
+
 
     /* Sidebar-er Background Color */
     .main-sidebar,
@@ -71,9 +97,22 @@
       color: #FFFFFF !important;
     }
 
-    /* Sidebar-er brand link-er bottom border-ti halka kore dilam */
+    /* 🔹 Brand Logo (AdminLTE 3) background color change */
     .brand-link {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      background-color: #f5b87fff !important;
+      /* তোমার পছন্দের রঙ */
+      color: #000000 !important;
+      /* টেক্সটের রঙ কালো */
+    }
+
+    /* 🔹 Logo text color */
+    .brand-link .brand-text {
+      color: #000000 !important;
+    }
+
+    /* 🔹 Logo image opacity normal (optional) */
+    .brand-link .brand-image {
+      opacity: 1 !important;
     }
   </style>
   <!-- overlayScrollbars -->
