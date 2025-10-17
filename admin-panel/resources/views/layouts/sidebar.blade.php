@@ -73,16 +73,49 @@
                     </a>
                 </li>
 
+
+
                 <li class="nav-item">
-                    <a href="/add-user" class="nav-link">
+                    <a href="/add-product" class="nav-link">
                         <i class="bi bi-cart-check-fill"></i>
                         <p>
-                            product
+                            Product
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
 
                 </li>
+
+                 <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-shipping-fast"></i>
+                        <p>
+                            Vendors
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+<i class="bi bi-people-fill"></i>                        <p>
+                            Customers
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                            <i class="bi bi-receipt"></i>
+                            <p>
+                            Purchases
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+
+                </li>
+
 
             </ul>
         </nav>
