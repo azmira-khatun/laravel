@@ -88,8 +88,8 @@
 
                  <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-shipping-fast"></i>
-                        <p>
+                    <i class="bi bi-person-heart"></i>
+                                           <p>
                             Vendors
                             <i class="right fas fa-angle-left"></i>
                         </p>
@@ -115,6 +115,15 @@
                     </a>
 
                 </li>
+                 <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="bi bi-receipt"></i>
+                                           <p>
+                            Sales
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    </li>
 
 
             </ul>
