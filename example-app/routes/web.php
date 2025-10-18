@@ -1,34 +1,55 @@
 <?php
 
+use App\Http\Controllers\OneToOneController;
 use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application.
+|
+*/
+
+// --- 1. Basic App Routes ---
 
 Route::get('/', function () {
     return view('welcome');
-
-
 });
+
+// Home Page
 Route::get('/h', function () {
-    return view('home  ');
-
-
+    return view('home');
 });
+
+// Add User Page
 Route::get('/add', function () {
-    return view('pages.add-user  ');
-
-
+    // Note: Removed extra spaces from view name 'pages.add-user'
+    return view('pages.add-user');
 });
+
+// Manage User Page
 Route::get('/manage', function () {
-    return view('pages.manage-user  ');
-
-
+    // Note: Removed extra spaces from view name 'pages.manage-user'
+    return view('pages.manage-user');
 });
+
+// Master Layout Test Page
 Route::get('/master', function () {
-    return view('master  ');
-
-
+    return view('master');
 });
 
+// --- 2. One-to-One Profile Management Routes ---
 
+// Profile Show Route (Uses OneToOneController::show)
+// URL: /profile/{id}
+Route::get('/profile/{id}', [OneToOneController::class, 'show'])->name('profile.show');
 
+// Profile Edit Form Route (Uses OneToOneController::edit)
+// URL: /profile/{id}/edit
+Route::get('/profile/{id}/edit', [OneToOneController::class, 'edit'])->name('profile.edit');
 
-
+// Profile Update Route (Uses OneToOneController::update)
+// URL: /profile/{id} (via PUT method)
+Route::put('/profile/{id}', [OneToOneController::class, 'update'])->name('profile.update');
