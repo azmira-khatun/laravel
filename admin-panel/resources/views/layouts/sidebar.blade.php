@@ -76,7 +76,7 @@
 
 
                 <li class="nav-item">
-                    <a href="/add-product" class="nav-link">
+                    <a href="/products" class="nav-link">
                         <i class="bi bi-cart-check-fill"></i>
                         <p>
                             Product
@@ -124,6 +124,84 @@
                         </p>
                     </a>
                     </li>
+                     <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-warehouse"></i>
+                        <p>
+                            Inventory
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="home.php?page=21" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Stock</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="home.php?page=24" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Expired Products</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-chart-line"></i>
+                        <p>
+                            Reports
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="home.php?page=26" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Purchase Report</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="home.php?page=27" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Sales Report</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="home.php?page=28" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Inventory Report</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="home.php?page=29" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Profit/Loss Report</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="home.php?page=30" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Customers Report</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="home.php?page=31" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Vendors Report</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="logout.php" class="nav-link">
+                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
 
 
             </ul>
