@@ -52,7 +52,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="/add-user" class="nav-link">
+                    <a href="/users" class="nav-link">
                         <i class="bi bi-people-fill"></i>
                         <p>
                             Users
@@ -86,10 +86,10 @@
 
                 </li>
 
-                 <li class="nav-item">
+                <li class="nav-item">
                     <a href="#" class="nav-link">
-                    <i class="bi bi-person-heart"></i>
-                                           <p>
+                        <i class="bi bi-person-heart"></i>
+                        <p>
                             Vendors
                             <i class="right fas fa-angle-left"></i>
                         </p>
@@ -98,7 +98,8 @@
 
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-<i class="bi bi-people-fill"></i>                        <p>
+                        <i class="bi bi-people-fill"></i>
+                        <p>
                             Customers
                             <i class="right fas fa-angle-left"></i>
                         </p>
@@ -107,24 +108,24 @@
 
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                            <i class="bi bi-receipt"></i>
-                            <p>
+                        <i class="bi bi-receipt"></i>
+                        <p>
                             Purchases
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
 
                 </li>
-                 <li class="nav-item">
+                <li class="nav-item">
                     <a href="#" class="nav-link">
-                    <i class="bi bi-receipt"></i>
-                                           <p>
+                        <i class="bi bi-receipt"></i>
+                        <p>
                             Sales
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-                    </li>
-                     <li class="nav-item">
+                </li>
+                <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-warehouse"></i>
                         <p>

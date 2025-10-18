@@ -8,53 +8,67 @@ use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
 {
+    // ✅ Show all users (route: /users)
     public function index()
     {
-        $user = User::all();
-        return view('pages.user.view', compact('user'));
+        $users = User::all();
+        return view('pages.user.view', compact('users'));
     }
 
+    // ✅ Show the user creation form (route: /add-user)
     public function create()
     {
         return view('pages.user.add-user');
     }
 
+    // ✅ Store a new user (route: POST /userStore)
     public function store(Request $request)
     {
+        // Validation (optional but recommended)
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+        ]);
 
-        user::create($request->only([
-            'name',
-            'email',
-            'password',
-        ]));
-        // dd($request->all());
+        // Create user
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password, // You can later hash it if needed
+        ]);
 
-
-        return Redirect::to('/add-user');
+        // Redirect back to the users list
+        return Redirect::route('user.index');
     }
 
-
+    // ✅ Delete a user (route: DELETE /delete)
     public function destroy(Request $request)
     {
-        $uid = user::find($request->user_id);
-        $uid->delete();
-        return Redirect::to('/add-user');
+        $user = User::findOrFail($request->user_id);
+        $user->delete();
+
+        return Redirect::route('user.index');
     }
 
-
+    // ✅ Show edit form (route: GET /userEdit/{user_id})
     public function update($user_id)
     {
-        $u = User::find($user_id);
-        return view('pages.user.edit', compact('u'));
+        $user = User::findOrFail($user_id);
+        return view('pages.user.edit', compact('user'));
     }
 
+    // ✅ Update user info (route: POST /editStoreU)
     public function editStoreU(Request $request)
     {
-        $u = User::find($request->user_id);
-        $u->name = $request->name;
-        $u->email = $request->email;
-        $u->password = $request->password;
-        $u->save();
-        return Redirect::to('/add-user');
+        $user = User::findOrFail($request->user_id);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password,
+        ]);
+
+        return Redirect::route('user.index');
     }
 }
