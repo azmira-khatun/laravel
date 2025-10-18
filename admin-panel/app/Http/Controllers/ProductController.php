@@ -11,13 +11,13 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::with('category')->get();
-        return view('pages.viewProduct', compact('products'));
+        return view('pages.product.viewProduct', compact('products'));
     }
 
     public function create()
     {
         $categories = Category::all();
-        return view('createProduct', compact('categories'));
+        return view('pages.product.createProduct', compact('categories'));
     }
 
     public function store(Request $request)
@@ -44,7 +44,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $categories = Category::all();
-        return view('editProduct', compact('product', 'categories'));
+        return view('pages.product.editProduct', compact('product', 'categories'));
     }
 
     public function update(Request $request, $id)
