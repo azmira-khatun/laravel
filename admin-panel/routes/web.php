@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\VendorController;
 
 Route::get('/', function () {
     return view('master');
@@ -38,3 +39,16 @@ Route::post('/products', [ProductController::class, 'store'])->name('productStor
 Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('productEdit');
 Route::put('/products/{id}', [ProductController::class, 'update'])->name('productUpdate');
 Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('productDelete');
+
+// vendor start
+
+
+
+
+Route::get('/vendors', [VendorController::class, 'index'])->name('vendorIndex');
+Route::get('/vendors/create', [VendorController::class, 'create'])->name('vendorCreate');
+Route::post('/vendors', [VendorController::class, 'store'])->name('vendorStore');
+Route::get('/vendors/{vendor}', [VendorController::class, 'show'])->name('vendorShow');
+Route::get('/vendors/{vendor}/edit', [VendorController::class, 'edit'])->name('vendorEdit');
+Route::put('/vendors/{vendor}', [VendorController::class, 'update'])->name('vendorUpdate');
+Route::delete('/vendors/{vendor}', [VendorController::class, 'destroy'])->name('vendorDelete');

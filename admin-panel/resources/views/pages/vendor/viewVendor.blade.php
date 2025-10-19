@@ -3,78 +3,54 @@
 @section('content')
 <div class="card mt-4">
     <div class="card-header d-flex justify-content-between align-items-center">
-        {{-- ধরে নেওয়া হচ্ছে $vendor ভেরিয়েবলটি কন্ট্রোলার থেকে আসছে --}}
-        <h3>Vendor Details: {{ $vendor->name }}</h3>
-        <a href="{{ route('vendors.index') }}" class="btn btn-secondary btn-sm">
-            <i class="fas fa-arrow-left"></i> Back to List
-        </a>
+        <h3>Vendor List</h3>
+        <a href="{{ route('vendorCreate') }}" class="btn btn-primary btn-sm">Add New Vendor</a>
     </div>
     <div class="card-body">
-        <div class="row">
-            {{-- 1. Name --}}
-            <div class="col-md-6 mb-3">
-                <p><strong>Vendor Name:</strong></p>
-                <p class="form-control-plaintext">{{ $vendor->name }}</p>
-            </div>
+        @if(session('message'))
+            <div class="alert alert-success">{{ session('message') }}</div>
+        @endif
 
-            {{-- 2. Email --}}
-            <div class="col-md-6 mb-3">
-                <p><strong>Email:</strong></p>
-                <p class="form-control-plaintext">{{ $vendor->email ?? 'N/A' }}</p>
-            </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>TIN Number</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{-- $vendors ভ্যারিয়েবলটি Controller থেকে আসা আবশ্যক --}}
+                @foreach($vendors as $vendor)
+                <tr>
+                    <td>{{ $vendor->id }}</td>
+                    <td>{{ $vendor->name }}</td>
+                    <td>{{ $vendor->email }}</td>
+                    <td>{{ $vendor->phone }}</td>
+                    <td>{{ $vendor->tin_number }}</td>
+                    <td>
 
-            {{-- 3. Phone --}}
-            <div class="col-md-6 mb-3">
-                <p><strong>Phone Number:</strong></p>
-                <p class="form-control-plaintext">{{ $vendor->phone ?? 'N/A' }}</p>
-            </div>
+                        {{-- Edit --}}
+                        <a href="{{ route('vendorEdit', $vendor->id) }}" class="btn btn-warning btn-sm">Edit</a>
 
-            {{-- 4. TIN Number --}}
-            <div class="col-md-6 mb-3">
-                <p><strong>TIN Number (Tax ID):</strong></p>
-                <p class="form-control-plaintext">{{ $vendor->tin_number ?? 'N/A' }}</p>
-            </div>
-        </div>
+                        {{-- Delete --}}
+                        <form action="{{ route('vendorDelete', $vendor->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete {{ $vendor->name }}?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
 
-        <hr>
-
-        {{-- 5. Address (Full Width) --}}
-        <div class="row">
-            <div class="col-12 mb-3">
-                <p><strong>Address:</strong></p>
-                <p class="form-control-plaintext">{{ $vendor->address ?? 'N/A' }}</p>
-            </div>
-        </div>
-
-        {{-- 6. Bank Details (Full Width) --}}
-        <div class="row">
-            <div class="col-12 mb-3">
-                <p><strong>Bank Details:</strong></p>
-                <p class="form-control-plaintext">{{ $vendor->bank_details ?? 'N/A' }}</p>
-            </div>
-        </div>
-
-        <hr>
-
-        <div class="row">
-            <div class="col-md-6">
-                <p class="text-muted">Created At: {{ $vendor->created_at->format('M d, Y h:i A') }}</p>
-            </div>
-            <div class="col-md-6">
-                <p class="text-muted">Last Updated: {{ $vendor->updated_at->format('M d, Y h:i A') }}</p>
-            </div>
-        </div>
-
-        {{-- Edit এবং Delete বাটন --}}
-        <div class="mt-4">
-            <a href="{{ route('vendors.edit', $vendor->id) }}" class="btn btn-warning">Edit Vendor</a>
-
-            {{-- Delete Form --}}
-            <form action="{{ route('vendors.destroy', $vendor->id) }}" method="POST" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this vendor?');">Delete Vendor</button>
-            </form>
+        {{-- Pagination Links --}}
+        <div class="d-flex justify-content-center">
+            {{ $vendors->links() }}
         </div>
     </div>
 </div>

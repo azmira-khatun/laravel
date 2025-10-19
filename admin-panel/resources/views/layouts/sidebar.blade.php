@@ -87,7 +87,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/vendors" class="nav-link">
                         <i class="bi bi-person-heart"></i>
                         <p>
                             Vendors
