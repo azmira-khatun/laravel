@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable(); // optional user relation
+
+            // For One-to-One relation:
+            $table->unsignedBigInteger('user_id')->unique(); // **1. UNIQUE যোগ করা হলো**
+
+            // **2. Foreign Key Constraint যোগ করা হলো**
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
             $table->string('name');
             $table->string('email');
             $table->string('phone')->nullable();

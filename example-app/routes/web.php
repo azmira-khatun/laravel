@@ -40,8 +40,7 @@ Route::get('/master', function () {
     return view('master');
 });
 // --- 2. One-to-One Profile Management Routes ---
-
-Route::get('/profile', [OneToOneController::class, 'show'])->name('profile.show')->middleware('auth');
+Route::get('/profile', [OneToOneController::class, 'show'])->name('profile.show');
 
 Route::get('/profile/{id}/edit', [OneToOneController::class, 'edit'])->name('profile.edit');
 
