@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 19, 2025 at 02:39 AM
+-- Generation Time: Oct 19, 2025 at 08:12 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -72,6 +72,52 @@ CREATE TABLE `cache_locks` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cars`
+--
+
+CREATE TABLE `cars` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `mechanie_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `cars`
+--
+
+INSERT INTO `cars` (`id`, `name`, `mechanie_id`, `created_at`, `updated_at`) VALUES
+(1, 'Toyota', 1, '2025-10-15 05:45:22', '2025-10-15 05:45:22'),
+(2, 'Bike', 2, '2025-10-23 05:45:22', '2025-10-23 05:45:22');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `comments`
+--
+
+CREATE TABLE `comments` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `post_id` bigint(20) UNSIGNED NOT NULL,
+  `content` text NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `comments`
+--
+
+INSERT INTO `comments` (`id`, `post_id`, `content`, `created_at`, `updated_at`) VALUES
+(1, 1, 'done', '2025-10-18 03:08:34', '2025-10-18 03:08:34'),
+(2, 1, 'ok', '2025-10-25 03:08:34', '2025-10-25 03:08:34'),
+(3, 2, 'ok', '2025-10-24 03:10:06', '2025-10-24 03:10:06'),
+(4, 2, 'fdhfvbgh', '2025-10-23 03:10:06', '2025-10-23 03:10:06');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `failed_jobs`
 --
 
@@ -123,6 +169,27 @@ CREATE TABLE `job_batches` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `mechanies`
+--
+
+CREATE TABLE `mechanies` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `mechanies`
+--
+
+INSERT INTO `mechanies` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(1, 'Rana', '2025-10-24 05:48:05', '2025-10-24 05:48:05'),
+(2, 'Raju', '2025-10-31 05:48:05', '2025-10-31 05:48:05');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `migrations`
 --
 
@@ -143,7 +210,34 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (4, '2025_10_18_175229_create_profiles_table', 1),
 (5, '2025_10_18_065850_create_brands_table', 2),
 (6, '2025_10_18_065910_create_products_table', 2),
-(7, '2025_10_18_070109_create_brand_product_table', 2);
+(7, '2025_10_18_070109_create_brand_product_table', 2),
+(8, '2025_10_19_010029_create_posts_table', 3),
+(9, '2025_10_19_010048_create_comments_table', 3),
+(10, '2025_10_19_040525_create_cars_table', 4),
+(11, '2025_10_19_040928_create_mechanies_table', 4),
+(12, '2025_10_19_041021_create_owners_table', 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `owners`
+--
+
+CREATE TABLE `owners` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `car_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `owners`
+--
+
+INSERT INTO `owners` (`id`, `name`, `car_id`, `created_at`, `updated_at`) VALUES
+(1, 'Azmira', 1, '2025-10-24 05:46:46', '2025-10-23 05:46:46'),
+(2, 'Mira', 2, '2025-10-23 05:46:46', '2025-10-24 05:46:46');
 
 -- --------------------------------------------------------
 
@@ -156,6 +250,28 @@ CREATE TABLE `password_reset_tokens` (
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `posts`
+--
+
+CREATE TABLE `posts` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `body` text NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `posts`
+--
+
+INSERT INTO `posts` (`id`, `title`, `body`, `created_at`, `updated_at`) VALUES
+(1, 'Post comment1', 'POst successfull', '2025-10-15 01:06:20', '2025-10-15 01:06:20'),
+(2, 'Post2', 'post 2 successfull', '2025-10-16 01:06:20', '2025-10-16 01:06:20');
 
 -- --------------------------------------------------------
 
@@ -263,6 +379,19 @@ ALTER TABLE `cache_locks`
   ADD PRIMARY KEY (`key`);
 
 --
+-- Indexes for table `cars`
+--
+ALTER TABLE `cars`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `comments_post_id_foreign` (`post_id`);
+
+--
 -- Indexes for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -283,9 +412,21 @@ ALTER TABLE `job_batches`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `mechanies`
+--
+ALTER TABLE `mechanies`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `owners`
+--
+ALTER TABLE `owners`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -293,6 +434,12 @@ ALTER TABLE `migrations`
 --
 ALTER TABLE `password_reset_tokens`
   ADD PRIMARY KEY (`email`);
+
+--
+-- Indexes for table `posts`
+--
+ALTER TABLE `posts`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `products`
@@ -339,6 +486,18 @@ ALTER TABLE `brand_product`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `cars`
+--
+ALTER TABLE `cars`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -351,10 +510,28 @@ ALTER TABLE `jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `mechanies`
+--
+ALTER TABLE `mechanies`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `owners`
+--
+ALTER TABLE `owners`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `posts`
+--
+ALTER TABLE `posts`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -377,6 +554,12 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `comments`
+--
+ALTER TABLE `comments`
+  ADD CONSTRAINT `comments_post_id_foreign` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `profiles`
