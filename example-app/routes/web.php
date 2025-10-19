@@ -49,7 +49,7 @@ Route::put('/profile/{id}', [OneToOneController::class, 'update'])->name('profil
 
 
 
-
+// OneToMany relation
 
 Route::get('/documents', [OneToManyController::class, 'index'])->name('documents.index');
 
