@@ -13,8 +13,7 @@ class HasOneThroughController extends Controller
     public function index()
     {
         $posts = Mechanie::with('carOwner')->get();
-        return $posts;
-        // return view('index', compact('posts'));
-
+        // return $posts;
+        return view('relation_table.index', compact('posts'));
     }
 }
