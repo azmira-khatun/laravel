@@ -53,8 +53,6 @@ class User extends Authenticatable
 
     public function profile()
     {
-        // hasOne মেথডটি বোঝায় যে এই User-এর ID-টি Profile টেবিলের
-        // user_id কলামে Foreign Key হিসেবে ব্যবহৃত হবে।
         return $this->hasOne(Profile::class);
     }
 }

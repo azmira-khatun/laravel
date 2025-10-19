@@ -10,7 +10,7 @@ class OneToOneController extends Controller
  public function show()
     {
         $profiles = Profile::all();
-        // return $profiles;
-        return view('show', compact('profiles'));
+        return $profiles;
+        // return view('show', compact('profiles'));
     }
 }

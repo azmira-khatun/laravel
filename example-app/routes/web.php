@@ -39,17 +39,10 @@ Route::get('/manage', function () {
 Route::get('/master', function () {
     return view('master');
 });
-
 // --- 2. One-to-One Profile Management Routes ---
 
-// Profile Show Route (Uses OneToOneController::show)
-// URL: /profile/{id}
-Route::get('/profile/{id}', [OneToOneController::class, 'show'])->name('profile.show');
+Route::get('/profile', [OneToOneController::class, 'show'])->name('profile.show')->middleware('auth');
 
-// Profile Edit Form Route (Uses OneToOneController::edit)
-// URL: /profile/{id}/edit
 Route::get('/profile/{id}/edit', [OneToOneController::class, 'edit'])->name('profile.edit');
 
-// Profile Update Route (Uses OneToOneController::update)
-// URL: /profile/{id} (via PUT method)
 Route::put('/profile/{id}', [OneToOneController::class, 'update'])->name('profile.update');
