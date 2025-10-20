@@ -15,6 +15,9 @@ Route::get('/', function () {
 Route::get('/master', function () {
     return view('master');
 });
+Route::get('/dashboard', function () {
+    return view('pages.dashboard.dashboardCard');
+});
 Route::get('/users', [UserController::class, 'index'])->name('user.index'); // New path: /users
 Route::get('/add-user', [UserController::class, 'create'])->name('userCreate'); // Let /add-user be the actual creation form
 Route::post('userStore', [UserController::class, 'store'])->name('userStore');
