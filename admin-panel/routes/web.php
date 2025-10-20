@@ -54,9 +54,7 @@ Route::get('/vendors/{vendor}/edit', [VendorController::class, 'edit'])->name('v
 Route::put('/vendors/{vendor}', [VendorController::class, 'update'])->name('vendorUpdate');
 Route::delete('/vendors/{vendor}', [VendorController::class, 'destroy'])->name('vendorDelete');
 
-// Customer start
-
-
+// Customer CRUD Routes
 Route::get('/customers', [CustomerController::class, 'index'])->name('customerIndex');
 Route::get('/customers/create', [CustomerController::class, 'create'])->name('customerCreate');
 Route::post('/customers', [CustomerController::class, 'store'])->name('customerStore');

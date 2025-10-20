@@ -4,7 +4,7 @@
 <div class="card mt-4">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h3>Customer List</h3>
-        <a href="{{ route('customers.create') }}" class="btn btn-primary btn-sm">Add New Customer</a>
+        <a href="{{ route('customerCreate') }}" class="btn btn-primary btn-sm">Add New Customer</a>
     </div>
     <div class="card-body">
         @if(session('message'))
@@ -27,17 +27,15 @@
                 <tr>
                     <td>{{ $customer->id }}</td>
                     <td>
-                        <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->name }}</a>
+                        <a href="{{ route('customerShow', $customer->id) }}">{{ $customer->name }}</a>
                     </td>
                     <td>{{ $customer->email }}</td>
                     <td>{{ $customer->contact }}</td>
                     <td>{{ Str::limit($customer->address, 30) }}</td>
                     <td>
-                        {{-- Edit Button --}}
-                        <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ route('customerEdit', $customer->id) }}" class="btn btn-warning btn-sm">Edit</a>
 
-                        {{-- Delete Button --}}
-                        <form action="{{ route('customers.destroy', $customer->id) }}" method="POST" style="display:inline;">
+                        <form action="{{ route('customerDelete', $customer->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete {{ $customer->name }}?');">Delete</button>
@@ -52,7 +50,6 @@
             </tbody>
         </table>
 
-        {{-- Pagination Links --}}
         <div class="d-flex justify-content-center">
             {{ $customers->links() }}
         </div>

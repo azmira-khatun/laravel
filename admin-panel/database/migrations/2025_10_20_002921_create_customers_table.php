@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('customers', function (Blueprint $table) {
-            $table->id(); // Primary Key (id)
+            $table->id();
             $table->string('name', 255);
             $table->string('email', 255)->unique();
             $table->string('contact', 20)->nullable();
             $table->text('address')->nullable();
-            $table->timestamps(); // created_at and updated_at
-            $table->softDeletes(); // deleted_at (Soft Delete-এর জন্য)
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
