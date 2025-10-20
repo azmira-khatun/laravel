@@ -7,7 +7,12 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\CustomerController;
 
+
+
 Route::get('/', function () {
+    return view('portal');
+});
+Route::get('/master', function () {
     return view('master');
 });
 Route::get('/users', [UserController::class, 'index'])->name('user.index'); // New path: /users
