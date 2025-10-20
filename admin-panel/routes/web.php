@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
+use App\Http\Controllers\CustomerController;
 
 Route::get('/', function () {
     return view('master');
@@ -52,3 +53,14 @@ Route::get('/vendors/{vendor}', [VendorController::class, 'show'])->name('vendor
 Route::get('/vendors/{vendor}/edit', [VendorController::class, 'edit'])->name('vendorEdit');
 Route::put('/vendors/{vendor}', [VendorController::class, 'update'])->name('vendorUpdate');
 Route::delete('/vendors/{vendor}', [VendorController::class, 'destroy'])->name('vendorDelete');
+
+// Customer start
+
+
+Route::get('/customers', [CustomerController::class, 'index'])->name('customerIndex');
+Route::get('/customers/create', [CustomerController::class, 'create'])->name('customerCreate');
+Route::post('/customers', [CustomerController::class, 'store'])->name('customerStore');
+Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customerShow');
+Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customerEdit');
+Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customerUpdate');
+Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customerDelete');
