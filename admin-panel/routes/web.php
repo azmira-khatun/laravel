@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\PurchaseController;
 
 
 
@@ -70,3 +71,13 @@ Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('
 Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customerEdit');
 Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customerUpdate');
 Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customerDelete');
+
+
+// Purchase CRUD Routes (Explicitly defined - Error-free naming)
+Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchaseIndex');
+Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchaseCreate');
+Route::post('/purchases', [PurchaseController::class, 'store'])->name('purchaseStore');
+Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchaseShow');
+Route::get('/purchases/{purchase}/edit', [PurchaseController::class, 'edit'])->name('purchaseEdit');
+Route::put('/purchases/{purchase}', [PurchaseController::class, 'update'])->name('purchaseUpdate');
+Route::delete('/purchases/{purchase}', [PurchaseController::class, 'destroy'])->name('purchaseDelete');

@@ -3,71 +3,57 @@
 @section('content')
     <div class="card mt-4">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h3>Purchase History Details (ID: {{ $purchase->id ?? 'N/A' }})</h3>
-            {{-- Link back to the main list --}}
+            <h3>Purchase Details (ID: {{ $purchase->id }})</h3>
             <a href="{{ route('purchases.index') }}" class="btn btn-secondary">Back to List</a>
         </div>
         <div class="card-body">
 
-            {{-- 1. General Purchase Information --}}
-            <h4>General Information</h4>
-            <table class="table table-bordered mb-4">
-                <tbody>
-                    <tr>
-                        <th style="width: 25%;">Vendor Name</th>
-                        <td>{{ $purchase->vendor->name ?? 'N/A' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Purchase Date</th>
-                        <td>{{ $purchase->purchase_date ? \Carbon\Carbon::parse($purchase->purchase_date)->format('Y-m-d H:i:s') : 'N/A' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Total Purchase Amount</th>
-                        <td>**{{ number_format($purchase->total_amount ?? 0, 2) }}**</td>
-                    </tr>
-                </tbody>
-            </table>
+            {{-- Purchase Header Info --}}
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <p><strong>Vendor:</strong> {{ $purchase->vendor->name ?? 'N/A' }}</p>
+                    <p><strong>Date Recorded:</strong> {{ $purchase->created_at->format('Y-m-d h:i A') }}</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <h4>Total Purchase Amount: {{ number_format($purchase->total_amount, 2) }}</h4>
+                    <p>Purchase Date: {{ \Carbon\Carbon::parse($purchase->purchase_date)->format('Y-m-d') }}</p>
+                </div>
+            </div>
 
-            {{-- 2. Itemized Product Breakdown --}}
-            <h4>Purchased Items Breakdown</h4>
+            <hr>
+
+            <h4>Items Purchased</h4>
             <div class="table-responsive">
-                <table class="table table-striped table-hover">
+                <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>#</th>
                             <th>Product Name</th>
                             <th>Quantity</th>
-                            <th>Unit Purchase Price</th>
-                            <th>Subtotal</th>
-                            <th>Current Sale Price</th>
-                            <th>Manufacture/Expiry</th>
+                            <th>Unit Price (Cost)</th>
+                            <th>Sub Total</th>
+                            <th>Sale Price</th>
+                            <th>M. Date</th>
+                            <th>E. Date</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- Loop through the items related to this purchase --}}
-                        @forelse($purchase->items ?? [] as $item)
+                        {{-- Assuming $purchase->items is loaded with PurchaseItem models --}}
+                        @foreach ($purchase->items as $item)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->stock->product->product_name ?? 'N/A' }}</td>
+                                <td>{{ $item->product->product_name ?? 'Product Not Found' }}</td>
                                 <td>{{ $item->quantity }}</td>
                                 <td>{{ number_format($item->unit_price, 2) }}</td>
                                 <td>{{ number_format($item->quantity * $item->unit_price, 2) }}</td>
-                                <td>{{ number_format($item->stock->sale_price ?? 0, 2) }}</td>
-                                <td>
-                                    Mfg: {{ $item->stock->manufacture_date ?? 'N/A' }}<br>
-                                    Exp: **{{ $item->stock->expiry_date ?? 'N/A' }}**
+                                <td>{{ number_format($item->sale_price, 2) }}</td>
+                                <td>{{ $item->manufacture_date ? \Carbon\Carbon::parse($item->manufacture_date)->format('Y-m-d') : 'N/A' }}
+                                </td>
+                                <td>{{ $item->expiry_date ? \Carbon\Carbon::parse($item->expiry_date)->format('Y-m-d') : 'N/A' }}
                                 </td>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="text-center">No items recorded for this purchase history.</td>
-                            </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
 @endsection

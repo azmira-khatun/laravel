@@ -14,15 +14,14 @@
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
 
-        <form action="{{ route('purchases.store') }}" method="POST">
+        <form action="{{ route('purchaseStore') }}" method="POST">
             @csrf {{-- Laravel security token --}}
-            
+
             {{-- Vendor Selection --}}
             <div class="form-group mb-3">
                 <label for="vendor_id" class="form-label">Select Vendor</label>
-                <select name="vendor_id" id="vendor_id"
-                        class="form-control @error('vendor_id') is-invalid @enderror"
-                        required>
+                <select name="vendor_id" id="vendor_id" class="form-control @error('vendor_id') is-invalid @enderror"
+                    required>
                     <option value="">Select a Vendor</option>
                     {{-- Assuming $vendors is passed from the controller --}}
                     @foreach ($vendors as $vendor)
@@ -33,11 +32,11 @@
                 </select>
                 @error('vendor_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
-            
+
             <h4 class="mt-4">Product Items</h4>
-            
+
             <div id="productList">
-                {{-- Initial Product Row --}}
+                {{-- Initial Product Row (start with one, clone with JS) --}}
                 <div class="product-row row g-3 border rounded p-3 mb-3">
                     <div class="col-md-12 mb-3">
                         <label class="form-label">Product Name</label>
@@ -49,18 +48,21 @@
                             @endforeach
                         </select>
                     </div>
-                    
+
                     <div class="col-md-2 mb-3">
                         <label class="form-label">Quantity</label>
-                        <input type="number" name="quantity[]" class="form-control quantity-input" min="1" value="1" required>
+                        <input type="number" name="quantity[]" class="form-control quantity-input" min="1" value="1"
+                            required>
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label">Unit Price</label>
-                        <input type="number" step="0.01" name="unit_price[]" class="form-control unit-price-input" min="0" value="0.00" required>
+                        <input type="number" step="0.01" name="unit_price[]" class="form-control unit-price-input"
+                            min="0" value="0.00" required>
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label">Sale Price</label>
-                        <input type="number" step="0.01" name="sale_price[]" class="form-control sale-price-input" min="0" required>
+                        <input type="number" step="0.01" name="sale_price[]" class="form-control sale-price-input"
+                            min="0" required>
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label">Manufacture Date</label>
@@ -83,7 +85,8 @@
             {{-- Total Amount (Read-only, calculated by JS) --}}
             <div class="form-group mb-4">
                 <label for="total_amount" class="form-label">Total Amount</label>
-                <input type="number" step="0.01" name="total_amount" id="total_amount" class="form-control" value="0.00" readonly required>
+                <input type="number" step="0.01" name="total_amount" id="total_amount" class="form-control" value="0.00"
+                    readonly required>
                 @error('total_amount') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
 
@@ -95,7 +98,7 @@
 {{-- JavaScript Section for Dynamic Rows and Calculation --}}
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const productList = document.getElementById('productList');
             const addProductRowBtn = document.getElementById('addProductRowBtn');
             const totalAmountInput = document.getElementById('total_amount');
@@ -105,39 +108,38 @@
 
             function createProductRow() {
                 const productRow = document.createElement('div');
-                // Using border and padding classes for visual separation
-                productRow.className = 'product-row row g-3 border rounded p-3 mb-3'; 
+                productRow.className = 'product-row row g-3 border rounded p-3 mb-3';
                 productRow.innerHTML = `
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label">Product Name</label>
-                        <select name="product_id[]" class="form-control product-select" required>
-                            ${productOptionsHTML}
-                        </select>
-                    </div>
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">Quantity</label>
-                        <input type="number" name="quantity[]" class="form-control quantity-input" min="1" value="1" required>
-                    </div>
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">Unit Price</label>
-                        <input type="number" step="0.01" name="unit_price[]" class="form-control unit-price-input" min="0" value="0.00" required>
-                    </div>
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">Sale Price</label>
-                        <input type="number" step="0.01" name="sale_price[]" class="form-control sale-price-input" min="0" required>
-                    </div>
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">Manufacture Date</label>
-                        <input type="date" name="manufacture_date[]" class="form-control manufacture-date-input">
-                    </div>
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">Expiry Date</label>
-                        <input type="date" name="expiry_date[]" class="form-control expiry-date-input">
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end mb-3">
-                        <button type="button" class="btn btn-danger remove-product-row w-100">Remove</button>
-                    </div>
-                `;
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label">Product Name</label>
+                                    <select name="product_id[]" class="form-control product-select" required>
+                                        ${productOptionsHTML}
+                                    </select>
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    <label class="form-label">Quantity</label>
+                                    <input type="number" name="quantity[]" class="form-control quantity-input" min="1" value="1" required>
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    <label class="form-label">Unit Price</label>
+                                    <input type="number" step="0.01" name="unit_price[]" class="form-control unit-price-input" min="0" value="0.00" required>
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    <label class="form-label">Sale Price</label>
+                                    <input type="number" step="0.01" name="sale_price[]" class="form-control sale-price-input" min="0" required>
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    <label class="form-label">Manufacture Date</label>
+                                    <input type="date" name="manufacture_date[]" class="form-control manufacture-date-input">
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="date" name="expiry_date[]" class="form-control expiry-date-input">
+                                </div>
+                                <div class="col-md-2 d-flex align-items-end mb-3">
+                                    <button type="button" class="btn btn-danger remove-product-row w-100">Remove</button>
+                                </div>
+                            `;
                 return productRow;
             }
 
@@ -151,19 +153,19 @@
                 totalAmountInput.value = total.toFixed(2);
             }
 
-            productList.addEventListener('input', function(e) {
+            productList.addEventListener('input', function (e) {
                 if (e.target.classList.contains('quantity-input') || e.target.classList.contains('unit-price-input')) {
                     calculateTotal();
                 }
             });
 
-            addProductRowBtn.addEventListener('click', function() {
+            addProductRowBtn.addEventListener('click', function () {
                 const newRow = createProductRow();
                 productList.appendChild(newRow);
                 calculateTotal();
             });
 
-            productList.addEventListener('click', function(e) {
+            productList.addEventListener('click', function (e) {
                 if (e.target.classList.contains('remove-product-row')) {
                     // Ensure at least one product row remains
                     if (document.querySelectorAll('.product-row').length > 1) {
