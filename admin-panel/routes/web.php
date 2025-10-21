@@ -72,8 +72,9 @@ Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->n
 Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customerUpdate');
 Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customerDelete');
 
-
-// Purchase CRUD Routes (Explicitly defined - Error-free naming)
+// --- Purchase CRUD Routes ---
+// These routes use the FIXED explicit names ('purchaseIndex', 'purchaseStore', etc.) 
+// to prevent the RouteNotFoundException errors you were seeing.
 Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchaseIndex');
 Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchaseCreate');
 Route::post('/purchases', [PurchaseController::class, 'store'])->name('purchaseStore');
