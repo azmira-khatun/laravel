@@ -19,8 +19,11 @@ Route::get('/master', function () {
 Route::get('/dashboard', function () {
     return view('pages.dashboard.dashboardCard');
 });
-Route::get('/users', [UserController::class, 'index'])->name('user.index'); // New path: /users
-Route::get('/add-user', [UserController::class, 'create'])->name('userCreate'); // Let /add-user be the actual creation form
+// ===================================
+// 1. User Management Routes
+// ===================================
+Route::get('/users', [UserController::class, 'index'])->name('user.index');
+Route::get('/add-user', [UserController::class, 'create'])->name('userCreate');
 Route::post('userStore', [UserController::class, 'store'])->name('userStore');
 Route::get('userEdit/{user_id}', [UserController::class, 'update'])->name('userEdit');
 Route::post('editStoreU', [UserController::class, 'editStoreU'])->name('editStoreU');
@@ -73,8 +76,6 @@ Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name
 Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customerDelete');
 
 // --- Purchase CRUD Routes ---
-// These routes use the FIXED explicit names ('purchaseIndex', 'purchaseStore', etc.) 
-// to prevent the RouteNotFoundException errors you were seeing.
 Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchaseIndex');
 Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchaseCreate');
 Route::post('/purchases', [PurchaseController::class, 'store'])->name('purchaseStore');
