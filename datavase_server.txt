@@ -1,0 +1,4 @@
+database password:  0uR$sS]Ebupi%jR_
+database name:azmirakh_pos_project
+database user:azmirakh_pos_project
+project name:	pos-laravel.azmirakhatun.top

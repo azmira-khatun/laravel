@@ -29,7 +29,7 @@ class CategoryController extends Controller
         // dd($request->all());
 
 
-        return Redirect::to('/category');
+        return Redirect::to('/add-category');
     }
 
 

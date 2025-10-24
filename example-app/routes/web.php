@@ -4,7 +4,7 @@ use App\Http\Controllers\OneToOneController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OneToManyController;
 use App\Http\Controllers\HasOneThroughController;
-
+use App\Http\Controllers\HasManyThroughController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -61,3 +61,9 @@ Route::put('/documents/{document}', [OneToManyController::class, 'update'])->nam
 
 // HasOneThrough relation
 Route::get('/car', [HasOneThroughController::class, 'index']);
+
+// HasManyThrough relation
+
+
+Route::get('/deployments', [HasManyThroughController::class, 'index'])->name('deployments.index');
+

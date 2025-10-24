@@ -6,12 +6,24 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\PurchaseController;
+
+
 
 Route::get('/', function () {
+    return view('portal');
+});
+Route::get('/master', function () {
     return view('master');
 });
-Route::get('/users', [UserController::class, 'index'])->name('user.index'); // New path: /users
-Route::get('/add-user', [UserController::class, 'create'])->name('userCreate'); // Let /add-user be the actual creation form
+Route::get('/dashboard', function () {
+    return view('pages.dashboard.dashboardCard');
+});
+// ===================================
+// 1. User Management Routes
+// ===================================
+Route::get('/users', [UserController::class, 'index'])->name('user.index');
+Route::get('/add-user', [UserController::class, 'create'])->name('userCreate');
 Route::post('userStore', [UserController::class, 'store'])->name('userStore');
 Route::get('userEdit/{user_id}', [UserController::class, 'update'])->name('userEdit');
 Route::post('editStoreU', [UserController::class, 'editStoreU'])->name('editStoreU');
@@ -62,3 +74,12 @@ Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('
 Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customerEdit');
 Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customerUpdate');
 Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customerDelete');
+
+// --- Purchase CRUD Routes ---
+Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchaseIndex');
+Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchaseCreate');
+Route::post('/purchases', [PurchaseController::class, 'store'])->name('purchaseStore');
+Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchaseShow');
+Route::get('/purchases/{purchase}/edit', [PurchaseController::class, 'edit'])->name('purchaseEdit');
+Route::put('/purchases/{purchase}', [PurchaseController::class, 'update'])->name('purchaseUpdate');
+Route::delete('/purchases/{purchase}', [PurchaseController::class, 'destroy'])->name('purchaseDelete');
