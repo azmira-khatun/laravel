@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\OneToOneController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\OneToManyController;
+use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\HasOneThroughController;
 use App\Http\Controllers\HasManyThroughController;
 /*
@@ -41,6 +41,13 @@ Route::get('/manage', function () {
 Route::get('/master', function () {
     return view('master');
 });
+
+
+
+
+
+
+
 /// --- 2. One-to-One Profile Management Routes ---
 
 // 1. প্রোফাইল তালিকা দেখানোর জন্য রুট (Index)
@@ -65,13 +72,19 @@ Route::put('/profile/{id}', [OneToOneController::class, 'update'])->name('profil
 Route::delete('/profile/{id}', [OneToOneController::class, 'destroy'])->name('profile.destroy');
 
 
-// OneToMany relation
 
-Route::get('/documents', [OneToManyController::class, 'index'])->name('documents.index');
+// one to many
 
-Route::get('/documents/{document}/edit', [OneToManyController::class, 'edit'])->name('documents.edit');
+Route::get('/documents', [PostCommentController::class, 'index'])->name('documents.index');
 
-Route::put('/documents/{document}', [OneToManyController::class, 'update'])->name('documents.update');
+Route::get('/comments', [PostCommentController::class, 'listComments'])->name('comments.index');
+
+Route::get('/comments/{id}', [PostCommentController::class, 'show'])->name('comments.show');
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
 
 // HasOneThrough relation
 Route::get('/car', [HasOneThroughController::class, 'index']);
