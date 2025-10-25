@@ -1,46 +1,53 @@
-<?php
+<!DOCTYPE html>
+<html lang="en">
 
-namespace App\Http\Controllers;
+<head>
+    <meta charset="UTF-8">
+    <title>All Blog Posts with Comments</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
 
-use App\Models\Post;
-use App\Models\Comment;
-use Illuminate\Http\Request;
+<body class="bg-light">
 
-class PostCommentController extends Controller
-{
-    /**
-     * Display a listing of the Post resources (Index for Posts).
-     */
-    public function index()
-    {
-        $posts = Post::with('comments')->get();
-        // এটি resources/views/index.blade.php কে কল করবে
-        return view('index', compact('posts'));
-    }
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">All Blog Posts with Comments</h2>
 
-    /**
-     * Display a listing of the Comment resources (Index for Comments).
-     * এটি resources/views/comments/index.blade.php ভিউতে $comments ডেটা পাঠাবে।
-     */
-    public function listComments()
-    {
-        // Inverse One-to-Many: Post রিলেশনশিপ Eager Load করা হলো
-        $comments = Comment::with('post')->get();
+        <table class="table table-bordered table-striped align-middle shadow-sm">
+            <thead class="table-success">
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Body</th>
+                    <th>Comments</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($posts as $post)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $post->title }}</td>
+                        <td>{{ $post->body }}</td>
+                        <td>
+                            @if($post->comments->count() > 0)
+                                <ul class="mb-0">
+                                    @foreach($post->comments as $comment)
+                                        <li>{{ $comment->content }}</li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <span class="text-muted">No comments</span>
+                            @endif
+                        </td>
+                        <td>{{ $post->created_at }}</td>
+                        <td>{{ $post->updated_at }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
-        // ভিউতে $comments ভেরিয়েবলটি পাঠানো হলো
-        return view('comments.index', compact('comments'));
-    }
+</body>
 
-    /**
-     * Display the specified Comment resource. (View Only Detail)
-     */
-    public function show($id)
-    {
-        // নির্দিষ্ট মন্তব্য এবং তার পোস্ট ডেটা লোড করা হলো
-        $comment = Comment::with('post')->findOrFail($id);
-        // এটি resources/views/comments/show.blade.php ভিউতে $comment পাঠাবে
-        return view('comments.show', compact('comment'));
-    }
-
-    // যেহেতু আপনি শুধুমাত্র দেখতে চেয়েছেন (View Only), তাই সমস্ত CRUD মেথড (create, store, edit, update, destroy) সরিয়ে দেওয়া হলো।
-}
+</html>
