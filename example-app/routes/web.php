@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OneToManyController;
 use App\Http\Controllers\HasOneThroughController;
 use App\Http\Controllers\HasManyThroughController;
+use App\Http\Controllers\ManyToManyController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -59,6 +60,8 @@ Route::get('/documents/{document}/edit', [OneToManyController::class, 'edit'])->
 
 Route::put('/documents/{document}', [OneToManyController::class, 'update'])->name('documents.update');
 
+// ManyToMany relation
+Route::get('/many-to-many', [ManyToManyController::class, 'index']);
 // HasOneThrough relation
 Route::get('/car', [HasOneThroughController::class, 'index']);
 
