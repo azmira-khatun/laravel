@@ -13,10 +13,8 @@
 <body>
 
     <div class="container m-5 p-8">
-        <h2 class="mb-4">All Profiles</h2>
+        <h2 class="mb-4"> User and Profiles(OneToOne)</h2>
 
-        {{-- প্রোফাইল তৈরির রুট --}}
-        <a href="{{ route('profile.create') }}" class="btn btn-success mb-3">+ Create Profile</a>
 
         <table class="table table-success table-striped">
             <thead>
