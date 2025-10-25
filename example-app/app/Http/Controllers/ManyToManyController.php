@@ -11,8 +11,8 @@ class ManyToManyController extends Controller
     public function index()
     {
         $products = Brand::with('products')->get();
-        //    return  $products;
-        return view('pages.many_to_many', compact('products'));
+        return $products;
+        // return view('pages.many_to_many', compact('products'));
 
         // $comments = Comment::with('post')->get();
         //   //    return  $post;
