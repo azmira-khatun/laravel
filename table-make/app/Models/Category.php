@@ -13,7 +13,7 @@ class Category extends Model
     {
         // hasOneThrough(Final, Through, throughForeignKey, finalForeignKey, localKey, throughLocalKey)
         return $this->hasOneThrough(
-            Order::class,     // final model
+            Order::class,     
             Product::class,   // through model
             'category_id',    // products.category_id (throughForeignKey)
             'product_id',     // orders.product_id (finalForeignKey)
