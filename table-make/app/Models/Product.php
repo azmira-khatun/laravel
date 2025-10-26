@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['category_id', 'name'];
+    protected $fillable = ['name', 'category_id'];
 
     public function category()
     {
@@ -15,6 +15,6 @@ class Product extends Model
 
     public function order()
     {
-        return $this->hasOne(Order::class); // product -> order (one)
+        return $this->hasOne(Order::class);
     }
 }
