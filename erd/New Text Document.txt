@@ -300,3 +300,67 @@ stocks টেবিলের product_id ফিল্ডটি products টেব
 payments ↔ sales:
 
 payments টেবিলের `
+
+
+
+
+
+🧾 Updated purchases Table (Vendor-based Purchase)
+Field	Type	Description
+id	BIGINT (PK, Auto Increment)	Primary key
+purchase_date	DATE	ক্রয়ের তারিখ
+invoice_no	VARCHAR(50) [unique]	Vendor invoice নম্বর
+vendor_id	BIGINT (FK → vendors.id)	কোন vendor থেকে কেনা হয়েছে
+warehouse_id	BIGINT (FK → warehouses.id)	কোথায় পণ্য রিসিভ হলো (যদি multiple warehouse থাকে)
+reference_no	VARCHAR(100) (nullable)	রেফারেন্স নম্বর বা external PO number
+total_qty	INT	মোট quantity
+subtotal_amount	DECIMAL(10,2)	ভ্যাট/ডিসকাউন্ট বাদে মোট
+discount_amount	DECIMAL(10,2) (nullable)	ডিসকাউন্ট পরিমাণ
+tax_amount	DECIMAL(10,2) (nullable)	ট্যাক্স/ভ্যাট
+shipping_cost	DECIMAL(10,2) (nullable)	ট্রান্সপোর্ট বা শিপিং খরচ
+grand_total	DECIMAL(10,2)	সব কিছু মিলিয়ে মোট
+paid_amount	DECIMAL(10,2)	Vendor কে দেওয়া টাকা
+due_amount	DECIMAL(10,2)	Vendor এর কাছে বাকি টাকা
+payment_status	ENUM('Paid','Due','Partial')	পেমেন্ট অবস্থা
+payment_method	ENUM('Cash','Bank','Mobile','Cheque','Other')	পেমেন্টের মাধ্যম
+received_date	DATE (nullable)	পণ্য রিসিভ করার তারিখ
+status	ENUM('Pending','Received','Cancelled')	Purchase এর অবস্থা
+invoice_file	VARCHAR(255) (nullable)	ইনভয়েস ফাইল (PDF/Image) আপলোড করলে
+note	TEXT (nullable)	অতিরিক্ত মন্তব্য
+created_by	BIGINT (FK → users.id)	কে purchase এন্ট্রি দিয়েছে
+created_at	TIMESTAMP	
+updated_at	TIMESTAMP	
+📦 purchase_items Table (unchanged but vendor-aware)
+Field	Type	Description
+id	BIGINT (PK, Auto Increment)	
+purchase_id	BIGINT (FK → purchases.id)	কোন purchase এর সাথে সম্পর্কিত
+product_id	BIGINT (FK → products.id)	কোন পণ্য কেনা হয়েছে
+unit_id	BIGINT (FK → units.id) (optional)	পণ্যের ইউনিট (pcs, kg, etc.)
+quantity	INT	কতটি কেনা হয়েছে
+unit_cost	DECIMAL(10,2)	প্রতি ইউনিটের দাম
+total_cost	DECIMAL(10,2)	quantity × unit_cost
+expiry_date	DATE (nullable)	মেয়াদ (যদি প্রয়োজন হয়)
+batch_no	VARCHAR(100) (nullable)	ব্যাচ নাম্বার (যদি প্রয়োজনে থাকে)
+created_at	TIMESTAMP	
+updated_at	TIMESTAMP	
+🔗 Relationships Summary
+Relation	Type	Example
+Purchase → Vendor	belongsTo	$purchase->vendor->name
+Purchase → Warehouse	belongsTo	$purchase->warehouse->name
+Purchase → PurchaseItems	hasMany	$purchase->items
+PurchaseItem → Product	belongsTo	$item->product->name
+Purchase → User	belongsTo	$purchase->user->fullname
+💡 Extra suggestions (for scalability)
+
+If your POS is growing, consider adding:
+
+Vendor Table:
+
+name, email, phone, address, company_name, contact_person
+
+Warehouses Table:
+
+name, location, contact_person
+
+Purchase Payments Table (optional but powerful):
+Each payment record per purchase with date, method, amount, note.
