@@ -364,3 +364,90 @@ name, location, contact_person
 
 Purchase Payments Table (optional but powerful):
 Each payment record per purchase with date, method, amount, note.
+
+
+
+
+
+
+🧩 Migration তৈরির সঠিক ক্রম:
+🥇 1️⃣ মূল ভিত্তি (Base Tables — যেগুলোর উপর অন্যরা নির্ভর করে)
+
+এই টেবিলগুলোতে অন্য কারও foreign key নেই, তাই এগুলো আগে তৈরি করতে হবে:
+
+roles
+
+users (ref: roles.id)
+
+vendors
+
+category
+
+product_units
+
+🧱 2️⃣ Product সম্পর্কিত টেবিল
+
+এগুলো products বা category/unit এর উপর নির্ভরশীল:
+6. products (ref: category.id, product_units.id)
+7. stocks (ref: category.id, users.id)
+
+👥 3️⃣ Customer সম্পর্কিত টেবিল
+
+customers (ref: users.id)
+
+💸 4️⃣ Purchase সেকশন
+
+এখানে vendors, users, product_units dependency আছে:
+9. purchases (ref: vendors.id, product_units.id)
+10. purchase_items (ref: purchases.id, stocks.id, users.id)
+11. purchase_returns (ref: purchases.id, products.id, vendors.id, users.id)
+
+🛍️ 5️⃣ Sales সেকশন
+
+sales (ref: customers.id, products.id, product_units.id)
+
+sale_items (ref: sales.id, stocks.id, users.id)
+
+sale_returns (ref: sales.id, customers.id, users.id)
+
+sale_return_items (ref: sale_returns.id, stocks.id, users.id)
+
+💳 6️⃣ Payment ও Discount সেকশন
+
+payments (ref: sales.id, purchases.id, users.id)
+
+discounts (no dependency — কিন্তু sales এর পরে রাখতে ভালো)
+
+🧾 7️⃣ Miscellaneous / Reporting সেকশন
+
+expenses (ref: users.id)
+
+revenues (ref: users.id)
+
+expired_products (ref: stocks.id, users.id)
+
+damage_products (ref: stocks.id, users.id)
+
+✅ সংক্ষিপ্ত তালিকা (Final Order)
+ক্রম	টেবিল নাম
+1	roles
+2	users
+3	vendors
+4	category
+5	product_units
+6	products
+7	stocks
+8	customers
+9	purchases
+10	purchase_items
+11	purchase_returns
+12	sales
+13	sale_items
+14	sale_returns
+15	sale_return_items
+16	payments
+17	discounts
+18	expenses
+19	revenues
+20	expired_products
+21	damage_products
