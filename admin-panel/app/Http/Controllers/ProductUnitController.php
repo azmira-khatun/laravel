@@ -7,26 +7,20 @@ use Illuminate\Http\Request;
 
 class ProductUnitController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Display all product units
     public function index()
     {
         $units = ProductUnit::all();
         return view('pages.product_units.index', compact('units'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Show create form
     public function create()
     {
         return view('pages.product_units.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Store new product unit
     public function store(Request $request)
     {
         $request->validate([
@@ -34,47 +28,34 @@ class ProductUnitController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        ProductUnit::create([
-            'unit_name' => $request->unit_name,
-            'description' => $request->description,
-        ]);
+        ProductUnit::create($request->only(['unit_name', 'description']));
 
-        return redirect()->route('productUnitStore')->with('message', 'Unit added successfully!');
+        return redirect()->route('productUnitIndex')->with('message', 'Unit added successfully!');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    // Show edit form
+    public function edit(ProductUnit $unit)
     {
-        $unit = ProductUnit::findOrFail($id);
         return view('pages.product_units.edit', compact('unit'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+    // Update product unit
+    public function update(Request $request, ProductUnit $unit)
     {
         $request->validate([
             'unit_name' => 'required|string|max:100',
             'description' => 'nullable|string',
         ]);
 
-        $unit = ProductUnit::findOrFail($id);
         $unit->update($request->only(['unit_name', 'description']));
 
-        return redirect()->route('pages.product_units.index')->with('message', 'Unit updated successfully!');
+        return redirect()->route('productUnitIndex')->with('message', 'Unit updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
+    // Delete product unit
+    public function destroy(ProductUnit $unit)
     {
-        $unit = ProductUnit::findOrFail($id);
         $unit->delete();
-
-        return redirect()->route('pages.product_units.index')->with('message', 'Unit deleted successfully!');
+        return redirect()->route('productUnitIndex')->with('message', 'Unit deleted successfully!');
     }
 }
