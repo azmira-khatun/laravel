@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ProductUnitController;
 
 
 
@@ -37,6 +38,14 @@ Route::post('/category/store', [CategoryController::class, 'store'])->name('cate
 Route::get('/category/edit/{category_id}', [CategoryController::class, 'update'])->name('category.edit');
 Route::post('/category/editStore', [CategoryController::class, 'editStore'])->name('category.editStore');
 Route::delete('/category/delete', [CategoryController::class, 'destroy'])->name('category.delete');
+
+
+Route::get('/product_units', [ProductUnitController::class, 'index'])->name('productUnitIndex');
+Route::get('/product_units/create', [ProductUnitController::class, 'create'])->name('productUnitCreate');
+Route::post('/product_units', [ProductUnitController::class, 'store'])->name('productUnitStore');
+Route::get('/product_units/{unit}/edit', [ProductUnitController::class, 'edit'])->name('productUnitEdit');
+Route::put('/product_units/{unit}', [ProductUnitController::class, 'update'])->name('productUnitUpdate');
+Route::delete('/product_units/{unit}', [ProductUnitController::class, 'destroy'])->name('productUnitDelete');
 
 
 

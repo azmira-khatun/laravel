@@ -55,6 +55,13 @@
                         <p>Category <span class="badge badge-info right">6</span></p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ url('/product_units') }}" class="nav-link">
+                        <i class="bi bi-cart-check-fill"></i>
+                        <p>Product Units <span class="badge badge-info right">6</span></p>
+                    </a>
+                </li>
+
 
                 <li class="nav-item">
                     <a href="{{ url('/products') }}" class="nav-link">
