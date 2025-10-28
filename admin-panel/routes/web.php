@@ -54,14 +54,12 @@ Route::delete('/product_units/{unit}', [ProductUnitController::class, 'destroy']
 // product start
 
 
-
-Route::get('/products', [ProductController::class, 'index'])->name('productIndex');
-Route::get('/products/create', [ProductController::class, 'create'])->name('productCreate');
-Route::post('/products', [ProductController::class, 'store'])->name('productStore');
-Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('productEdit');
-Route::put('/products/{id}', [ProductController::class, 'update'])->name('productUpdate');
-Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('productDelete');
-
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 // vendor start
 
 

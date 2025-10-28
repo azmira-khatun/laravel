@@ -1,77 +1,85 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\ProductUnit;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    /**
+     * Display a listing of the products.
+     */
     public function index()
     {
-        $products = Product::with('category')->get();
-        return view('pages.product.viewProduct', compact('products'));
+        $products = Product::with('category', 'productUnit')->get();
+        return view('pages.products.index', compact('products'));
     }
 
+    /**
+     * Show the form for creating a new product.
+     */
     public function create()
     {
         $categories = Category::all();
-        return view('pages.product.createProduct', compact('categories'));
+        $units = ProductUnit::all();
+        return view('products.create', compact('categories', 'units'));
     }
 
+    /**
+     * Store a newly created product in storage.
+     */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'product_name' => 'required|string|max:255',
+        $request->validate([
+            'name' => 'required|string|max:150',
             'category_id' => 'required|exists:categories,id',
-            'price' => 'nullable|numeric',
+            'productunit_id' => 'required|exists:product_units,id',
+            'barcode' => 'required|string|unique:products,barcode',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
         ]);
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('product_images', 'public');
-            $validated['image_path'] = $path;
-        }
+        Product::create($request->all());
 
-        Product::create($validated);
-
-        return redirect()->route('productIndex')->with('message', 'Product added successfully');
+        return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
-    public function edit($id)
+    /**
+     * Show the form for editing the specified product.
+     */
+    public function edit(Product $product)
     {
-        $product = Product::findOrFail($id);
         $categories = Category::all();
-        return view('pages.product.editProduct', compact('product', 'categories'));
+        $units = ProductUnit::all();
+        return view('products.edit', compact('product', 'categories', 'units'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified product in storage.
+     */
+    public function update(Request $request, Product $product)
     {
-        $product = Product::findOrFail($id);
-
-        $validated = $request->validate([
-            'product_name' => 'required|string|max:255',
+        $request->validate([
+            'name' => 'required|string|max:150',
             'category_id' => 'required|exists:categories,id',
-            'price' => 'nullable|numeric',
+            'productunit_id' => 'required|exists:product_units,id',
+            'barcode' => 'required|string|unique:products,barcode,' . $product->id,
             'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
         ]);
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('product_images', 'public');
-            $validated['image_path'] = $path;
-        }
+        $product->update($request->all());
 
-        $product->update($validated);
-
-        return redirect()->route('productIndex')->with('message', 'Product updated successfully');
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified product from storage.
+     */
+    public function destroy(Product $product)
     {
-        $product = Product::findOrFail($id);
         $product->delete();
-        return redirect()->route('productIndex')->with('message', 'Product deleted successfully');
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 }

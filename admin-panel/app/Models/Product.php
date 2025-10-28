@@ -1,7 +1,5 @@
 <?php
 
-// app/Models/Product.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,17 +9,27 @@ class Product extends Model
 {
     use HasFactory;
 
+    // Mass assignment এর জন্য fillable fields
     protected $fillable = [
-        'product_name',
+        'name',
         'category_id',
-        'price',
+        'productunit_id',
+        'barcode',
         'description',
-        'image_path',
-        'status',
     ];
 
+    // যদি table নাম Laravel convention অনুসারে না হয়, তবে declare করতে হবে
+    // protected $table = 'products';
+
+    // Relationship with Category
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    // Relationship with ProductUnit
+    public function productUnit()
+    {
+        return $this->belongsTo(ProductUnit::class);
     }
 }
