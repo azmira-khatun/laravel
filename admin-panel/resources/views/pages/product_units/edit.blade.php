@@ -25,13 +25,13 @@
                     <div class="mb-3">
                         <label for="unit_name" class="form-label">Unit Name</label>
                         <input type="text" name="unit_name" id="unit_name" class="form-control"
-                            value="{{ $unit->unit_name }}" required>
+                            value="{{ old('unit_name', $unit->unit_name) }}" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Description (optional)</label>
                         <textarea name="description" id="description" class="form-control"
-                            rows="3">{{ $unit->description }}</textarea>
+                            rows="3">{{ old('description', $unit->description) }}</textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Update Unit</button>

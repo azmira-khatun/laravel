@@ -23,16 +23,17 @@
                     <div class="mb-3">
                         <label for="unit_name" class="form-label">Unit Name</label>
                         <input type="text" name="unit_name" id="unit_name" class="form-control"
-                            placeholder="e.g. kg, liter, piece" required>
+                            value="{{ old('unit_name') }}" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Description (optional)</label>
-                        <textarea name="description" id="description" class="form-control" rows="3"></textarea>
+                        <textarea name="description" id="description" class="form-control"
+                            rows="3">{{ old('description') }}</textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-success">Save Unit</button>
-                    <!-- <a href="{{ route('productUnitIndex') }}" class="btn btn-secondary">Back</a> -->
+                    <button type="submit" class="btn btn-primary">Add Unit</button>
+                    <a href="{{ route('productUnitIndex') }}" class="btn btn-secondary">Back</a>
                 </form>
             </div>
         </div>
