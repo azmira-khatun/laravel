@@ -25,7 +25,7 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $units = ProductUnit::all();
-        return view('products.create', compact('categories', 'units'));
+        return view('pages.products.create', compact('categories', 'units'));
     }
 
     /**
@@ -53,7 +53,7 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $units = ProductUnit::all();
-        return view('products.edit', compact('product', 'categories', 'units'));
+        return view('pages.products.edit', compact('product', 'categories', 'units'));
     }
 
     /**
