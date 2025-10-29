@@ -84,12 +84,12 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="{{ url('/purchases') }}" class="nav-link">
-                        <i class="bi bi-receipt"></i>
-                        <p>Purchases</p>
-                    </a>
-                </li>
+               <li class="nav-item">
+    <a href="{{ route('purchasesCreate') }}" class="nav-link">
+        <i class="fa fa-shopping-cart"></i>
+        <span>Purchase</span>
+    </a>
+</li>
 
                 <li class="nav-item">
                     <a href="{{ url('/sales') }}" class="nav-link">

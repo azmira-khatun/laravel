@@ -1,65 +1,58 @@
 @extends('master')
 
 @section('content')
-    <div class="card mt-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h3>Purchase History</h3>
+<div class="container">
+    <h1>Purchases List</h1>
 
-            {{-- FIX: Changed route('pages.purchases.create') or route('purchases.create') to route('purchaseCreate') --}}
-            <a href="{{ route('purchaseCreate') }}" class="btn btn-primary">Add New Purchase</a>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
         </div>
-        <div class="card-body">
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
+    @endif
 
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Purchase Date</th>
-                            <th>Vendor</th>
-                            <th>Total Amount</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{-- Assuming $purchases variable is passed from the controller's index() method --}}
-                        @forelse ($purchases as $purchase)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ \Carbon\Carbon::parse($purchase->purchase_date)->format('Y-m-d') }}</td>
-                                <td>{{ $purchase->vendor->name ?? 'N/A' }}</td>
-                                <td>{{ number_format($purchase->total_amount, 2) }}</td>
-                                <td>
-                                    {{-- FIX: Changed route('purchases.show', ...) to route('purchaseShow', ...) --}}
-                                    <a href="{{ route('purchaseShow', $purchase->id) }}" class="btn btn-sm btn-info">View
-                                        Details</a>
+    <a href="{{ route('purchasesCreate') }}" class="btn btn-primary mb-3">Add New Purchase</a>
 
-                                    {{-- FIX: Changed route('purchases.edit', ...) to route('purchaseEdit', ...) --}}
-                                    <a href="{{ route('purchaseEdit', $purchase->id) }}" class="btn btn-sm btn-warning">Edit</a>
-
-                                    {{-- Delete Form (Requires purchaseDelete route) --}}
-                                    <form action="{{ route('purchaseDelete', $purchase->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Are you sure you want to delete this purchase?')">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="text-center">No purchases recorded yet.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-            {{-- Pagination links --}}
-            {{ $purchases->links() }}
-        </div>
-    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Purchase Date</th>
+                <th>Invoice No</th>
+                <th>Vendor</th>
+                <th>Total Qty</th>
+                <th>Grand Total</th>
+                <th>Paid Amount</th>
+                <th>Due Amount</th>
+                <th>Payment Status</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($purchases as $purchase)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ \Carbon\Carbon::parse($purchase->purchase_date)->format('Y‑m‑d') }}</td>
+                    <td>{{ $purchase->invoice_no }}</td>
+                    <td>{{ $purchase->vendor->name ?? 'N/A' }}</td>
+                    <td>{{ $purchase->total_qty }}</td>
+                    <td>{{ number_format($purchase->grand_total, 2) }}</td>
+                    <td>{{ number_format($purchase->paid_amount, 2) }}</td>
+                    <td>{{ number_format($purchase->due_amount, 2) }}</td>
+                    <td>{{ $purchase->payment_status }}</td>
+                    <td>{{ $purchase->status }}</td>
+                    <td>
+                        <a href="{{ route('purchasesShow', $purchase->id) }}" class="btn btn-info btn-sm">View</a>
+                        <a href="{{ route('purchasesEdit', $purchase->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('purchasesDelete', $purchase->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 @endsection

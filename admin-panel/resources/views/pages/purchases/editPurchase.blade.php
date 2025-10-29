@@ -1,103 +1,152 @@
 @extends('master')
 
 @section('content')
-    <div class="card mt-4">
-        <div class="card-header">
-            <h3>Edit Purchase #{{ $purchase->id }}</h3>
+<div class="container">
+    <h1>Edit Purchase</h1>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-        <div class="card-body">
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-            @if(session('error'))
-                <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
+    @endif
 
-            <form action="{{ route('purchases.update', $purchase->id) }}" method="POST">
-                @csrf
-                @method('PUT') {{-- Required for UPDATE action --}}
+    <form action="{{ route('purchases.update', $purchase->id) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
 
-                {{-- Vendor Selection (Read-only or disabled for consistency) --}}
-                <div class="form-group mb-3">
-                    <label for="vendor_id" class="form-label">Select Vendor</label>
-                    <select name="vendor_id" id="vendor_id" class="form-control" disabled>
-                        @foreach ($vendors as $vendor)
-                            <option value="{{ $vendor->id }}" {{ $purchase->vendor_id == $vendor->id ? 'selected' : '' }}>
-                                {{ $vendor->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    {{-- Send the ID via a hidden field since the select is disabled --}}
-                    <input type="hidden" name="vendor_id" value="{{ $purchase->vendor_id }}">
-                </div>
-
-                <h4 class="mt-4">Product Items</h4>
-
-                <div id="productList">
-                    {{-- Loop through existing items to populate the form --}}
-                    @foreach ($purchase->items as $item)
-                        <div class="product-row row g-3 border rounded p-3 mb-3">
-                            <input type="hidden" name="item_id[]" value="{{ $item->id }}"> {{-- Item ID to identify for update
-                            --}}
-                            <div class="col-md-12 mb-3">
-                                <label class="form-label">Product Name</label>
-                                <select name="product_id[]" class="form-control product-select" required>
-                                    <option value="">Select a Product</option>
-                                    @foreach ($products as $product)
-                                        <option value="{{ $product->id }}" {{ $item->product_id == $product->id ? 'selected' : '' }}>
-                                            {{ $product->product_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="col-md-2 mb-3">
-                                <label class="form-label">Quantity</label>
-                                <input type="number" name="quantity[]" class="form-control quantity-input" min="1"
-                                    value="{{ old('quantity.' . $loop->index, $item->quantity) }}" required>
-                            </div>
-                            <div class="col-md-2 mb-3">
-                                <label class="form-label">Unit Price</label>
-                                <input type="number" step="0.01" name="unit_price[]" class="form-control unit-price-input"
-                                    min="0" value="{{ old('unit_price.' . $loop->index, $item->unit_price) }}" required>
-                            </div>
-                            <div class="col-md-2 mb-3">
-                                <label class="form-label">Sale Price</label>
-                                <input type="number" step="0.01" name="sale_price[]" class="form-control sale-price-input"
-                                    min="0" value="{{ old('sale_price.' . $loop->index, $item->sale_price) }}" required>
-                            </div>
-                            <div class="col-md-2 mb-3">
-                                <label class="form-label">Manufacture Date</label>
-                                <input type="date" name="manufacture_date[]" class="form-control manufacture-date-input"
-                                    value="{{ old('manufacture_date.' . $loop->index, optional($item->manufacture_date)->format('Y-m-d')) }}">
-                            </div>
-                            <div class="col-md-2 mb-3">
-                                <label class="form-label">Expiry Date</label>
-                                <input type="date" name="expiry_date[]" class="form-control expiry-date-input"
-                                    value="{{ old('expiry_date.' . $loop->index, optional($item->expiry_date)->format('Y-m-d')) }}">
-                            </div>
-                            <div class="col-md-2 d-flex align-items-end mb-3">
-                                <button type="button" class="btn btn-danger remove-product-row w-100">Remove</button>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
-                <button type="button" id="addProductRowBtn" class="btn btn-secondary mb-3">Add Another Product</button>
-
-                <hr>
-
-                {{-- Total Amount (Read-only, calculated by JS) --}}
-                <div class="form-group mb-4">
-                    <label for="total_amount" class="form-label">Total Amount</label>
-                    <input type="number" step="0.01" name="total_amount" id="total_amount" class="form-control"
-                        value="{{ old('total_amount', $purchase->total_amount) }}" readonly required>
-                    @error('total_amount') <span class="text-danger">{{ $message }}</span> @enderror
-                </div>
-
-                <button type="submit" class="btn btn-success">Update Purchase</button>
-            </form>
+        <div class="mb-3">
+            <label for="purchase_date" class="form-label">Purchase Date</label>
+            <input type="date" name="purchase_date" class="form-control" id="purchase_date"
+                   value="{{ old('purchase_date', $purchase->purchase_date) }}" required>
         </div>
-    </div>
-    {{-- Include your JavaScript section (from createPurchase) here as well --}}
+
+        <div class="mb-3">
+            <label for="invoice_no" class="form-label">Invoice No</label>
+            <input type="text" name="invoice_no" class="form-control" id="invoice_no"
+                   value="{{ old('invoice_no', $purchase->invoice_no) }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="vendor_id" class="form-label">Vendor</label>
+            <select name="vendor_id" id="vendor_id" class="form-control" required>
+                <option value="">Select Vendor</option>
+                @foreach(\App\Models\Vendor::all() as $vendor)
+                    <option value="{{ $vendor->id }}"
+                        {{ old('vendor_id', $purchase->vendor_id) == $vendor->id ? 'selected' : '' }}>
+                        {{ $vendor->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="reference_no" class="form-label">Reference No (Optional)</label>
+            <input type="text" name="reference_no" class="form-control" id="reference_no"
+                   value="{{ old('reference_no', $purchase->reference_no) }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="total_qty" class="form-label">Total Qty</label>
+            <input type="number" name="total_qty" class="form-control" id="total_qty"
+                   value="{{ old('total_qty', $purchase->total_qty) }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="subtotal_amount" class="form-label">Subtotal Amount</label>
+            <input type="text" name="subtotal_amount" class="form-control" id="subtotal_amount"
+                   value="{{ old('subtotal_amount', $purchase->subtotal_amount) }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="discount_amount" class="form-label">Discount Amount (Optional)</label>
+            <input type="text" name="discount_amount" class="form-control" id="discount_amount"
+                   value="{{ old('discount_amount', $purchase->discount_amount) }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="tax_amount" class="form-label">Tax Amount (Optional)</label>
+            <input type="text" name="tax_amount" class="form-control" id="tax_amount"
+                   value="{{ old('tax_amount', $purchase->tax_amount) }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="shipping_cost" class="form-label">Shipping Cost (Optional)</label>
+            <input type="text" name="shipping_cost" class="form-control" id="shipping_cost"
+                   value="{{ old('shipping_cost', $purchase->shipping_cost) }}">
+        </div>
+
+        <div class="mb‑3">
+            <label for="grand_total" class="form-label">Grand Total</label>
+            <input type="text" name="grand_total" class="form-control" id="grand_total"
+                   value="{{ old('grand_total', $purchase->grand_total) }}" required>
+        </div>
+
+        <div class="mb‑3">
+            <label for="paid_amount" class="form-label">Paid Amount</label>
+            <input type="text" name="paid_amount" class="form-control" id="paid_amount"
+                   value="{{ old('paid_amount', $purchase->paid_amount) }}" required>
+        </div>
+
+        <div class="mb‑3">
+            <label for="due_amount" class="form-label">Due Amount</label>
+            <input type="text" name="due_amount" class="form-control" id="due_amount"
+                   value="{{ old('due_amount', $purchase->due_amount) }}" required>
+        </div>
+
+        <div class="mb‑3">
+            <label for="payment_status" class="form-label">Payment Status</label>
+            <select name="payment_status" id="payment_status" class="form-control" required>
+                <option value="Paid" {{ old('payment_status', $purchase->payment_status) == 'Paid' ? 'selected' : '' }}>Paid</option>
+                <option value="Due" {{ old('payment_status', $purchase->payment_status) == 'Due' ? 'selected' : '' }}>Due</option>
+                <option value="Partial" {{ old('payment_status', $purchase->payment_status) == 'Partial' ? 'selected' : '' }}>Partial</option>
+            </select>
+        </div>
+
+        <div class="mb‑3">
+            <label for="payment_method" class="form-label">Payment Method</label>
+            <select name="payment_method" id="payment_method" class="form-control" required>
+                <option value="Cash" {{ old('payment_method', $purchase->payment_method) == 'Cash' ? 'selected' : '' }}>Cash</option>
+                <option value="Bank" {{ old('payment_method', $purchase->payment_method) == 'Bank' ? 'selected' : '' }}>Bank</option>
+                <option value="Mobile" {{ old('payment_method', $purchase->payment_method) == 'Mobile' ? 'selected' : '' }}>Mobile</option>
+                <option value="Cheque" {{ old('payment_method', $purchase->payment_method) == 'Cheque' ? 'selected' : '' }}>Cheque</option>
+                <option value="Other" {{ old('payment_method', $purchase->payment_method) == 'Other' ? 'selected' : '' }}>Other</option>
+            </select>
+        </div>
+
+        <div class="mb‑3">
+            <label for="received_date" class="form-label">Received Date (Optional)</label>
+            <input type="date" name="received_date" class="form-control" id="received_date"
+                   value="{{ old('received_date', $purchase->received_date) }}">
+        </div>
+
+        <div class="mb‑3">
+            <label for="status" class="form-label">Status</label>
+            <select name="status" id="status" class="form-control" required>
+                <option value="Pending" {{ old('status', $purchase->status) == 'Pending' ? 'selected' : '' }}>Pending</option>
+                <option value="Received" {{ old('status', $purchase->status) == 'Received' ? 'selected' : '' }}>Received</option>
+                <option value="Cancelled" {{ old('status', $purchase->status) == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
+            </select>
+        </div>
+
+        <div class="mb‑3">
+            <label for="invoice_file" class="form-label">Invoice File (Optional)</label>
+            @if($purchase->invoice_file)
+                <p>Existing File: <a href="{{ Storage::url($purchase->invoice_file) }}" target="_blank">View</a></p>
+            @endif
+            <input type="file" name="invoice_file" class="form-control" id="invoice_file">
+        </div>
+
+        <div class="mb‑3">
+            <label for="note" class="form-label">Note (Optional)</label>
+            <textarea name="note" class="form-control" id="note">{{ old('note', $purchase->note) }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Purchase</button>
+        <a href="{{ route('purchases.index') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
 @endsection

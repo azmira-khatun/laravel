@@ -82,11 +82,13 @@ Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->n
 Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customerUpdate');
 Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customerDelete');
 
-// --- Purchase CRUD Routes ---
-Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchaseIndex');
-Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchaseCreate');
-Route::post('/purchases', [PurchaseController::class, 'store'])->name('purchaseStore');
-Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchaseShow');
-Route::get('/purchases/{purchase}/edit', [PurchaseController::class, 'edit'])->name('purchaseEdit');
-Route::put('/purchases/{purchase}', [PurchaseController::class, 'update'])->name('purchaseUpdate');
-Route::delete('/purchases/{purchase}', [PurchaseController::class, 'destroy'])->name('purchaseDelete');
+
+
+// / Purchases Routes
+Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchasesIndex');
+Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchasesCreate');
+Route::post('/purchases', [PurchaseController::class, 'store'])->name('purchasesStore');
+Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchasesShow');
+Route::get('/purchases/{purchase}/edit', [PurchaseController::class, 'edit'])->name('purchasesEdit');
+Route::put('/purchases/{purchase}', [PurchaseController::class, 'update'])->name('purchasesUpdate');
+Route::delete('/purchases/{purchase}', [PurchaseController::class, 'destroy'])->name('purchasesDelete');

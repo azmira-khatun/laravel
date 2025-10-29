@@ -1,59 +1,58 @@
 @extends('master')
 
 @section('content')
-    <div class="card mt-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h3>Purchase Details (ID: {{ $purchase->id }})</h3>
-            <a href="{{ route('purchases.index') }}" class="btn btn-secondary">Back to List</a>
-        </div>
-        <div class="card-body">
+<div class="container mt-4">
+    <h1>Purchase History</h1>
 
-            {{-- Purchase Header Info --}}
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <p><strong>Vendor:</strong> {{ $purchase->vendor->name ?? 'N/A' }}</p>
-                    <p><strong>Date Recorded:</strong> {{ $purchase->created_at->format('Y-m-d h:i A') }}</p>
-                </div>
-                <div class="col-md-6 text-end">
-                    <h4>Total Purchase Amount: {{ number_format($purchase->total_amount, 2) }}</h4>
-                    <p>Purchase Date: {{ \Carbon\Carbon::parse($purchase->purchase_date)->format('Y-m-d') }}</p>
-                </div>
-            </div>
+    @if(session('message'))
+        <div class="alert alert-success">{{ session('message') }}</div>
+    @endif
 
-            <hr>
+    <a href="{{ route('purchasesCreate') }}" class="btn btn-primary mb-3">Add New Purchase</a>
 
-            <h4>Items Purchased</h4>
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Product Name</th>
-                            <th>Quantity</th>
-                            <th>Unit Price (Cost)</th>
-                            <th>Sub Total</th>
-                            <th>Sale Price</th>
-                            <th>M. Date</th>
-                            <th>E. Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{-- Assuming $purchase->items is loaded with PurchaseItem models --}}
-                        @foreach ($purchase->items as $item)
-                            <tr>
-                                <td>{{ $item->product->product_name ?? 'Product Not Found' }}</td>
-                                <td>{{ $item->quantity }}</td>
-                                <td>{{ number_format($item->unit_price, 2) }}</td>
-                                <td>{{ number_format($item->quantity * $item->unit_price, 2) }}</td>
-                                <td>{{ number_format($item->sale_price, 2) }}</td>
-                                <td>{{ $item->manufacture_date ? \Carbon\Carbon::parse($item->manufacture_date)->format('Y-m-d') : 'N/A' }}
-                                </td>
-                                <td>{{ $item->expiry_date ? \Carbon\Carbon::parse($item->expiry_date)->format('Y-m-d') : 'N/A' }}
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Invoice No</th>
+                <th>Vendor</th>
+                <th>Purchase Date</th>
+                <th>Grand Total</th>
+                <th>Paid Amount</th>
+                <th>Due Amount</th>
+                <th>Payment Status</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($purchases as $purchase)
+                <tr>
+                    <td>{{ $purchase->id }}</td>
+                    <td>{{ $purchase->invoice_no }}</td>
+                    <td>{{ $purchase->vendor->name ?? 'N/A' }}</td>
+                    <td>{{ \Carbon\Carbon::parse($purchase->purchase_date)->format('d-M-Y') }}</td>
+                    <td>{{ number_format($purchase->grand_total, 2) }}</td>
+                    <td>{{ number_format($purchase->paid_amount, 2) }}</td>
+                    <td>{{ number_format($purchase->due_amount, 2) }}</td>
+                    <td>{{ $purchase->payment_status }}</td>
+                    <td>{{ $purchase->status }}</td>
+                    <td>
+                        <a href="{{ route('purchases.show', $purchase->id) }}" class="btn btn-info btn-sm">View</a>
+                        <a href="{{ route('purchases.edit', $purchase->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('purchases.destroy', $purchase->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="10" class="text-center">No purchase history found.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
 @endsection
