@@ -8,21 +8,21 @@ use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
-    // 🟢 Show all purchases
+    // Show all purchases
     public function index()
     {
         $purchases = Purchase::with('vendor')->orderBy('id', 'desc')->get();
         return view('pages.purchases.historyPurchase', compact('purchases'));
     }
 
-    // 🟢 Show create form
+    // Show create form
     public function create()
     {
         $vendors = Vendor::all();
         return view('pages.purchases.createPurchase', compact('vendors'));
     }
 
-    // 🟢 Store new purchase
+    // Store new purchase
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -53,23 +53,23 @@ class PurchaseController extends Controller
 
         Purchase::create($validated);
 
-        return redirect()->route('purchasesIndex')->with('message', '✅ Purchase সফলভাবে তৈরি হয়েছে।');
+        return redirect()->route('purchasesIndex')->with('message', '✅ Purchase successfully created.');
     }
 
-    // 🟢 Show single purchase
+    // Show single purchase
     public function show(Purchase $purchase)
     {
-        return view('pages.purchases.historyPurchase', compact('purchase'));
+        return view('pages.purchases.viewPurchase', compact('purchase'));
     }
 
-    // 🟢 Edit form
+    // Show edit form
     public function edit(Purchase $purchase)
     {
         $vendors = Vendor::all();
         return view('pages.purchases.editPurchase', compact('purchase', 'vendors'));
     }
 
-    // 🟢 Update
+    // Update purchase
     public function update(Request $request, Purchase $purchase)
     {
         $validated = $request->validate([
@@ -98,13 +98,13 @@ class PurchaseController extends Controller
 
         $purchase->update($validated);
 
-        return redirect()->route('purchasesIndex')->with('message', '✅ Purchase আপডেট হয়েছে।');
+        return redirect()->route('purchasesIndex')->with('message', '✅ Purchase updated successfully.');
     }
 
-    // 🟢 Delete
+    // Delete purchase
     public function destroy(Purchase $purchase)
     {
         $purchase->delete();
-        return redirect()->route('purchasesIndex')->with('message', '🗑️ Purchase মুছে ফেলা হয়েছে।');
+        return redirect()->route('purchasesIndex')->with('message', '🗑️ Purchase deleted successfully.');
     }
 }
