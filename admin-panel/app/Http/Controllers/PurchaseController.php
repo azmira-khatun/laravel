@@ -59,7 +59,7 @@ class PurchaseController extends Controller
     // 🟢 Show single purchase
     public function show(Purchase $purchase)
     {
-        return view('pages.purchases.viewPurchase', compact('purchase'));
+        return view('pages.purchases.historyPurchase', compact('purchase'));
     }
 
     // 🟢 Edit form

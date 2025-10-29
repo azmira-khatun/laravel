@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <form action="{{ route('purchases.update', $purchase->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('purchasesUpdate', $purchase->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -146,7 +146,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Update Purchase</button>
-        <a href="{{ route('purchases.index') }}" class="btn btn-secondary">Cancel</a>
+        <a href="{{ route('purchasesIndex') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 @endsection

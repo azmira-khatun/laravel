@@ -86,7 +86,7 @@
 
                <li class="nav-item">
     <a href="{{ route('purchasesCreate') }}" class="nav-link">
-        <i class="fa fa-shopping-cart"></i>
+                        <i class="bi bi-cart-check-fill"></i>
         <span>Purchase</span>
     </a>
 </li>

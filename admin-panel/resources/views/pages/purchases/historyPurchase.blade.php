@@ -38,9 +38,9 @@
                     <td>{{ $purchase->payment_status }}</td>
                     <td>{{ $purchase->status }}</td>
                     <td>
-                        <a href="{{ route('purchases.show', $purchase->id) }}" class="btn btn-info btn-sm">View</a>
-                        <a href="{{ route('purchases.edit', $purchase->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('purchases.destroy', $purchase->id) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('purchasesShow', $purchase->id) }}" class="btn btn-info btn-sm">View</a>
+                        <a href="{{ route('purchasesEdit', $purchase->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('purchasesDelete', $purchase->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
