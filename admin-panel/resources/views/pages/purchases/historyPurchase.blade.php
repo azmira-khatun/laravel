@@ -39,9 +39,9 @@
                         <td>{{ number_format($purchase->due_amount, 2) }}</td>
                         <td>
                             <span class="badge 
-                                    @if($purchase->status == 'Pending') bg-warning
-                                    @elseif($purchase->status == 'Received') bg-success
-                                    @else bg-danger @endif">
+                                            @if($purchase->status == 'Pending') bg-warning
+                                            @elseif($purchase->status == 'Received') bg-success
+                                            @else bg-danger @endif">
                                 {{ $purchase->status }}
                             </span>
                         </td>

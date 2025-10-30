@@ -84,12 +84,12 @@
                     </a>
                 </li>
 
-        <li class="nav-item">
-            <a href="{{ route('purchasesHistory') }}" class="nav-link">
-                <i class="bi bi-cart-check-fill"></i>
-                <span>Purchase</span>
-            </a>
-        </li>
+                <li class="nav-item">
+                    <a href="{{ route('purchasesHistory') }}" class="nav-link">
+                        <i class="bi bi-cart-check-fill"></i>
+                        <span>Purchase</span>
+                    </a>
+                </li>
 
 
                 <li class="nav-item">
