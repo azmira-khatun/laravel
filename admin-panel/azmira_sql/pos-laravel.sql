@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 28, 2025 at 08:25 AM
+-- Generation Time: Oct 30, 2025 at 01:31 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `pos_laravel`
+-- Database: `pos-laravel`
 --
 
 -- --------------------------------------------------------
@@ -221,9 +221,9 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `category_id`, `productunit_id`, `barcode`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'Product A', 5, 1, '1234567890', 'Description for Product A', '2025-10-28 07:02:35', '2025-10-28 07:02:35'),
+(1, 'Product A', 2, 7, '1234567890', 'Description for Product A', '2025-10-28 07:02:35', '2025-10-29 04:57:12'),
 (2, 'Product B', 6, 2, '0987654321', 'Description for Product B', '2025-10-28 07:02:35', '2025-10-28 07:02:35'),
-(3, 'Product C', 5, 1, '1122334455', 'Description for Product C', '2025-10-28 07:02:35', '2025-10-28 07:02:35');
+(4, 'Rice', 10, 7, '2222', 'good', '2025-10-28 08:56:29', '2025-10-28 08:56:29');
 
 -- --------------------------------------------------------
 
@@ -257,12 +257,35 @@ INSERT INTO `product_units` (`id`, `unit_name`, `description`, `created_at`, `up
 
 CREATE TABLE `purchases` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `purchase_date` date NOT NULL,
+  `invoice_no` varchar(100) NOT NULL,
   `vendor_id` bigint(20) UNSIGNED NOT NULL,
-  `purchase_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `total_amount` decimal(12,2) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `reference_no` varchar(100) DEFAULT NULL,
+  `total_qty` int(11) NOT NULL,
+  `subtotal_amount` decimal(10,2) NOT NULL,
+  `discount_amount` decimal(10,2) DEFAULT 0.00,
+  `tax_amount` decimal(10,2) DEFAULT 0.00,
+  `shipping_cost` decimal(10,2) DEFAULT 0.00,
+  `grand_total` decimal(10,2) NOT NULL,
+  `paid_amount` decimal(10,2) NOT NULL,
+  `due_amount` decimal(10,2) NOT NULL,
+  `payment_status` enum('Paid','Due','Partial') NOT NULL,
+  `payment_method` enum('Cash','Bank','Mobile','Cheque','Other') NOT NULL,
+  `received_date` date DEFAULT NULL,
+  `status` enum('Pending','Received','Cancelled') NOT NULL,
+  `invoice_file` varchar(255) DEFAULT NULL,
+  `note` text DEFAULT NULL,
+  `created_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `purchases`
+--
+
+INSERT INTO `purchases` (`id`, `purchase_date`, `invoice_no`, `vendor_id`, `reference_no`, `total_qty`, `subtotal_amount`, `discount_amount`, `tax_amount`, `shipping_cost`, `grand_total`, `paid_amount`, `due_amount`, `payment_status`, `payment_method`, `received_date`, `status`, `invoice_file`, `note`, `created_by`, `created_at`, `updated_at`) VALUES
+(5, '2025-10-29', 'INV-1001', 2, 'REF-123', 10, 5000.00, 500.00, 300.00, 100.00, 4900.00, 3000.00, 1900.00, 'Partial', 'Bank', '2025-10-30', 'Pending', 'invoice1001.pdf', 'First purchase of the month', 3, '2025-10-29 13:53:57', '2025-10-29 13:53:57');
 
 -- --------------------------------------------------------
 
@@ -423,7 +446,8 @@ ALTER TABLE `product_units`
 --
 ALTER TABLE `purchases`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `purchases_vendor_id_foreign` (`vendor_id`);
+  ADD KEY `vendor_id` (`vendor_id`),
+  ADD KEY `created_by` (`created_by`);
 
 --
 -- Indexes for table `sessions`
@@ -492,7 +516,7 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `product_units`
@@ -504,7 +528,7 @@ ALTER TABLE `product_units`
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -533,7 +557,8 @@ ALTER TABLE `products`
 -- Constraints for table `purchases`
 --
 ALTER TABLE `purchases`
-  ADD CONSTRAINT `purchases_vendor_id_foreign` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `purchases_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`),
+  ADD CONSTRAINT `purchases_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
