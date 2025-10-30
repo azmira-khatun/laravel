@@ -83,11 +83,10 @@ Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name
 Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customerDelete');
 
 
-
-// / Purchases Routes
-Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchasesIndex');
+// 🧾 Purchases Routes
+Route::get('/purchases/history', [PurchaseController::class, 'history'])->name('purchasesHistory');
 Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchasesCreate');
-Route::post('/purchases', [PurchaseController::class, 'store'])->name('purchasesStore');
+Route::post('/purchases/store', [PurchaseController::class, 'store'])->name('purchasesStore');
 Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchasesShow');
 Route::get('/purchases/{purchase}/edit', [PurchaseController::class, 'edit'])->name('purchasesEdit');
 Route::put('/purchases/{purchase}', [PurchaseController::class, 'update'])->name('purchasesUpdate');

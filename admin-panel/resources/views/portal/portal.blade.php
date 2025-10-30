@@ -74,6 +74,8 @@
             </ul>
           </li> -->
                     <li><a href="http://localhost:5173">Login</a></li>
+                    <!-- <li><a href="http://localhost:5173">Registration</a></li> -->
+
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
