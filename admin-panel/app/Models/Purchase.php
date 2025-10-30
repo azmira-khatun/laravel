@@ -10,34 +10,28 @@ class Purchase extends Model
     use HasFactory;
 
     protected $fillable = [
-        'purchase_date',
-        'invoice_no',
         'vendor_id',
-        'reference_no',
-        'total_qty',
+        'invoice_no',
+        'purchase_date',
+        'product_quantity',
         'subtotal_amount',
         'discount_amount',
-        'tax_amount',
-        'shipping_cost',
-        'grand_total',
+        'product_price',
         'paid_amount',
         'due_amount',
         'payment_status',
         'payment_method',
-        'received_date',
+        'receive_date',
         'status',
-        'invoice_file',
         'note',
-        'created_by'
+        'tax_amount',
+        'shipping_cost',
+        'total_cost',
     ];
 
+    // Relation with Vendor
     public function vendor()
     {
         return $this->belongsTo(Vendor::class);
-    }
-
-    public function creator()
-    {
-        return $this->belongsTo(User::class, 'created_by');
     }
 }

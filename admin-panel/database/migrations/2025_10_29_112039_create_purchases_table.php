@@ -6,39 +6,41 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
         Schema::create('purchases', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->date('purchase_date');
-            $table->string('invoice_no', 50)->unique();
+            $table->id();
             $table->unsignedBigInteger('vendor_id');
-            // warehouse_id বাদ দেওয়া হয়েছে
-            $table->string('reference_no', 100)->nullable();
-            $table->integer('total_qty');
-            $table->decimal('subtotal_amount',10,2);
-            $table->decimal('discount_amount',10,2)->nullable();
-            $table->decimal('tax_amount',10,2)->nullable();
-            $table->decimal('shipping_cost',10,2)->nullable();
-            $table->decimal('grand_total',10,2);
-            $table->decimal('paid_amount',10,2);
-            $table->decimal('due_amount',10,2);
-            $table->enum('payment_status', ['Paid','Due','Partial']);
-            $table->enum('payment_method', ['Cash','Bank','Mobile','Cheque','Other']);
-            $table->date('received_date')->nullable();
-            $table->enum('status', ['Pending','Received','Cancelled']);
-            $table->string('invoice_file',255)->nullable();
+            $table->string('invoice_no')->unique();
+            $table->date('purchase_date');
+            $table->integer('product_quantity')->default(0);
+            $table->decimal('subtotal_amount', 12, 2)->default(0);
+            $table->decimal('discount_amount', 12, 2)->default(0);
+            $table->decimal('product_price', 12, 2)->default(0);
+            $table->decimal('paid_amount', 12, 2)->default(0);
+            $table->decimal('due_amount', 12, 2)->default(0);
+            $table->string('payment_status')->default('pending'); // paid, pending, partial
+            $table->string('payment_method')->nullable(); // cash, bank, etc.
+            $table->date('receive_date')->nullable();
+            $table->string('status')->default('active'); // active, cancelled, etc.
             $table->text('note')->nullable();
-            $table->unsignedBigInteger('created_by');
+            $table->decimal('tax_amount', 12, 2)->default(0);
+            $table->decimal('shipping_cost', 12, 2)->default(0);
+            $table->decimal('total_cost', 12, 2)->default(0);
             $table->timestamps();
 
-            // ফরেন কী‑র রিলেশন
+            // Foreign key
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
         Schema::dropIfExists('purchases');
     }

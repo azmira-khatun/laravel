@@ -8,112 +8,85 @@ use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
-    // 🧾 Show all purchases (History Page)
+    // Purchase History
     public function history()
     {
-        $purchases = Purchase::with('vendor')->orderBy('id', 'desc')->get();
-        return view('pages.purchases.historyPurchase', compact('purchases'));
+        $purchases = Purchase::with('vendor')->latest()->paginate(10);
+        return view('pages.purchases.history', compact('purchases'));
     }
 
-    // ➕ Show create form
+    // Show Create Form
     public function create()
     {
         $vendors = Vendor::all();
-        return view('pages.purchases.createPurchase', compact('vendors'));
+        return view('pages.purchases.create', compact('vendors'));
     }
 
-    // 💾 Store new purchase
+    // Store Purchase
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
+            'vendor_id' => 'required|exists:vendors,id',
+            'invoice_no' => 'required|unique:purchases,invoice_no',
             'purchase_date' => 'required|date',
-            'invoice_no' => 'required|string|max:50|unique:purchases',
-            'vendor_id' => 'required|integer|exists:vendors,id',
-            'reference_no' => 'nullable|string|max:100',
-            'total_qty' => 'required|integer',
-            'subtotal_amount' => 'required|numeric',
-            'discount_amount' => 'nullable|numeric',
-            'tax_amount' => 'nullable|numeric',
-            'shipping_cost' => 'nullable|numeric',
-            'grand_total' => 'required|numeric',
-            'paid_amount' => 'required|numeric',
-            'due_amount' => 'required|numeric',
-            'payment_status' => 'required|in:Paid,Due,Partial',
-            'payment_method' => 'required|in:Cash,Bank,Mobile,Cheque,Other',
-            'received_date' => 'nullable|date',
-            'status' => 'required|in:Pending,Received,Cancelled',
-            'note' => 'nullable|string',
-            'invoice_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'product_quantity' => 'required|integer|min:0',
+            'product_price' => 'required|numeric|min:0',
+            'paid_amount' => 'required|numeric|min:0',
         ]);
 
-        // 🧾 File upload handle
-        if ($request->hasFile('invoice_file')) {
-            $validated['invoice_file'] = $request->file('invoice_file')->store('invoices', 'public');
-        }
+        $data = $request->all();
 
-        // 👤 Add created_by user
-        $validated['created_by'] = auth()->id() ?? 1;
+        // Calculate subtotal and total cost
+        $data['subtotal_amount'] = $data['product_price'] * $data['product_quantity'];
+        $data['total_cost'] = $data['subtotal_amount'] + $data['tax_amount'] + $data['shipping_cost'] - $data['discount_amount'];
+        $data['due_amount'] = $data['total_cost'] - $data['paid_amount'];
 
-        // ✅ Insert into database
-        Purchase::create($validated);
+        Purchase::create($data);
 
-        // 🔁 Redirect to History Page
-        return redirect()->route('purchasesHistory')->with('message', '✅ Purchase successfully created.');
+        return redirect()->route('purchasesHistory')->with('message', 'Purchase added successfully!');
     }
 
-    // 👁️ Show single purchase
+    // Show Purchase
     public function show(Purchase $purchase)
     {
-        return view('pages.purchases.viewPurchase', compact('purchase'));
+        return view('pages.purchases.show', compact('purchase'));
     }
 
-    // ✏️ Show edit form
+    // Edit Purchase
     public function edit(Purchase $purchase)
     {
         $vendors = Vendor::all();
-        return view('pages.purchases.editPurchase', compact('purchase', 'vendors'));
+        return view('pages.purchases.edit', compact('purchase', 'vendors'));
     }
 
-    // ♻️ Update purchase
+    // Update Purchase
     public function update(Request $request, Purchase $purchase)
     {
-        $validated = $request->validate([
+        $request->validate([
+            'vendor_id' => 'required|exists:vendors,id',
+            'invoice_no' => 'required|unique:purchases,invoice_no,' . $purchase->id,
             'purchase_date' => 'required|date',
-            'invoice_no' => 'required|string|max:50|unique:purchases,invoice_no,' . $purchase->id,
-            'vendor_id' => 'required|integer|exists:vendors,id',
-            'reference_no' => 'nullable|string|max:100',
-            'total_qty' => 'required|integer',
-            'subtotal_amount' => 'required|numeric',
-            'discount_amount' => 'nullable|numeric',
-            'tax_amount' => 'nullable|numeric',
-            'shipping_cost' => 'nullable|numeric',
-            'grand_total' => 'required|numeric',
-            'paid_amount' => 'required|numeric',
-            'due_amount' => 'required|numeric',
-            'payment_status' => 'required|in:Paid,Due,Partial',
-            'payment_method' => 'required|in:Cash,Bank,Mobile,Cheque,Other',
-            'received_date' => 'nullable|date',
-            'status' => 'required|in:Pending,Received,Cancelled',
-            'note' => 'nullable|string',
-            'invoice_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'product_quantity' => 'required|integer|min:0',
+            'product_price' => 'required|numeric|min:0',
+            'paid_amount' => 'required|numeric|min:0',
         ]);
 
-        // 🧾 File upload update
-        if ($request->hasFile('invoice_file')) {
-            $validated['invoice_file'] = $request->file('invoice_file')->store('invoices', 'public');
-        }
+        $data = $request->all();
 
-        // ✅ Update record
-        $purchase->update($validated);
+        // Recalculate totals
+        $data['subtotal_amount'] = $data['product_price'] * $data['product_quantity'];
+        $data['total_cost'] = $data['subtotal_amount'] + $data['tax_amount'] + $data['shipping_cost'] - $data['discount_amount'];
+        $data['due_amount'] = $data['total_cost'] - $data['paid_amount'];
 
-        // 🔁 Redirect to History Page
-        return redirect()->route('purchasesHistory')->with('message', '✅ Purchase updated successfully.');
+        $purchase->update($data);
+
+        return redirect()->route('purchasesHistory')->with('message', 'Purchase updated successfully!');
     }
 
-    // 🗑️ Delete purchase
+    // Delete Purchase
     public function destroy(Purchase $purchase)
     {
         $purchase->delete();
-        return redirect()->route('purchasesHistory')->with('message', '🗑️ Purchase deleted successfully.');
+        return redirect()->route('purchasesHistory')->with('message', 'Purchase deleted successfully!');
     }
 }
