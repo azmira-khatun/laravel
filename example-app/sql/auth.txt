@@ -1,0 +1,11 @@
+   
+authenction korar jonno laravel breeze install deya search dbo.
+install
+1.composer require laravel/breeze --dev
+2.php artisan breeze:install
+3. npm install
+4.npm run dev
+5.php artisan migrate
+6.php artisan serve
+
+@@jodi ami (npm run dev r php artisan serve)ai dui ta command na dai tahola composer artisan serve de;a ai dui tar command kaj kora

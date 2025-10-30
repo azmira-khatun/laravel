@@ -46,7 +46,7 @@ class User extends Authenticatable
         ];
     }
 
-     // ----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
     // One-to-One relation
     // ----------------------------------------------------------------------
 
@@ -54,5 +54,12 @@ class User extends Authenticatable
     public function profile()
     {
         return $this->hasOne(Profile::class);
+    }
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 }
