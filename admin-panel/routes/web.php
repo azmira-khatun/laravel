@@ -8,6 +8,7 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ProductUnitController;
+use App\Http\Controllers\PurchaseItemController;
 
 
 
@@ -91,3 +92,14 @@ Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])->name('
 Route::get('/purchases/{purchase}/edit', [PurchaseController::class, 'edit'])->name('purchasesEdit');
 Route::put('/purchases/{purchase}', [PurchaseController::class, 'update'])->name('purchasesUpdate');
 Route::delete('/purchases/{purchase}', [PurchaseController::class, 'destroy'])->name('purchasesDelete');
+
+
+
+
+Route::get('/purchase-items/history', [PurchaseItemController::class, 'history'])->name('purchaseItems.history');
+Route::get('/purchase-items/create',  [PurchaseItemController::class, 'create'])->name('purchaseItems.create');
+Route::post('/purchase-items/store',  [PurchaseItemController::class, 'store'])->name('purchaseItems.store');
+Route::get('/purchase-items/{purchaseItem}', [PurchaseItemController::class, 'show'])->name('purchaseItems.show');
+Route::get('/purchase-items/{purchaseItem}/edit', [PurchaseItemController::class, 'edit'])->name('purchaseItems.edit');
+Route::put('/purchase-items/{purchaseItem}', [PurchaseItemController::class, 'update'])->name('purchaseItems.update');
+Route::delete('/purchase-items/{purchaseItem}', [PurchaseItemController::class, 'destroy'])->name('purchaseItems.delete');

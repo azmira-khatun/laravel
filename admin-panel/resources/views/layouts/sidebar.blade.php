@@ -84,12 +84,23 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="{{ route('purchasesHistory') }}" class="nav-link">
-                        <i class="bi bi-cart-check-fill"></i>
-                        <span>Purchase</span>
-                    </a>
-                </li>
+
+<li class="nav-item dropdown">
+    <a href="#" class="nav-link dropdown-toggle" id="sidebarPurchasesDropdown" role="button"
+       data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-cart-check-fill"></i>
+        <span>Purchases</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="sidebarPurchasesDropdown">
+        <li>
+            <a class="dropdown-item" href="{{ url('/purchase-items') }}">
+                Purchase Items
+            </a>
+        </li>
+    </ul>
+</li>
+
+
 
 
                 <li class="nav-item">
