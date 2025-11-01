@@ -19,4 +19,8 @@ class Vendor extends Model
         'tin_number',
         'bank_details',
     ];
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
+    }
 }

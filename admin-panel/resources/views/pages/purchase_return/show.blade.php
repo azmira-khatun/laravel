@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('content')
-    <div class="container mt-4">
+    <div class="container mt‑4">
         <h2>Purchase Return Details</h2>
 
         <table class="table table-bordered">
@@ -14,6 +14,10 @@
                 <td>{{ $return->purchase->invoice_no ?? '-' }}</td>
             </tr>
             <tr>
+                <th>Product Name</th>
+                <td>{{ $return->product->name ?? $return->product_name ?? '-' }}</td>
+            </tr>
+            <tr>
                 <th>Total Quantity</th>
                 <td>{{ $return->total_quantity }}</td>
             </tr>
@@ -23,23 +27,23 @@
             </tr>
             <tr>
                 <th>Subtotal Amount</th>
-                <td>{{ $return->subtotal_amount }}</td>
+                <td>{{ number_format($return->subtotal_amount, 2) }}</td>
             </tr>
             <tr>
                 <th>Tax Amount</th>
-                <td>{{ $return->tax_amount }}</td>
+                <td>{{ number_format($return->tax_amount, 2) }}</td>
             </tr>
             <tr>
                 <th>Shipping Cost</th>
-                <td>{{ $return->shipping_cost_adjustment }}</td>
+                <td>{{ number_format($return->shipping_cost, 2) }}</td>
             </tr>
             <tr>
                 <th>Refund Amount</th>
-                <td>{{ $return->refund_amount }}</td>
+                <td>{{ number_format($return->refund_amount, 2) }}</td>
             </tr>
             <tr>
                 <th>Net Refund</th>
-                <td>{{ $return->net_refund }}</td>
+                <td>{{ number_format($return->net_refund, 2) }}</td>
             </tr>
             <tr>
                 <th>Status</th>
@@ -51,6 +55,6 @@
             </tr>
         </table>
 
-        <a href="{{ route('purchase_returns.index') }}" class="btn btn-secondary">Back</a>
+        <a href="{{ route('purchase_returns.index') }}" class="btn btn-secondary mt‑2">Back</a>
     </div>
 @endsection

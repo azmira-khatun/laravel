@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,6 +9,11 @@ return new class extends Migration {
         Schema::create('purchase_returns', function (Blueprint $table) {
             $table->id();
             $table->foreignId('purchase_id')->constrained('purchases')->onDelete('cascade');
+
+            // নতুন: product সম্পর্ক
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->string('product_name')->nullable(); // যদি নাম‐snapshop রাখতে চান
+
             $table->integer('total_quantity');
             $table->decimal('subtotal_amount', 10, 2);
             $table->decimal('tax_amount', 10, 2);
@@ -22,7 +26,6 @@ return new class extends Migration {
             $table->text('note')->nullable();
             $table->timestamps();
         });
-
     }
 
     public function down(): void

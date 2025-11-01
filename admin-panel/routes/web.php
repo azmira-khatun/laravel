@@ -10,6 +10,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ProductUnitController;
 use App\Http\Controllers\PurchaseItemController;
 use App\Http\Controllers\PurchaseReturnController;
+use App\Http\Controllers\StockController;
 
 
 
@@ -123,3 +124,15 @@ Route::delete('/purchase_returns/{id}', [PurchaseReturnController::class, 'destr
 // AJAX route to fetch purchase data
 Route::post('/purchase_returns/fetch_purchase_data', [PurchaseReturnController::class, 'fetchPurchaseData'])
     ->name('purchase_returns.fetch_purchase_data');
+
+
+
+
+    // Stocks Routes
+Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
+Route::get('/stocks/create', [StockController::class, 'create'])->name('stocks.create');
+Route::post('/stocks', [StockController::class, 'store'])->name('stocks.store');
+Route::get('/stocks/{stock}', [StockController::class, 'show'])->name('stocks.show');
+Route::get('/stocks/{stock}/edit', [StockController::class, 'edit'])->name('stocks.edit');
+Route::put('/stocks/{stock}', [StockController::class, 'update'])->name('stocks.update');
+Route::delete('/stocks/{stock}', [StockController::class, 'destroy'])->name('stocks.destroy');

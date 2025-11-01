@@ -22,13 +22,18 @@
             </div>
 
             <div class="mb-3">
+                <label for="product_name" class="form-label">Product Name</label>
+                <input type="text" name="product_name" id="product_name" class="form-control" readonly>
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label">Total Purchased Quantity</label>
                 <input type="text" id="total_quantity" name="total_quantity" class="form-control" readonly>
             </div>
 
             <div class="mb-3">
-                <label for="product_quantity" class="form-label">Return Quantity</label>
-                <input type="number" name="return_quantity" id="product_quantity" class="form-control" min="1" required>
+                <label for="return_quantity" class="form-label">Return Quantity</label>
+                <input type="number" name="return_quantity" id="return_quantity" class="form-control" min="1" required>
             </div>
 
             <div class="mb-3">
@@ -43,8 +48,7 @@
 
             <div class="mb-3">
                 <label for="shipping_cost_adjustment" class="form-label">Shipping Cost</label>
-                <input type="text" id="shipping_cost_adjustment" name="shipping_cost_adjustment" class="form-control"
-                    readonly>
+                <input type="text" id="shipping_cost_adjustment" name="shipping_cost_adjustment" class="form-control" readonly>
             </div>
 
             <div class="mb-3">
@@ -89,20 +93,30 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const purchaseSelect = document.getElementById('purchase_id');
-            const totalQtyField = document.getElementById('total_quantity');
-            const subtotalField = document.getElementById('subtotal_amount');
-            const taxField = document.getElementById('tax_amount');
-            const shippingField = document.getElementById('shipping_cost_adjustment');
-            const returnQtyInput = document.getElementById('product_quantity');
-            const refundField = document.getElementById('refund_amount');
-            const netRefundField = document.getElementById('net_refund');
+            const purchaseSelect       = document.getElementById('purchase_id');
+            const productNameField     = document.getElementById('product_name');
+            const totalQtyField        = document.getElementById('total_quantity');
+            const subtotalField        = document.getElementById('subtotal_amount');
+            const taxField             = document.getElementById('tax_amount');
+            const shippingField        = document.getElementById('shipping_cost_adjustment');
+            const returnQtyInput       = document.getElementById('return_quantity');
+            const refundField          = document.getElementById('refund_amount');
+            const netRefundField       = document.getElementById('net_refund');
 
             let totalQty = 1, subtotal = 0, tax = 0, shipping = 0;
 
             purchaseSelect.addEventListener('change', function () {
                 const pid = this.value;
-                if (!pid) return;
+                if (!pid) {
+                    productNameField.value = '';
+                    totalQtyField.value   = '';
+                    subtotalField.value   = '';
+                    taxField.value        = '';
+                    shippingField.value   = '';
+                    refundField.value     = '';
+                    netRefundField.value  = '';
+                    return;
+                }
 
                 fetch("{{ route('purchase_returns.fetch_purchase_data') }}", {
                     method: 'POST',
@@ -112,32 +126,36 @@
                     },
                     body: JSON.stringify({ purchase_id: pid })
                 })
-                    .then(res => res.json())
-                    .then(data => {
-                        totalQty = data.total_quantity || 1;
-                        subtotal = parseFloat(data.subtotal_amount) || 0;
-                        tax = parseFloat(data.tax_amount) || 0;
-                        shipping = parseFloat(data.shipping_cost) || 0;
+                .then(res => res.json())
+                .then(data => {
+                    productNameField.value = data.product_name || '';
+                    totalQty  = data.total_quantity || 1;
+                    subtotal  = parseFloat(data.subtotal_amount) || 0;
+                    tax       = parseFloat(data.tax_amount)     || 0;
+                    shipping  = parseFloat(data.shipping_cost)  || 0;
 
-                        totalQtyField.value = totalQty;
-                        subtotalField.value = subtotal.toFixed(2);
-                        taxField.value = tax.toFixed(2);
-                        shippingField.value = shipping.toFixed(2);
+                    totalQtyField.value = totalQty;
+                    subtotalField.value = subtotal.toFixed(2);
+                    taxField.value      = tax.toFixed(2);
+                    shippingField.value = shipping.toFixed(2);
 
-                        calculateRefund();
-                    });
+                    calculateRefund();
+                })
+                .catch(err => {
+                    console.error('Fetch error:', err);
+                });
             });
 
             function calculateRefund() {
                 const returnQty = parseFloat(returnQtyInput.value) || 0;
 
-                const refund = (subtotal / totalQty) * returnQty;
-                const proportionalTax = (tax / totalQty) * returnQty;
-                const proportionalShipping = (shipping / totalQty) * returnQty;
-                const netRefund = refund - (proportionalTax + proportionalShipping);
+                const refund            = (subtotal / totalQty) * returnQty;
+                const proportionalTax   = (tax      / totalQty) * returnQty;
+                const proportionalShip  = (shipping / totalQty) * returnQty;
+                const netRefundCalc     = refund - (proportionalTax + proportionalShip);
 
-                refundField.value = refund.toFixed(2);
-                netRefundField.value = netRefund.toFixed(2);
+                refundField.value       = refund.toFixed(2);
+                netRefundField.value    = netRefundCalc.toFixed(2);
             }
 
             returnQtyInput.addEventListener('input', calculateRefund);

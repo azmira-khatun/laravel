@@ -1,15 +1,20 @@
 <?php
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class PurchaseReturn extends Model
 {
-    use HasFactory;
+    protected $table = 'purchase_returns';
 
+    /**
+     * The attributes that are mass assignable.
+     */
     protected $fillable = [
         'purchase_id',
+        'product_id',
+        'product_name',
         'total_quantity',
         'subtotal_amount',
         'tax_amount',
@@ -19,13 +24,22 @@ class PurchaseReturn extends Model
         'net_refund',
         'payment_method',
         'status',
-        'note'
+        'note',
     ];
 
+    /**
+     * Beziehungen / relations
+     */
+
+    // PurchaseReturn belongs to a Purchase
     public function purchase()
     {
-        return $this->belongsTo(Purchase::class, 'purchase_id');
+        return $this->belongsTo(Purchase::class);
     }
 
-
+    // PurchaseReturn belongs to a Product
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }
