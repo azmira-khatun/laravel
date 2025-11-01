@@ -17,12 +17,24 @@
         <form action="{{ route('purchasesStore') }}" method="POST">
             @csrf
 
+            <!-- Vendor -->
             <div class="mb-3">
                 <label for="vendor_id" class="form-label">Vendor</label>
                 <select name="vendor_id" id="vendor_id" class="form-control" required>
                     <option value="">Select Vendor</option>
                     @foreach($vendors as $vendor)
                         <option value="{{ $vendor->id }}">{{ $vendor->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Product -->
+            <div class="mb-3">
+                <label for="product_id" class="form-label">Product</label>
+                <select name="product_id" id="product_id" class="form-control" required>
+                    <option value="">Select Product</option>
+                    @foreach($products as $product)
+                        <option value="{{ $product->id }}">{{ $product->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -39,7 +51,7 @@
 
             <div class="mb-3">
                 <label for="product_quantity" class="form-label">Product Quantity</label>
-                <input type="number" name="product_quantity" id="product_quantity" class="form-control" value="0" min="1"
+                <input type="number" name="product_quantity" id="product_quantity" class="form-control" value="1" min="1"
                     required>
             </div>
 
@@ -107,7 +119,6 @@
                 </select>
             </div>
 
-
             <div class="mb-3">
                 <label for="receive_date" class="form-label">Receive Date</label>
                 <input type="date" name="receive_date" id="receive_date" class="form-control">
@@ -155,9 +166,26 @@
             document.getElementById('due_amount').value = due.toFixed(2);
         }
 
-        // লিসেনার যোগ করা
+        // Listeners for auto calculation
         ['product_quantity', 'subtotal_amount', 'discount_amount', 'tax_amount', 'shipping_cost', 'paid_amount'].forEach(id => {
             document.getElementById(id).addEventListener('input', calculateProductPriceTotalDue);
+        });
+
+        // Product select auto-fill
+        document.getElementById('product_id').addEventListener('change', function () {
+            let productId = this.value;
+            if (!productId) return;
+
+            fetch(`/products/${productId}/info`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('subtotal_amount').value = data.price;
+                    document.getElementById('tax_amount').value = data.tax;
+                    document.getElementById('shipping_cost').value = data.shipping;
+                    document.getElementById('product_quantity').value = 1;
+
+                    calculateProductPriceTotalDue();
+                });
         });
     </script>
 @endsection

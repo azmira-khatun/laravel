@@ -36,10 +36,15 @@ class PurchaseItem extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+    public function items()
+    {
+        return $this->hasMany(PurchaseItem::class);
+    }
 
     // Belongs to a unit
     public function unit()
     {
         return $this->belongsTo(ProductUnit::class, 'unit_id');
     }
+
 }

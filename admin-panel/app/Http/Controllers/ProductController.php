@@ -82,4 +82,15 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
+    public function getProductInfo($id)
+    {
+        $product = Product::findOrFail($id);
+
+        return response()->json([
+            'price' => $product->price,
+            'tax' => $product->tax_amount ?? 0,
+            'shipping' => $product->shipping_cost ?? 0,
+        ]);
+    }
+
 }

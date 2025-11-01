@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Purchase;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use App\Models\Product;
+
 
 class PurchaseController extends Controller
 {
@@ -19,7 +21,9 @@ class PurchaseController extends Controller
     public function create()
     {
         $vendors = Vendor::all();
-        return view('pages.purchases.create', compact('vendors'));
+        $products = Product::all(); // <-- ekhane product gulo fetch kora holo
+
+        return view('pages.purchases.create', compact('vendors', 'products'));
     }
 
     // Store Purchase

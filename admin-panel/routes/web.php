@@ -55,6 +55,7 @@ Route::delete('/product_units/{unit}', [ProductUnitController::class, 'destroy']
 
 // product start
 
+Route::get('/products/{id}/info', [ProductController::class, 'getProductInfo']);
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
@@ -86,6 +87,7 @@ Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->
 
 
 // 🧾 Purchases Routes
+
 Route::get('/purchases/history', [PurchaseController::class, 'history'])->name('purchasesHistory');
 Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchasesCreate');
 Route::post('/purchases/store', [PurchaseController::class, 'store'])->name('purchasesStore');
