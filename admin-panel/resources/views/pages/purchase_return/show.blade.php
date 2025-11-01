@@ -1,40 +1,53 @@
 @extends('master')
 
 @section('content')
-<div class="container mt‑4">
-    <h1>Purchase Return Details (ID: {{ $purchaseReturn->id }})</h1>
+    <div class="container mt-4">
+        <h2>Purchase Return Details</h2>
 
-    <div class="card mb‑4">
-        <div class="card-body">
-            <h5 class="card-title">Original Purchase</h5>
-            <p class="card-text">
-                Invoice No: <strong>{{ $purchaseReturn->purchase->invoice_no ?? '-' }}</strong><br>
-                Vendor: <strong>{{ $purchaseReturn->vendor->name ?? '-' }}</strong><br>
-                Purchase Date: <strong>{{ $purchaseReturn->purchase->purchase_date ?? '-' }}</strong>
-            </p>
+        <table class="table table-bordered">
+            <tr>
+                <th>Purchase Invoice</th>
+                <td>{{ $purchaseReturn->purchase->invoice_no ?? '' }}</td>
+            </tr>
+            <tr>
+                <th>Return Quantity</th>
+                <td>{{ $purchaseReturn->product_quantity }}</td>
+            </tr>
+            <tr>
+                <th>Subtotal Amount</th>
+                <td>{{ $purchaseReturn->subtotal_amount }}</td>
+            </tr>
+            <tr>
+                <th>Tax Amount</th>
+                <td>{{ $purchaseReturn->tax_amount }}</td>
+            </tr>
+            <tr>
+                <th>Shipping Cost</th>
+                <td>{{ $purchaseReturn->shipping_cost_adjustment }}</td>
+            </tr>
+            <tr>
+                <th>Refund Amount</th>
+                <td>{{ $purchaseReturn->refund_amount }}</td>
+            </tr>
+            <tr>
+                <th>Net Refund</th>
+                <td>{{ $purchaseReturn->refund_amount - ($purchaseReturn->tax_amount + $purchaseReturn->shipping_cost_adjustment) }}
+                </td>
+            </tr>
+            <tr>
+                <th>Payment Method</th>
+                <td>{{ $purchaseReturn->payment_method }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ $purchaseReturn->status }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ $purchaseReturn->note }}</td>
+            </tr>
+        </table>
 
-            <h5 class="card-title mt‑4">Return Information</h5>
-            <p class="card-text">
-                Return Invoice No: <strong>{{ $purchaseReturn->return_invoice_no ?? '-' }}</strong><br>
-                Return Date: <strong>{{ $purchaseReturn->return_date }}</strong><br>
-                Quantity Returned: <strong>{{ $purchaseReturn->product_quantity }}</strong><br>
-                Refund Amount: <strong>{{ number_format($purchaseReturn->refund_amount,2) }}</strong><br>
-                Tax Adjustment: <strong>{{ $purchaseReturn->tax_amount ? number_format($purchaseReturn->tax_amount,2) : '-' }}</strong><br>
-                Shipping Adjustment: <strong>{{ $purchaseReturn->shipping_cost_adjustment ? number_format($purchaseReturn->shipping_cost_adjustment,2) : '-' }}</strong><br>
-                Net Refund: <strong>{{ number_format($purchaseReturn->net_refund,2) }}</strong><br>
-                Payment Method: <strong>{{ $purchaseReturn->payment_method ?? '-' }}</strong><br>
-                Status: <strong>{{ ucfirst($purchaseReturn->status) }}</strong><br>
-                Note: <em>{{ $purchaseReturn->note ?? 'No note available' }}</em>
-            </p>
-        </div>
+        <a href="{{ route('purchase_returns.index') }}" class="btn btn-primary">Back to List</a>
     </div>
-
-    <a href="{{ route('purchase_returns.edit', $purchaseReturn) }}" class="btn btn-warning">Edit</a>
-    <form action="{{ route('purchase_returns.destroy', $purchaseReturn) }}" method="POST" style="display:inline‑block;" onsubmit="return confirm('Are you sure you want to delete this record?');">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="btn btn-danger">Delete</button>
-    </form>
-    <a href="{{ route('purchase_returns.index') }}" class="btn btn-secondary">Back to List</a>
-</div>
 @endsection

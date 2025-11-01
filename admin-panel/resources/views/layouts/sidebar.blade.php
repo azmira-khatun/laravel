@@ -83,28 +83,26 @@
                         <p>Customers</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('purchasesHistory') }}" class="nav-link">
+                        <i class="bi bi-people-fill"></i>
+                        <p>Purchase</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('purchaseItems.index') }}" class="nav-link">
+                        <i class="bi bi-people-fill"></i>
+                        <p>Purchase Items</p>
+                    </a>
+                </li>
 
 
-<li class="nav-item dropdown">
-    <a href="#" class="nav-link dropdown-toggle" id="sidebarPurchasesDropdown" role="button"
-       data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-cart-check-fill"></i>
-        <span>Purchases</span>
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="sidebarPurchasesDropdown">
-        <li>
-            <a class="dropdown-item" href="{{ url('/purchase-items') }}">
-                Purchase Items
-            </a>
-        </li>
-    </ul>
-</li>
-
-     <li class="nav-item">
-                <a class="nav-link" href="{{ route('purchase_returns.index') }}">
-                    Purchase Returns
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('purchase_returns.index') }}">
+                        Purchase Returns
+                    </a>
+                </li>
 
 
                 <li class="nav-item">
