@@ -451,3 +451,13 @@ damage_products (ref: stocks.id, users.id)
 19	revenues
 20	expired_products
 21	damage_products
+
+
+
+
+
+
+Total Cost = Subtotal Amount 
+             − Discount Amount 
+             + Tax Amount 
+             + Shipping Cost

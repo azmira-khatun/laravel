@@ -9,6 +9,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ProductUnitController;
 use App\Http\Controllers\PurchaseItemController;
+use App\Http\Controllers\PurchaseReturnController;
 
 
 
@@ -103,3 +104,18 @@ Route::get('/purchase-items/{purchaseItem}', [PurchaseItemController::class, 'sh
 Route::get('/purchase-items/{purchaseItem}/edit', [PurchaseItemController::class, 'edit'])->name('purchaseItems.edit');
 Route::put('/purchase-items/{purchaseItem}', [PurchaseItemController::class, 'update'])->name('purchaseItems.update');
 Route::delete('/purchase-items/{purchaseItem}', [PurchaseItemController::class, 'destroy'])->name('purchaseItems.delete');
+
+
+
+
+
+Route::get('/purchase‑returns', [PurchaseReturnController::class, 'index'])->name('purchase_returns.index');
+Route::get('/purchase‑returns/create', [PurchaseReturnController::class, 'create'])->name('purchase_returns.create');
+Route::post('/purchase‑returns', [PurchaseReturnController::class, 'store'])->name('purchase_returns.store');
+Route::get('/purchase‑returns/{purchaseReturn}', [PurchaseReturnController::class, 'show'])->name('purchase_returns.show');
+Route::get('/purchase‑returns/{purchaseReturn}/edit', [PurchaseReturnController::class, 'edit'])->name('purchase_returns.edit');
+Route::put('/purchase‑returns/{purchaseReturn}', [PurchaseReturnController::class, 'update'])->name('purchase_returns.update');
+Route::delete('/purchase‑returns/{purchaseReturn}', [PurchaseReturnController::class, 'destroy'])->name('purchase_returns.destroy');
+
+// AJAX route to fetch purchase data
+Route::post('/purchase‑returns/fetch‑purchase‑data', [PurchaseReturnController::class, 'fetchPurchaseData'])->name('purchase_returns.fetch_purchase_data');

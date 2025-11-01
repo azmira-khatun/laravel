@@ -100,7 +100,11 @@
     </ul>
 </li>
 
-
+     <li class="nav-item">
+                <a class="nav-link" href="{{ route('purchase_returns.index') }}">
+                    Purchase Returns
+                </a>
+            </li>
 
 
                 <li class="nav-item">
