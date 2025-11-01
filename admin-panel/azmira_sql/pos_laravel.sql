@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 30, 2025 at 01:31 AM
+-- Generation Time: Nov 01, 2025 at 02:21 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -257,35 +257,90 @@ INSERT INTO `product_units` (`id`, `unit_name`, `description`, `created_at`, `up
 
 CREATE TABLE `purchases` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `purchase_date` date NOT NULL,
-  `invoice_no` varchar(100) NOT NULL,
   `vendor_id` bigint(20) UNSIGNED NOT NULL,
-  `reference_no` varchar(100) DEFAULT NULL,
-  `total_qty` int(11) NOT NULL,
-  `subtotal_amount` decimal(10,2) NOT NULL,
-  `discount_amount` decimal(10,2) DEFAULT 0.00,
-  `tax_amount` decimal(10,2) DEFAULT 0.00,
-  `shipping_cost` decimal(10,2) DEFAULT 0.00,
-  `grand_total` decimal(10,2) NOT NULL,
-  `paid_amount` decimal(10,2) NOT NULL,
-  `due_amount` decimal(10,2) NOT NULL,
-  `payment_status` enum('Paid','Due','Partial') NOT NULL,
-  `payment_method` enum('Cash','Bank','Mobile','Cheque','Other') NOT NULL,
-  `received_date` date DEFAULT NULL,
-  `status` enum('Pending','Received','Cancelled') NOT NULL,
-  `invoice_file` varchar(255) DEFAULT NULL,
+  `invoice_no` varchar(255) NOT NULL,
+  `purchase_date` date NOT NULL,
+  `product_quantity` int(11) DEFAULT 0,
+  `subtotal_amount` decimal(12,2) DEFAULT 0.00,
+  `discount_amount` decimal(12,2) DEFAULT 0.00,
+  `product_price` decimal(12,2) DEFAULT 0.00,
+  `paid_amount` decimal(12,2) DEFAULT 0.00,
+  `due_amount` decimal(12,2) DEFAULT 0.00,
+  `payment_status` varchar(50) DEFAULT 'pending',
+  `payment_method` varchar(100) DEFAULT NULL,
+  `receive_date` date DEFAULT NULL,
+  `status` varchar(50) DEFAULT 'active',
   `note` text DEFAULT NULL,
-  `created_by` bigint(20) UNSIGNED DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `tax_amount` decimal(12,2) DEFAULT 0.00,
+  `shipping_cost` decimal(12,2) DEFAULT 0.00,
+  `total_cost` decimal(12,2) DEFAULT 0.00,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `purchases`
 --
 
-INSERT INTO `purchases` (`id`, `purchase_date`, `invoice_no`, `vendor_id`, `reference_no`, `total_qty`, `subtotal_amount`, `discount_amount`, `tax_amount`, `shipping_cost`, `grand_total`, `paid_amount`, `due_amount`, `payment_status`, `payment_method`, `received_date`, `status`, `invoice_file`, `note`, `created_by`, `created_at`, `updated_at`) VALUES
-(5, '2025-10-29', 'INV-1001', 2, 'REF-123', 10, 5000.00, 500.00, 300.00, 100.00, 4900.00, 3000.00, 1900.00, 'Partial', 'Bank', '2025-10-30', 'Pending', 'invoice1001.pdf', 'First purchase of the month', 3, '2025-10-29 13:53:57', '2025-10-29 13:53:57');
+INSERT INTO `purchases` (`id`, `vendor_id`, `invoice_no`, `purchase_date`, `product_quantity`, `subtotal_amount`, `discount_amount`, `product_price`, `paid_amount`, `due_amount`, `payment_status`, `payment_method`, `receive_date`, `status`, `note`, `tax_amount`, `shipping_cost`, `total_cost`, `created_at`, `updated_at`) VALUES
+(2, 3, 'INV-1001', '2025-10-31', 5, 450.00, 50.00, 90.00, 300.00, 135.00, 'partial', 'cash', '2025-11-01', 'active', 'First purchase test', 25.00, 10.00, 435.00, '2025-10-30 22:07:04', '2025-10-30 16:14:21');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase_items`
+--
+
+CREATE TABLE `purchase_items` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `purchase_id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `unit_id` bigint(20) UNSIGNED NOT NULL,
+  `quantity` decimal(10,2) NOT NULL,
+  `unit_price` decimal(12,2) NOT NULL,
+  `total_price` decimal(14,2) NOT NULL,
+  `purchased_date` date NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `purchase_items`
+--
+
+INSERT INTO `purchase_items` (`id`, `purchase_id`, `product_id`, `unit_id`, `quantity`, `unit_price`, `total_price`, `purchased_date`, `created_at`, `updated_at`) VALUES
+(2, 2, 2, 2, 5.00, 150.00, 750.00, '0000-00-00', '2025-10-31 09:16:11', '2025-10-31 09:16:11');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase_returns`
+--
+
+CREATE TABLE `purchase_returns` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `purchase_id` bigint(20) UNSIGNED NOT NULL,
+  `vendor_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `return_invoice_no` varchar(255) DEFAULT NULL,
+  `return_date` date NOT NULL,
+  `product_quantity` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `refund_amount` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `tax_amount` decimal(15,2) DEFAULT NULL,
+  `shipping_cost_adjustment` decimal(15,2) DEFAULT NULL,
+  `payment_method` varchar(255) DEFAULT NULL,
+  `status` enum('pending','completed','cancelled') NOT NULL DEFAULT 'pending',
+  `note` text DEFAULT NULL,
+  `net_refund` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `purchase_returns`
+--
+
+INSERT INTO `purchase_returns` (`id`, `purchase_id`, `vendor_id`, `return_invoice_no`, `return_date`, `product_quantity`, `refund_amount`, `tax_amount`, `shipping_cost_adjustment`, `payment_method`, `status`, `note`, `net_refund`, `created_at`, `updated_at`) VALUES
+(2, 2, 3, 'PR‑1001', '0000-00-00', 5, 435.00, 25.00, 10.00, 'cash', 'pending', 'Return of full purchase INV‑1001', 400.00, '2025-11-01 01:04:50', '2025-11-01 01:04:50');
 
 -- --------------------------------------------------------
 
@@ -307,7 +362,8 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('9Zn2AQyy3VQ2Kf3TTDpjW7b1QGqsa4vE48VgvcAR', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoicVhuYzBTeVpVM0FmOE9TQnhNYlppVVA3Q0RIcVQ2a2VVZzI1YlBOMyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1761636246);
+('9Zn2AQyy3VQ2Kf3TTDpjW7b1QGqsa4vE48VgvcAR', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoicVhuYzBTeVpVM0FmOE9TQnhNYlppVVA3Q0RIcVQ2a2VVZzI1YlBOMyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wcm9kdWN0cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1761636246),
+('C4olAGNMyB87vldrxGd6IXMuOuiAMcUqFc0PKXOa', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoicFVzTzJkZ3lic3FGRnExWkNuVXBUQWNoUkZXNFpvYnkxakJNMlgxRiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzk6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wdXJjaGFzZXMvMTEvZWRpdCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1761809342);
 
 -- --------------------------------------------------------
 
@@ -330,6 +386,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Admin', 'admin@example.com', '<hashed-password>', NULL, '2025-10-30 07:28:24', '2025-10-30 07:28:24'),
 (3, 'Al Amin', 'al.amin@example.com', '$2y$10$920tYn8sR6K5bV4J.kQ7o.gW.8G5fK.J4E9F2G7H3', NULL, NULL, NULL),
 (4, 'Shawon Ahmed', 's.sawon2001@gmail.com', '$2y$12$HBNGfIfblXbUOiaP6Ygau.m3UplQzn6o8Q2cXQdlwK8901611JtLm', NULL, '2025-10-21 22:42:36', '2025-10-21 22:42:36');
 
@@ -446,8 +503,25 @@ ALTER TABLE `product_units`
 --
 ALTER TABLE `purchases`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `vendor_id` (`vendor_id`),
-  ADD KEY `created_by` (`created_by`);
+  ADD UNIQUE KEY `invoice_no` (`invoice_no`),
+  ADD KEY `fk_purchases_vendor` (`vendor_id`);
+
+--
+-- Indexes for table `purchase_items`
+--
+ALTER TABLE `purchase_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_purchase_items_purchase` (`purchase_id`),
+  ADD KEY `fk_purchase_items_product` (`product_id`),
+  ADD KEY `fk_purchase_items_unit` (`unit_id`);
+
+--
+-- Indexes for table `purchase_returns`
+--
+ALTER TABLE `purchase_returns`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `purchase_returns_purchase_id_index` (`purchase_id`),
+  ADD KEY `purchase_returns_vendor_id_index` (`vendor_id`);
 
 --
 -- Indexes for table `sessions`
@@ -528,7 +602,19 @@ ALTER TABLE `product_units`
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `purchase_items`
+--
+ALTER TABLE `purchase_items`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `purchase_returns`
+--
+ALTER TABLE `purchase_returns`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -557,8 +643,22 @@ ALTER TABLE `products`
 -- Constraints for table `purchases`
 --
 ALTER TABLE `purchases`
-  ADD CONSTRAINT `purchases_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`),
-  ADD CONSTRAINT `purchases_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `fk_purchases_vendor` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `purchase_items`
+--
+ALTER TABLE `purchase_items`
+  ADD CONSTRAINT `fk_purchase_items_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
+  ADD CONSTRAINT `fk_purchase_items_purchase` FOREIGN KEY (`purchase_id`) REFERENCES `purchases` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_purchase_items_unit` FOREIGN KEY (`unit_id`) REFERENCES `product_units` (`id`);
+
+--
+-- Constraints for table `purchase_returns`
+--
+ALTER TABLE `purchase_returns`
+  ADD CONSTRAINT `purchase_returns_purchase_id_foreign` FOREIGN KEY (`purchase_id`) REFERENCES `purchases` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `purchase_returns_vendor_id_foreign` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
