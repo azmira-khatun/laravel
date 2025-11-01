@@ -1,31 +1,30 @@
 <?php
-
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class PurchaseReturn extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'purchase_id',
-        'product_quantity',
+        'total_quantity',
         'subtotal_amount',
         'tax_amount',
-        'shipping_cost_adjustment',
+        'shipping_cost',
+        'return_quantity',
         'refund_amount',
+        'net_refund',
         'payment_method',
         'status',
-        'note',
-        'return_date',
+        'note'
     ];
 
-    protected $casts = [
-        'return_date' => 'date',
-    ];
-
-    // Relationship to Purchase
     public function purchase()
     {
         return $this->belongsTo(Purchase::class);
     }
+
 }
