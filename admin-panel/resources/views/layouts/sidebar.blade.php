@@ -105,12 +105,12 @@
                 </li>
 
 
-                <li class="nav-item">
-                    <a href="{{ url('/sales') }}" class="nav-link">
-                        <i class="bi bi-receipt"></i>
-                        <p>Sales</p>
-                    </a>
-                </li>
+              <li class="nav-item">
+    <a class="nav-link" href="{{ route('stocks.index') }}">
+        <i class="bi bi-receipt"></i>
+        <p>Stocks</p>
+    </a>
+</li>
 
                 <li class="nav-item">
                     <a href="#" class="nav-link">

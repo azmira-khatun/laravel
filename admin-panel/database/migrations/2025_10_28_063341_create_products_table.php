@@ -11,13 +11,14 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id(); // id bigint, primary key, auto increment
-            $table->string('name', 150); // name varchar(150) not null
-            $table->unsignedBigInteger('category_id'); // foreign key to categories
-            $table->unsignedBigInteger('productunit_id'); // foreign key to product_units
-            $table->string('barcode', 100)->unique(); // unique barcode
-            $table->text('description')->nullable(); // description text, nullable
-            $table->timestamps(); // created_at & updated_at
+            $table->id(); // BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY
+            $table->string('name', 150);
+            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('productunit_id');
+            $table->string('barcode', 100)->unique();
+            $table->text('description')->nullable();
+            $table->integer('stock_quantity')->default(0);         // নতুন ফিল্ড
+            $table->timestamps();
 
             // Foreign key constraints
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');

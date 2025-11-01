@@ -24,7 +24,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        $units = ProductUnit::all();
+        $units      = ProductUnit::all();
         return view('pages.products.create', compact('categories', 'units'));
     }
 
@@ -34,14 +34,21 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:150',
-            'category_id' => 'required|exists:categories,id',
-            'productunit_id' => 'required|exists:product_units,id',
-            'barcode' => 'required|string|unique:products,barcode',
-            'description' => 'nullable|string',
+            'name'            => 'required|string|max:150',
+            'category_id'     => 'required|exists:categories,id',
+            'productunit_id'  => 'required|exists:product_units,id',
+            'barcode'         => 'required|string|unique:products,barcode',
+            'description'     => 'nullable|string',
+            'stock_quantity'  => 'nullable|integer|min:0',
         ]);
 
-        Product::create($request->all());
+        $data = $request->all();
+        // যদি stock_quantity না আসে, ডিফল্ট 0 হিসেবে সেট করা যেতে পারে
+        if (!isset($data['stock_quantity'])) {
+            $data['stock_quantity'] = 0;
+        }
+
+        Product::create($data);
 
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
@@ -52,7 +59,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::all();
-        $units = ProductUnit::all();
+        $units      = ProductUnit::all();
         return view('pages.products.edit', compact('product', 'categories', 'units'));
     }
 
@@ -62,14 +69,18 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $request->validate([
-            'name' => 'required|string|max:150',
-            'category_id' => 'required|exists:categories,id',
-            'productunit_id' => 'required|exists:product_units,id',
-            'barcode' => 'required|string|unique:products,barcode,' . $product->id,
-            'description' => 'nullable|string',
+            'name'            => 'required|string|max:150',
+            'category_id'     => 'required|exists:categories,id',
+            'productunit_id'  => 'required|exists:product_units,id',
+            'barcode'         => 'required|string|unique:products,barcode,' . $product->id,
+            'description'     => 'nullable|string',
+            'stock_quantity'  => 'nullable|integer|min:0',
         ]);
 
-        $product->update($request->all());
+        $data = $request->all();
+        // যদি needed হয়, এখানে mix পুরনো stock_quantity রাখা যাবে
+
+        $product->update($data);
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
@@ -82,15 +93,19 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
+
+    /**
+     * Get specific product info (for ajax / api).
+     */
     public function getProductInfo($id)
     {
         $product = Product::findOrFail($id);
 
         return response()->json([
-            'price' => $product->price,
-            'tax' => $product->tax_amount ?? 0,
+            'price' => $product->price ?? 0,
+            'tax'   => $product->tax_amount ?? 0,
             'shipping' => $product->shipping_cost ?? 0,
+            'stock_quantity' => $product->stock_quantity ?? 0,
         ]);
     }
-
 }

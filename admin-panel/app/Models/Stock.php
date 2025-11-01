@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Stock extends Model
 {
-    protected $table = 'stocks';
-
     protected $fillable = [
         'product_id',
         'product_name',
@@ -23,7 +21,6 @@ class Stock extends Model
         'sale_price',
         'expiry_date',
         'supplier_name',
-        'location_id',
         'user_id',
         'return_type',
         'unit_cost',
@@ -45,10 +42,5 @@ class Stock extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
     }
 }

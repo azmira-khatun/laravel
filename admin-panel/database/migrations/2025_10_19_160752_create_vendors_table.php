@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up(): void
-    {
-        Schema::create('vendors', function (Blueprint $table) {
+    {Schema::create('vendors', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100)->unique();
             $table->string('email', 100)->nullable()->unique();
@@ -18,6 +17,7 @@ return new class extends Migration
             $table->text('bank_details')->nullable();
             $table->timestamps();
         });
+
     }
 
     public function down(): void
