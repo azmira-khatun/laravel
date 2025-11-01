@@ -2,124 +2,96 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PurchaseReturn;
-use App\Models\Purchase;
 use Illuminate\Http\Request;
+use App\Models\Purchase;
+use App\Models\PurchaseReturn;
+use App\Models\PurchaseItem;
 
 class PurchaseReturnController extends Controller
 {
-    /**
-     * Show all purchase returns.
-     */
     public function index()
     {
         $returns = PurchaseReturn::with('purchase')->latest()->get();
         return view('pages.purchase_return.index', compact('returns'));
     }
 
-    /**
-     * Show form for creating new return.
-     */
     public function create()
     {
-        $purchases = Purchase::select('id', 'invoice_no')->get();
-        return view('pages.purchase_return.create', compact('purchases'));
+        $purchases = Purchase::all();
+        return view('purchase_returns.create', compact('purchases'));
     }
 
-    /**
-     * Store a new purchase return.
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'purchase_id' => 'required|exists:purchases,id',
-            'product_quantity' => 'required|integer|min:1',
-            'refund_amount' => 'required|numeric|min:0',
-            'tax_amount' => 'nullable|numeric|min:0',
-            'shipping_cost_adjustment' => 'nullable|numeric|min:0',
-            'payment_method' => 'nullable|string|max:255',
-            'status' => 'required|in:pending,completed,cancelled',
-            'note' => 'nullable|string',
-        ]);
-
-        PurchaseReturn::create($validated);
-
-        return redirect()->route('purchase_returns.index')
-            ->with('success', 'Purchase return created successfully.');
-    }
-
-    /**
-     * Show a specific return.
-     */
-    public function show(PurchaseReturn $purchaseReturn)
-    {
-        return view('pages.purchase_return.show', compact('purchaseReturn'));
-    }
-
-    /**
-     * Edit existing return.
-     */
-    public function edit(PurchaseReturn $purchaseReturn)
-    {
-        $purchases = Purchase::select('id', 'invoice_no')->get();
-        return view('pages.purchase_return.edit', compact('purchaseReturn', 'purchases'));
-    }
-
-    /**
-     * Update existing purchase return.
-     */
-    public function update(Request $request, PurchaseReturn $purchaseReturn)
-    {
-        $validated = $request->validate([
-            'purchase_id' => 'required|exists:purchases,id',
-            'product_quantity' => 'required|integer|min:1',
-            'refund_amount' => 'required|numeric|min:0',
-            'tax_amount' => 'nullable|numeric|min:0',
-            'shipping_cost_adjustment' => 'nullable|numeric|min:0',
-            'payment_method' => 'nullable|string|max:50',
-            'status' => 'required|in:pending,completed,cancelled',
-            'note' => 'nullable|string',
-        ]);
-
-        $purchaseReturn->update($validated);
-
-        return redirect()->route('purchase_returns.index')
-            ->with('success', 'Purchase return updated successfully.');
-    }
-
-    /**
-     * Delete a return.
-     */
-    public function destroy(PurchaseReturn $purchaseReturn)
-    {
-        $purchaseReturn->delete();
-        return redirect()->route('purchase_returns.index')
-            ->with('success', 'Purchase return deleted successfully.');
-    }
-
-    /**
-     * AJAX – Fetch purchase data for auto-fill & refund calculation.
-     */
     public function fetchPurchaseData(Request $request)
     {
-        $request->validate([
-            'purchase_id' => 'required|exists:purchases,id',
-        ]);
-
         $purchase = Purchase::with('items')->find($request->purchase_id);
 
         if (!$purchase) {
             return response()->json(['error' => 'Purchase not found'], 404);
         }
 
-        // Safely calculate total quantity
-        $totalQuantity = $purchase->items ? $purchase->items->sum('quantity') : 0;
+        // মোট Product Quantity হিসাব করা
+        $totalQuantity = $purchase->items->sum('quantity');
 
         return response()->json([
-            'subtotal_amount' => (float) $purchase->subtotal_amount,
-            'tax_amount' => (float) $purchase->tax_amount,
-            'shipping_cost' => (float) $purchase->shipping_cost,
-            'total_quantity' => (int) $totalQuantity,
+            'total_quantity' => $totalQuantity,
+            'subtotal_amount' => $purchase->subtotal_amount,
+            'tax_amount' => $purchase->tax_amount,
+            'shipping_cost' => $purchase->shipping_cost,
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'purchase_id' => 'required',
+            'return_quantity' => 'required|numeric|min:1',
+            'payment_method' => 'required',
+            'status' => 'required',
+        ]);
+
+        PurchaseReturn::create([
+            'purchase_id' => $request->purchase_id,
+            'total_quantity' => $request->total_quantity,
+            'return_quantity' => $request->return_quantity,
+            'subtotal_amount' => $request->subtotal_amount,
+            'tax_amount' => $request->tax_amount,
+            'shipping_cost_adjustment' => $request->shipping_cost_adjustment,
+            'refund_amount' => $request->refund_amount,
+            'net_refund' => $request->net_refund,
+            'payment_method' => $request->payment_method,
+            'status' => $request->status,
+            'note' => $request->note,
+        ]);
+
+        return redirect()->route('purchase_returns.index')->with('success', 'Purchase return created successfully!');
+    }
+
+    public function show($id)
+    {
+        $return = PurchaseReturn::with('purchase')->findOrFail($id);
+        return view('pages.purchase_return.show', compact('return'));
+    }
+
+    public function edit($id)
+    {
+        $return = PurchaseReturn::findOrFail($id);
+        $purchases = Purchase::all();
+        return view('purchase_returns.edit', compact('return', 'purchases'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $return = PurchaseReturn::findOrFail($id);
+        $return->update($request->all());
+
+        return redirect()->route('purchase_returns.index')->with('success', 'Purchase return updated successfully!');
+    }
+
+    public function destroy($id)
+    {
+        $return = PurchaseReturn::findOrFail($id);
+        $return->delete();
+
+        return redirect()->route('purchase_returns.index')->with('success', 'Purchase return deleted successfully!');
     }
 }

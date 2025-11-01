@@ -110,13 +110,14 @@ Route::delete('/purchase-items/{purchaseItem}', [PurchaseItemController::class, 
 
 
 
-Route::get('/purchase‑returns', [PurchaseReturnController::class, 'index'])->name('purchase_returns.index');
-Route::get('/purchase‑returns/create', [PurchaseReturnController::class, 'create'])->name('purchase_returns.create');
-Route::post('/purchase‑returns', [PurchaseReturnController::class, 'store'])->name('purchase_returns.store');
-Route::get('/purchase‑returns/{purchaseReturn}', [PurchaseReturnController::class, 'show'])->name('purchase_returns.show');
-Route::get('/purchase‑returns/{purchaseReturn}/edit', [PurchaseReturnController::class, 'edit'])->name('purchase_returns.edit');
-Route::put('/purchase‑returns/{purchaseReturn}', [PurchaseReturnController::class, 'update'])->name('purchase_returns.update');
-Route::delete('/purchase‑returns/{purchaseReturn}', [PurchaseReturnController::class, 'destroy'])->name('purchase_returns.destroy');
+Route::get('/purchase_returns', [PurchaseReturnController::class, 'index'])->name('purchase_returns.index');
+Route::get('/purchase_returns/create', [PurchaseReturnController::class, 'create'])->name('purchase_returns.create');
+Route::post('/purchase_returns/store', [PurchaseReturnController::class, 'store'])->name('purchase_returns.store');
+Route::get('/purchase_returns/{id}', [PurchaseReturnController::class, 'show'])->name('purchase_returns.show');
+Route::get('/purchase_returns/{id}/edit', [PurchaseReturnController::class, 'edit'])->name('purchase_returns.edit');
+Route::put('/purchase_returns/{id}', [PurchaseReturnController::class, 'update'])->name('purchase_returns.update');
+Route::delete('/purchase_returns/{id}', [PurchaseReturnController::class, 'destroy'])->name('purchase_returns.destroy');
 
 // AJAX route to fetch purchase data
-Route::post('/purchase‑returns/fetch‑purchase‑data', [PurchaseReturnController::class, 'fetchPurchaseData'])->name('purchase_returns.fetch_purchase_data');
+Route::post('/purchase_returns/fetch_purchase_data', [PurchaseReturnController::class, 'fetchPurchaseData'])
+    ->name('purchase_returns.fetch_purchase_data');

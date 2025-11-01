@@ -24,7 +24,8 @@ class PurchaseReturn extends Model
 
     public function purchase()
     {
-        return $this->belongsTo(Purchase::class);
+        return $this->belongsTo(Purchase::class, 'purchase_id');
     }
+
 
 }
