@@ -2,47 +2,59 @@
 
 @section('content')
     <div class="container mt-4">
-        <h2>All Purchase Returns</h2>
+        <h2>Purchase Return List</h2>
 
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-        <a href="{{ route('purchase_returns.create') }}" class="btn btn-success mb-3">Add New Return</a>
+        <a href="{{ route('purchase_returns.create') }}" class="btn btn-primary mb-3">Add New Return</a>
 
-        <table class="table table-bordered">
-            <thead>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
                 <tr>
-                    <th>ID</th>
-                    <th>Purchase Invoice</th>
-                    <th>Return Quantity</th>
+                    <th>#</th>
+                    <th>Invoice No</th>
+                    <th>Return Qty</th>
                     <th>Refund Amount</th>
-                    <th>Net Refund</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th>Payment Method</th>
+                    <th>Note</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($returns as $r)
+                @forelse ($returns as $r)
                     <tr>
-                        <td>{{ $r->id }}</td>
-                        <td>{{ $r->purchase->invoice_no ?? '' }}</td>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $r->purchase->invoice_no ?? 'N/A' }}</td>
                         <td>{{ $r->product_quantity }}</td>
-                        <td>{{ $r->refund_amount }}</td>
-                        <td>{{ $r->refund_amount - ($r->tax_amount + $r->shipping_cost_adjustment) }}</td>
-                        <td>{{ ucfirst($r->status) }}</td>
+                        <td>{{ number_format($r->refund_amount, 2) }}</td>
+                        <td>
+                            <span class="badge 
+                                            @if($r->status == 'completed') bg-success 
+                                            @elseif($r->status == 'pending') bg-warning 
+                                            @else bg-danger @endif">
+                                {{ ucfirst($r->status) }}
+                            </span>
+                        </td>
+                        <td>{{ $r->payment_method ?? 'N/A' }}</td>
+                        <td>{{ $r->note ?? '-' }}</td>
                         <td>
                             <a href="{{ route('purchase_returns.show', $r->id) }}" class="btn btn-info btn-sm">View</a>
-                            <a href="{{ route('purchase_returns.edit', $r->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                            <form action="{{ route('purchase_returns.destroy', $r->id) }}" method="POST" class="d-inline"
-                                onsubmit="return confirm('Are you sure to delete?')">
+                            <a href="{{ route('purchase_returns.edit', $r->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('purchase_returns.destroy', $r->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-danger btn-sm">Delete</button>
+                                <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">No purchase returns found</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
