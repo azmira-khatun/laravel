@@ -11,7 +11,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Vendor</th>
-                    <th>Product</th> <!-- Added Product Column -->
+                    <th>Product</th>
                     <th>Invoice No</th>
                     <th>Purchase Date</th>
                     <th>Total Cost</th>
@@ -25,8 +25,8 @@
                 @foreach($purchases as $purchase)
                     <tr>
                         <td>{{ $purchase->id }}</td>
-                        <td>{{ $purchase->vendor->name }}</td>
-                        <td>{{ $purchase->product->name ?? 'N/A' }}</td> <!-- Product Name -->
+                        <td>{{ $purchase->vendor->name ?? 'N/A' }}</td>
+                        <td>{{ $purchase->product->name ?? 'N/A' }}</td>
                         <td>{{ $purchase->invoice_no }}</td>
                         <td>{{ $purchase->purchase_date }}</td>
                         <td>{{ number_format($purchase->total_cost, 2) }}</td>

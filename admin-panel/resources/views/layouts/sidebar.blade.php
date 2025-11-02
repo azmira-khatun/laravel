@@ -105,23 +105,26 @@
                 </li>
 
 
-              <li class="nav-item">
-    <a class="nav-link" href="{{ route('stocks.index') }}">
-        <i class="bi bi-receipt"></i>
-        <p>Stocks</p>
-    </a>
-</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('stocks.index') }}">
+                        <i class="bi bi-receipt"></i>
+                        <p>Stocks</p>
+                    </a>
+                </li>
 
 
 
 
-        <li class="nav-item">
-    <a class="nav-link" href="{{ route('sales.index') }}">
-        <i class="bi bi-receipt"></i>
-        <p>Sales</p>
-    </a>
-</li>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('sales.index') }}">
+                        <i class="bi bi-receipt"></i>
+                        <p>Sales</p>
+                    </a>
+                </li>
+                <a class="nav-link" href="{{ route('sales.items.index', ['sale' => 1]) }}">
+                    <i class="bi bi-receipt"></i>
+                    <p>Sale Items</p>
+                </a>
 
                 <li class="nav-item">
                     <a href="#" class="nav-link">

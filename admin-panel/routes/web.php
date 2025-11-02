@@ -12,6 +12,7 @@ use App\Http\Controllers\PurchaseItemController;
 use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SaleItemController;
 
 
 
@@ -130,22 +131,36 @@ Route::post('/purchase_returns/fetch_purchase_data', [PurchaseReturnController::
 
 
 
-Route::get('/stocks',        [StockController::class, 'index'])->name('stocks.index');
+Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
 Route::get('/stocks/create', [StockController::class, 'create'])->name('stocks.create');
-Route::post('/stocks',       [StockController::class, 'store'])->name('stocks.store');
-Route::get('/stocks/{stock}',[StockController::class, 'show'])->name('stocks.show');
-Route::get('/stocks/{stock}/edit',   [StockController::class, 'edit'])->name('stocks.edit');
-Route::put('/stocks/{stock}',        [StockController::class, 'update'])->name('stocks.update');
-Route::delete('/stocks/{stock}',     [StockController::class, 'destroy'])->name('stocks.destroy');
+Route::post('/stocks', [StockController::class, 'store'])->name('stocks.store');
+Route::get('/stocks/{stock}', [StockController::class, 'show'])->name('stocks.show');
+Route::get('/stocks/{stock}/edit', [StockController::class, 'edit'])->name('stocks.edit');
+Route::put('/stocks/{stock}', [StockController::class, 'update'])->name('stocks.update');
+Route::delete('/stocks/{stock}', [StockController::class, 'destroy'])->name('stocks.destroy');
 
 
 
-Route::get('/sales',           [SaleController::class, 'index'])->name('sales.index');
-Route::get('/sales/create',    [SaleController::class, 'create'])->name('sales.create');
-Route::post('/sales',          [SaleController::class, 'store'])->name('sales.store');
-Route::get('/sales/{sale}',    [SaleController::class, 'show'])->name('sales.show');
-Route::get('/sales/{sale}/edit',[SaleController::class, 'edit'])->name('sales.edit');
-Route::put('/sales/{sale}',    [SaleController::class, 'update'])->name('sales.update');
+Route::get('/sales', [SaleController::class, 'index'])->name('sales.index');
+Route::get('/sales/create', [SaleController::class, 'create'])->name('sales.create');
+Route::post('/sales', [SaleController::class, 'store'])->name('sales.store');
+Route::get('/sales/{sale}', [SaleController::class, 'show'])->name('sales.show');
+Route::get('/sales/{sale}/edit', [SaleController::class, 'edit'])->name('sales.edit');
+Route::put('/sales/{sale}', [SaleController::class, 'update'])->name('sales.update');
 Route::delete('/sales/{sale}', [SaleController::class, 'destroy'])->name('sales.destroy');
+
+
+
+
+
+Route::prefix('sales/{sale}')->group(function () {
+    Route::get('/items', [SaleItemController::class, 'index'])->name('sales.items.index');
+    Route::get('/items/create', [SaleItemController::class, 'create'])->name('sales.items.create');
+    Route::post('/items', [SaleItemController::class, 'store'])->name('sales.items.store');
+    Route::get('/items/{item}/edit', [SaleItemController::class, 'edit'])->name('sales.items.edit');
+    Route::put('/items/{item}', [SaleItemController::class, 'update'])->name('sales.items.update');
+    Route::delete('/items/{item}', [SaleItemController::class, 'destroy'])->name('sales.items.destroy');
+});
+
 
 

@@ -33,11 +33,12 @@
                 <label for="product_id" class="form-label">Product</label>
                 <select name="product_id" id="product_id" class="form-control" required>
                     <option value="">Select Product</option>
-                    @foreach($products as $product)
+                    @foreach ($products as $product)
                         <option value="{{ $product->id }}">{{ $product->name }}</option>
                     @endforeach
                 </select>
             </div>
+
 
             <div class="mb-3">
                 <label for="invoice_no" class="form-label">Invoice No</label>
@@ -56,20 +57,20 @@
             </div>
 
             <div class="mb-3">
-                <label for="subtotal_amount" class="form-label">Subtotal Amount</label>
-                <input type="number" name="subtotal_amount" id="subtotal_amount" class="form-control" value="0" step="0.01"
+                <label for="product_price" class="form-label">Unit Price</label>
+                <input type="number" name="product_price" id="product_price" class="form-control" value="0" step="0.01"
                     required>
+            </div>
+
+            <div class="mb-3">
+                <label for="subtotal_amount" class="form-label">Subtotal Amount (Auto)</label>
+                <input type="number" name="subtotal_amount" id="subtotal_amount" class="form-control" value="0" step="0.01"
+                    readonly>
             </div>
 
             <div class="mb-3">
                 <label for="discount_amount" class="form-label">Discount Amount</label>
                 <input type="number" name="discount_amount" id="discount_amount" class="form-control" value="0" step="0.01">
-            </div>
-
-            <div class="mb-3">
-                <label for="product_price" class="form-label">Product Price (Auto Calculated)</label>
-                <input type="number" name="product_price" id="product_price" class="form-control" value="0" step="0.01"
-                    readonly>
             </div>
 
             <div class="mb-3">
@@ -83,7 +84,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="total_cost" class="form-label">Total Cost (Auto Calculated)</label>
+                <label for="total_cost" class="form-label">Total Cost (Auto)</label>
                 <input type="number" name="total_cost" id="total_cost" class="form-control" value="0" step="0.01" readonly>
             </div>
 
@@ -94,7 +95,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="due_amount" class="form-label">Due Amount</label>
+                <label for="due_amount" class="form-label">Due Amount (Auto)</label>
                 <input type="number" name="due_amount" id="due_amount" class="form-control" value="0" step="0.01" readonly>
             </div>
 
@@ -144,30 +145,27 @@
     <script>
         function calculateProductPriceTotalDue() {
             let quantity = parseFloat(document.getElementById('product_quantity').value) || 0;
-            let subtotal = parseFloat(document.getElementById('subtotal_amount').value) || 0;
+            let unitPrice = parseFloat(document.getElementById('product_price').value) || 0;
             let discount = parseFloat(document.getElementById('discount_amount').value) || 0;
             let tax = parseFloat(document.getElementById('tax_amount').value) || 0;
             let shipping = parseFloat(document.getElementById('shipping_cost').value) || 0;
             let paid = parseFloat(document.getElementById('paid_amount').value) || 0;
 
-            // product_price
-            let productPrice = 0;
-            if (quantity > 0) {
-                productPrice = (subtotal - discount) / quantity;
-            }
-            document.getElementById('product_price').value = productPrice.toFixed(2);
+            // subtotal = quantity × unit price
+            let subtotal = quantity * unitPrice;
+            document.getElementById('subtotal_amount').value = subtotal.toFixed(2);
 
-            // total_cost
-            let totalCost = (productPrice * quantity) + tax + shipping - discount;
+            // total cost = subtotal + tax + shipping - discount
+            let totalCost = subtotal + tax + shipping - discount;
             document.getElementById('total_cost').value = totalCost.toFixed(2);
 
-            // due_amount
+            // due amount = total cost - paid
             let due = totalCost - paid;
             document.getElementById('due_amount').value = due.toFixed(2);
         }
 
-        // Listeners for auto calculation
-        ['product_quantity', 'subtotal_amount', 'discount_amount', 'tax_amount', 'shipping_cost', 'paid_amount'].forEach(id => {
+        // Auto calculate on input
+        ['product_quantity', 'product_price', 'discount_amount', 'tax_amount', 'shipping_cost', 'paid_amount'].forEach(id => {
             document.getElementById(id).addEventListener('input', calculateProductPriceTotalDue);
         });
 
@@ -179,7 +177,8 @@
             fetch(`/products/${productId}/info`)
                 .then(res => res.json())
                 .then(data => {
-                    document.getElementById('subtotal_amount').value = data.price;
+                    document.getElementById('product_name').value = data.name; // fill product name
+                    document.getElementById('product_price').value = data.price;
                     document.getElementById('tax_amount').value = data.tax;
                     document.getElementById('shipping_cost').value = data.shipping;
                     document.getElementById('product_quantity').value = 1;

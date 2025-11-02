@@ -14,63 +14,63 @@
             </tr>
             <tr>
                 <th>Vendor</th>
-                <td>{{ $purchase->vendor->name }}</td>
+                <td>{{ $purchase->vendor->name ?? 'N/A' }}</td>
             </tr>
             <tr>
                 <th>Product</th>
                 <td>{{ $purchase->product->name ?? 'N/A' }}</td>
-            </tr> <!-- Added Product -->
+            </tr>
             <tr>
                 <th>Invoice No</th>
                 <td>{{ $purchase->invoice_no }}</td>
             </tr>
             <tr>
                 <th>Purchase Date</th>
-                <td>{{ $purchase->purchase_date }}</td>
+                <td>{{ $purchase->purchase_date ?? '-' }}</td>
             </tr>
             <tr>
                 <th>Product Quantity</th>
-                <td>{{ $purchase->product_quantity }}</td>
+                <td>{{ $purchase->product_quantity ?? 0 }}</td>
             </tr>
             <tr>
                 <th>Product Price</th>
-                <td>{{ number_format($purchase->product_price, 2) }}</td>
+                <td>{{ number_format($purchase->product_price ?? 0, 2) }}</td>
             </tr>
             <tr>
                 <th>Subtotal Amount</th>
-                <td>{{ number_format($purchase->subtotal_amount, 2) }}</td>
+                <td>{{ number_format($purchase->subtotal_amount ?? 0, 2) }}</td>
             </tr>
             <tr>
                 <th>Tax Amount</th>
-                <td>{{ number_format($purchase->tax_amount, 2) }}</td>
+                <td>{{ number_format($purchase->tax_amount ?? 0, 2) }}</td>
             </tr>
             <tr>
                 <th>Shipping Cost</th>
-                <td>{{ number_format($purchase->shipping_cost, 2) }}</td>
+                <td>{{ number_format($purchase->shipping_cost ?? 0, 2) }}</td>
             </tr>
             <tr>
                 <th>Discount Amount</th>
-                <td>{{ number_format($purchase->discount_amount, 2) }}</td>
+                <td>{{ number_format($purchase->discount_amount ?? 0, 2) }}</td>
             </tr>
             <tr>
                 <th>Total Cost</th>
-                <td>{{ number_format($purchase->total_cost, 2) }}</td>
+                <td>{{ number_format($purchase->total_cost ?? 0, 2) }}</td>
             </tr>
             <tr>
                 <th>Paid Amount</th>
-                <td>{{ number_format($purchase->paid_amount, 2) }}</td>
+                <td>{{ number_format($purchase->paid_amount ?? 0, 2) }}</td>
             </tr>
             <tr>
                 <th>Due Amount</th>
-                <td>{{ number_format($purchase->due_amount, 2) }}</td>
+                <td>{{ number_format($purchase->due_amount ?? 0, 2) }}</td>
             </tr>
             <tr>
                 <th>Payment Status</th>
-                <td>{{ ucfirst($purchase->payment_status) }}</td>
+                <td>{{ ucfirst($purchase->payment_status ?? 'N/A') }}</td>
             </tr>
             <tr>
                 <th>Payment Method</th>
-                <td>{{ $purchase->payment_method }}</td>
+                <td>{{ $purchase->payment_method ?? 'N/A' }}</td>
             </tr>
             <tr>
                 <th>Receive Date</th>
@@ -82,15 +82,15 @@
             </tr>
             <tr>
                 <th>Status</th>
-                <td>{{ ucfirst($purchase->status) }}</td>
+                <td>{{ ucfirst($purchase->status ?? 'N/A') }}</td>
             </tr>
             <tr>
                 <th>Created At</th>
-                <td>{{ $purchase->created_at }}</td>
+                <td>{{ $purchase->created_at ?? '-' }}</td>
             </tr>
             <tr>
                 <th>Updated At</th>
-                <td>{{ $purchase->updated_at }}</td>
+                <td>{{ $purchase->updated_at ?? '-' }}</td>
             </tr>
         </table>
     </div>
