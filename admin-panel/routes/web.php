@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductUnitController;
 use App\Http\Controllers\PurchaseItemController;
 use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\SaleController;
 
 
 
@@ -138,5 +139,13 @@ Route::put('/stocks/{stock}',        [StockController::class, 'update'])->name('
 Route::delete('/stocks/{stock}',     [StockController::class, 'destroy'])->name('stocks.destroy');
 
 
+
+Route::get('/sales',           [SaleController::class, 'index'])->name('sales.index');
+Route::get('/sales/create',    [SaleController::class, 'create'])->name('sales.create');
+Route::post('/sales',          [SaleController::class, 'store'])->name('sales.store');
+Route::get('/sales/{sale}',    [SaleController::class, 'show'])->name('sales.show');
+Route::get('/sales/{sale}/edit',[SaleController::class, 'edit'])->name('sales.edit');
+Route::put('/sales/{sale}',    [SaleController::class, 'update'])->name('sales.update');
+Route::delete('/sales/{sale}', [SaleController::class, 'destroy'])->name('sales.destroy');
 
 

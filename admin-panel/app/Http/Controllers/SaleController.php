@@ -33,6 +33,7 @@ class SaleController extends Controller
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity'   => 'required|integer|min:1',
             'items.*.unit_price' => 'required|numeric|min:0',
+            'type'               => 'required|string|in:sale,sale_return',
         ]);
 
         DB::transaction(function() use ($request) {
@@ -44,12 +45,17 @@ class SaleController extends Controller
                 'payment_status' => $request->payment_status ?? 'pending',
                 'payment_method' => $request->payment_method,
                 'note'           => $request->note,
+                'type'           => $request->type,
             ]);
 
             foreach ($request->items as $item) {
                 $product = Product::findOrFail($item['product_id']);
-                // স্টক থেকে কমানো
-                $product->adjustStock($item['quantity'], 'decrease');
+
+                if ($request->type === 'sale') {
+                    $product->adjustStock($item['quantity'], 'decrease');
+                } elseif ($request->type === 'sale_return') {
+                    $product->adjustStock($item['quantity'], 'increase');
+                }
 
                 SaleItem::create([
                     'sale_id'     => $sale->id,
@@ -61,7 +67,7 @@ class SaleController extends Controller
             }
         });
 
-        return redirect()->route('sales.index')->with('success', 'Sale created and stock updated!');
+        return redirect()->route('sales.index')->with('success', 'Sale recorded & stock updated!');
     }
 
     public function show(Sale $sale)
@@ -73,15 +79,15 @@ class SaleController extends Controller
     public function edit(Sale $sale)
     {
         $products = Product::all();
-        return view('pages.sales.edit', compact('sale', 'products'));
+        return view('pages.sales.edit', compact('sale','products'));
     }
 
     public function update(Request $request, Sale $sale)
     {
         $request->validate([
-            'invoice_no'     => 'required|string|max:100|unique:sales,invoice_no,' . $sale->id,
-            'sale_date'      => 'required|date',
-            'total_amount'   => 'required|numeric|min:0',
+            'invoice_no'   => 'required|string|max:100|unique:sales,invoice_no,' . $sale->id,
+            'sale_date'    => 'required|date',
+            'total_amount' => 'required|numeric|min:0',
         ]);
 
         $sale->update($request->only([
@@ -93,14 +99,12 @@ class SaleController extends Controller
             'note',
         ]));
 
-        // **রিটার্ন বা পরিবর্তনের ক্ষেত্রে** স্টক লজিক এখানে প্রয়োজনে যুক্ত করুন
-
-        return redirect()->route('sales.index')->with('success', 'Sale updated!');
+        return redirect()->route('sales.index')->with('success', 'Sale updated successfully!');
     }
 
     public function destroy(Sale $sale)
     {
         $sale->delete();
-        return redirect()->route('sales.index')->with('success', 'Sale deleted!');
+        return redirect()->route('sales.index')->with('success', 'Sale deleted successfully!');
     }
 }

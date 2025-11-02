@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class SaleItemController extends Controller
 {
     /**
-     * Show items of a given sale
+     * Show all items of a given sale.
      */
     public function index($saleId)
     {
@@ -20,17 +20,17 @@ class SaleItemController extends Controller
     }
 
     /**
-     * Show form to add a new item to a sale
+     * Show the form for adding a new item to a sale (or handling return).
      */
     public function create($saleId)
     {
-        $sale = Sale::findOrFail($saleId);
+        $sale     = Sale::findOrFail($saleId);
         $products = Product::all();
-        return view('pages.sales.items.create', compact('sale','products'));
+        return view('pages.sales.items.create', compact('sale', 'products'));
     }
 
     /**
-     * Store a new sale item and update product stock
+     * Store a new sale item (or return item) and update product stock accordingly.
      */
     public function store(Request $request, $saleId)
     {
@@ -38,48 +38,51 @@ class SaleItemController extends Controller
             'product_id' => 'required|exists:products,id',
             'quantity'   => 'required|integer|min:1',
             'unit_price' => 'required|numeric|min:0',
+            'type'       => 'required|string|in:sale_item,return_item',
         ]);
 
         DB::transaction(function() use ($request, $saleId) {
-            $sale = Sale::findOrFail($saleId);
+            $sale    = Sale::findOrFail($saleId);
             $product = Product::findOrFail($request->product_id);
 
-            // স্টক চেক ও হ্রাস
-            if ($product->stock_quantity < $request->quantity) {
-                throw new \Exception("Not enough stock for product {$product->name}");
+            if ($request->type === 'sale_item') {
+                // এক নতুন বিক্রয়ের লাইন – স্টক কমানো
+                $product->adjustStock($request->quantity, 'decrease');
+            } elseif ($request->type === 'return_item') {
+                // রিটার্ন পণ্য – স্টক বাড়ানো
+                $product->adjustStock($request->quantity, 'increase');
             }
-            $product->decrement('stock_quantity', $request->quantity);
 
-            // SaleItem তৈরি
             SaleItem::create([
-                'sale_id'    => $sale->id,
-                'product_id' => $product->id,
-                'quantity'   => $request->quantity,
-                'unit_price' => $request->unit_price,
-                'total_price'=> $request->quantity * $request->unit_price,
+                'sale_id'     => $sale->id,
+                'product_id'  => $product->id,
+                'quantity'    => $request->quantity,
+                'unit_price'  => $request->unit_price,
+                'total_price' => $request->quantity * $request->unit_price,
             ]);
         });
 
         return redirect()->route('sales.items.index', $saleId)
-                         ->with('success','Item added and stock updated!');
+                         ->with('success', 'Item processed and stock updated!');
     }
 
     /**
-     * Remove an item from sale and restore product stock
+     * Delete a sale item (or return) and adjust stock back.
      */
     public function destroy($saleId, $itemId)
     {
         DB::transaction(function() use ($saleId, $itemId) {
-            $item = SaleItem::findOrFail($itemId);
+            $item    = SaleItem::findOrFail($itemId);
             $product = Product::findOrFail($item->product_id);
 
-            // স্টক পুনরুদ্ধার (রিমুভ হলে)
-            $product->increment('stock_quantity', $item->quantity);
+            // এখানে ধারণা করা হচ্ছে—itemটি পূর্বে sale_item বা return_item ছিল
+            // স্টক পুনরুদ্ধার:
+            $product->adjustStock($item->quantity, 'increase');
 
             $item->delete();
         });
 
         return redirect()->route('sales.items.index', $saleId)
-                         ->with('success','Item removed and stock restored!');
+                         ->with('success', 'Item removed and stock restored!');
     }
 }
