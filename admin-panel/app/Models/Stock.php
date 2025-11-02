@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Stock extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'product_id',
         'product_name',
@@ -21,6 +24,7 @@ class Stock extends Model
         'sale_price',
         'expiry_date',
         'supplier_name',
+        'location_id',
         'user_id',
         'return_type',
         'unit_cost',

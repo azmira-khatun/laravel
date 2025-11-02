@@ -16,7 +16,7 @@ class Product extends Model
         'productunit_id',
         'barcode',
         'description',
-        'stock_quantity',         // এখানে নতুন ফিল্ড যুক্ত
+        'stock_quantity',
     ];
 
     /**
@@ -44,7 +44,7 @@ class Product extends Model
     }
 
     /**
-     * Relationship: purchase items (optional)
+     * Relationship: purchase items
      */
     public function purchaseItems()
     {
@@ -52,18 +52,25 @@ class Product extends Model
     }
 
     /**
-     * স্টক পরিমাণ সামঞ্জস্য করার ফাংশন
+     * Adjust stock quantity by a given amount.
      *
-     * @param int    $amount   পরিবর্তনের পরিমাণ
-     * @param string $action   'increase' বা 'decrease'
-     * @return void
+     * @param int    $amount The amount to adjust.
+     * @param string $action 'increase' or 'decrease'
+     * @throws \Exception If an invalid action or insufficient stock for decrease.
      */
     public function adjustStock(int $amount, string $action = 'increase')
     {
         if ($action === 'increase') {
             $this->stock_quantity = ($this->stock_quantity ?? 0) + $amount;
-        } elseif ($action === 'decrease') {
-            $this->stock_quantity = max(0, ($this->stock_quantity ?? 0) - $amount);
+        }
+        elseif ($action === 'decrease') {
+            if (($this->stock_quantity ?? 0) < $amount) {
+                throw new \Exception("Insufficient stock to decrease by {$amount} for product ID {$this->id}");
+            }
+            $this->stock_quantity = ($this->stock_quantity ?? 0) - $amount;
+        }
+        else {
+            throw new \Exception("Invalid action '{$action}' passed to adjustStock. Use 'increase' or 'decrease'.");
         }
 
         $this->save();

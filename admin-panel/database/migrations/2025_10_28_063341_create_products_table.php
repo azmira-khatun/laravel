@@ -17,8 +17,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('productunit_id');
             $table->string('barcode', 100)->unique();
             $table->text('description')->nullable();
-            $table->integer('stock_quantity')->default(0);         // নতুন ফিল্ড
-            $table->timestamps();
+            $table->integer('stock_quantity')->default(0)->after('description');
+                     $table->timestamps();
 
             // Foreign key constraints
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
