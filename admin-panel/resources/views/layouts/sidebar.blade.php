@@ -112,6 +112,17 @@
     </a>
 </li>
 
+
+
+
+        <li class="nav-item">
+    <a class="nav-link" href="{{ route('sales.index') }}">
+        <i class="bi bi-receipt"></i>
+        <p>Sales</p>
+    </a>
+</li>
+
+
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-warehouse"></i>

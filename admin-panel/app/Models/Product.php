@@ -51,6 +51,12 @@ class Product extends Model
         return $this->hasMany(PurchaseItem::class);
     }
 
+     // পণ্যটির বিভিন্ন SaleItem রেকর্ড থাকতে পারে
+    public function saleItems()
+    {
+        return $this->hasMany(SaleItem::class);
+    }
+
     /**
      * Adjust stock quantity by a given amount.
      *
