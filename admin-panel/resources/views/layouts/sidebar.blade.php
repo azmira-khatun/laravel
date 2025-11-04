@@ -41,6 +41,12 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}"
+                        href="{{ route('roles.index') }}">
+                        Roles
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a href="{{ url('/users') }}" class="nav-link">

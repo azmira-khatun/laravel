@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoleController;
+
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
@@ -25,6 +27,11 @@ Route::get('/master', function () {
 Route::get('/dashboard', function () {
     return view('pages.dashboard.dashboardCard');
 });
+
+
+
+Route::resource('roles', RoleController::class);
+
 // ===================================
 // 1. User Management Routes
 // ===================================
