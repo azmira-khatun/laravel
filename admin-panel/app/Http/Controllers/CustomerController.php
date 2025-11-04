@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Auth; // Auth Facade ব্যবহার করতে এটি যোগ করা হয়েছে
 
 class CustomerController extends Controller
 {
     public function index()
     {
+        // For security and performance, only authenticated users can view the index
+        if (!Auth::check()) {
+            return redirect('/login');
+        }
+
         $customers = Customer::paginate(10);
         return view('pages.customers.index', compact('customers'));
     }
@@ -20,14 +26,19 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        // 1. Validation updated to use 'phone' and database constraints
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:customers,email',
-            'contact' => 'nullable|string|max:20',
+            'email' => 'required|email|unique:customers,email|max:100',
+            'phone' => 'nullable|string|max:20', // 'contact' থেকে 'phone' এ পরিবর্তন করা হয়েছে
             'address' => 'nullable|string',
         ]);
 
-        Customer::create($request->all());
+        // 2. Set the user_id to the currently authenticated user
+        $validatedData['user_id'] = Auth::id();
+        // Note: For this to work, the Customer model must have 'user_id' in its $fillable array.
+
+        Customer::create($validatedData);
 
         return redirect()->route('customerIndex')->with('message', 'Customer created successfully!');
     }
@@ -48,14 +59,16 @@ class CustomerController extends Controller
     {
         $customer = Customer::findOrFail($id);
 
-        $request->validate([
+        // Validation updated to use 'phone'
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:customers,email,' . $customer->id,
-            'contact' => 'nullable|string|max:20',
+            'email' => 'required|email|unique:customers,email,' . $customer->id . '|max:100',
+            'phone' => 'nullable|string|max:20', // 'contact' থেকে 'phone' এ পরিবর্তন করা হয়েছে
             'address' => 'nullable|string',
         ]);
 
-        $customer->update($request->all());
+        // user_id should not be updated after creation, so we only update validated fields
+        $customer->update($validatedData);
 
         return redirect()->route('customerIndex')->with('message', 'Customer updated successfully!');
     }

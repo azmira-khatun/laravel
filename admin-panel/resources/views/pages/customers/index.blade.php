@@ -1,56 +1,62 @@
 @extends('master')
 
 @section('content')
-<div class="card mt-4">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h3>Customer List</h3>
-        <a href="{{ route('customerCreate') }}" class="btn btn-primary btn-sm">Add New Customer</a>
+<div class="container mx-auto p-4 sm:p-6 lg:p-8">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold text-gray-800">Customer List</h2>
+        <a href="{{ route('customerCreate') }}" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-300">
+            + Add New Customer
+        </a>
     </div>
-    <div class="card-body">
-        @if(session('message'))
-            <div class="alert alert-success">{{ session('message') }}</div>
-        @endif
 
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Contact</th>
-                    <th>Address</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($customers as $customer)
-                <tr>
-                    <td>{{ $customer->id }}</td>
-                    <td>
-                        <a href="{{ route('customerShow', $customer->id) }}">{{ $customer->name }}</a>
-                    </td>
-                    <td>{{ $customer->email }}</td>
-                    <td>{{ $customer->contact }}</td>
-                    <td>{{ Str::limit($customer->address, 30) }}</td>
-                    <td>
-                        <a href="{{ route('customerEdit', $customer->id) }}" class="btn btn-warning btn-sm">Edit</a>
+    @if (session('message'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ session('message') }}</span>
+        </div>
+    @endif
 
-                        <form action="{{ route('customerDelete', $customer->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete {{ $customer->name }}?');">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="6" class="text-center">No customers found.</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
+    <div class="bg-white shadow-xl rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created By</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach ($customers as $customer)
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->id }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $customer->name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $customer->email }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $customer->phone }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ $customer->user->fullname ?? 'N/A' }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <div class="flex space-x-2">
+                                    <a href="{{ route('customerShow', $customer->id) }}" class="text-blue-600 hover:text-blue-900">View</a>
+                                    <a href="{{ route('customerEdit', $customer->id) }}" class="text-yellow-600 hover:text-yellow-900">Edit</a>
 
-        <div class="d-flex justify-content-center">
+                                    <form action="{{ route('customerDelete', $customer->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this customer?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <div class="p-4">
             {{ $customers->links() }}
         </div>
     </div>

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
-
+use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
@@ -59,6 +59,15 @@ Route::get('/product_units/{unit}/edit', [ProductUnitController::class, 'edit'])
 Route::put('/product_units/{unit}', [ProductUnitController::class, 'update'])->name('productUnitUpdate');
 Route::delete('/product_units/{unit}', [ProductUnitController::class, 'destroy'])->name('productUnitDelete');
 
+
+// Payment Method CRUD Routes
+Route::get('/payment-methods', [PaymentMethodController::class, 'index'])->name('paymentMethodIndex');
+Route::get('/payment-methods/create', [PaymentMethodController::class, 'create'])->name('paymentMethodCreate');
+Route::post('/payment-methods', [PaymentMethodController::class, 'store'])->name('paymentMethodStore');
+Route::get('/payment-methods/{paymentMethod}', [PaymentMethodController::class, 'show'])->name('paymentMethodShow');
+Route::get('/payment-methods/{paymentMethod}/edit', [PaymentMethodController::class, 'edit'])->name('paymentMethodEdit');
+Route::put('/payment-methods/{paymentMethod}', [PaymentMethodController::class, 'update'])->name('paymentMethodUpdate');
+Route::delete('/payment-methods/{paymentMethod}', [PaymentMethodController::class, 'destroy'])->name('paymentMethodDelete');
 
 
 
