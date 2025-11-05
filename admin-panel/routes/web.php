@@ -42,14 +42,19 @@ Route::get('userEdit/{user_id}', [UserController::class, 'update'])->name('userE
 Route::post('editStoreU', [UserController::class, 'editStoreU'])->name('editStoreU');
 Route::delete('delete', [UserController::class, 'destroy'])->name('delete');
 
-// ctaegory
-
-Route::get('/add-category', [CategoryController::class, 'index']);
-Route::get('/create', [CategoryController::class, 'create'])->name('category.create');
+// Category CRUD Routes (সংশোধিত এবং সঠিক)
+Route::get('/add-category', [CategoryController::class, 'index'])->name('category.index'); // <-- 'category.index' নাম দিলাম
+Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
 Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
-Route::get('/category/edit/{category_id}', [CategoryController::class, 'update'])->name('category.edit');
-Route::post('/category/editStore', [CategoryController::class, 'editStore'])->name('category.editStore');
-Route::delete('/category/delete', [CategoryController::class, 'destroy'])->name('category.delete');
+
+// 'edit' রুটটি 'edit' মেথডকে কল করবে
+Route::get('/category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+
+// 'update' রুটটি 'update' মেথডকে কল করবে এবং POST বা PUT ব্যবহার করবে
+Route::post('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
+
+// 'delete' রুটটি 'destroy' মেথডকে কল করবে এবং ID বহন করবে
+Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
 
 
 Route::get('/product_units', [ProductUnitController::class, 'index'])->name('productUnitIndex');
