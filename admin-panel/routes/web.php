@@ -5,6 +5,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SubCategoryController;
+
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\CustomerController;
@@ -53,6 +55,22 @@ Route::post('/category/update/{id}', [CategoryController::class, 'update'])->nam
 // 'delete' রুটটি 'destroy' মেথডকে কল করবে এবং ID বহন করবে
 Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
 Route::put('category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
+
+// sub category
+Route::get('/sub-categories', [SubCategoryController::class, 'index'])->name('subCategory.index');
+Route::get('/sub-categories/create', [SubCategoryController::class, 'create'])->name('subCategory.create');
+Route::post('/sub-categories', [SubCategoryController::class, 'store'])->name('subCategory.store');
+Route::get('/sub-categories/{subCategory}/edit', [SubCategoryController::class, 'edit'])->name('subCategory.edit');
+Route::put('/sub-categories/{subCategory}', [SubCategoryController::class, 'update'])->name('subCategory.update');
+Route::delete('/sub-categories/{subCategory}', [SubCategoryController::class, 'destroy'])->name('subCategory.destroy');
+
+
+
+
+
+
+
+
 
 
 Route::get('/product_units', [ProductUnitController::class, 'index'])->name('productUnitIndex');
