@@ -12,7 +12,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ProductUnitController;
 use App\Http\Controllers\PurchaseItemController;
 use App\Http\Controllers\PurchaseReturnController;
-use App\Http\Controllers\StockController;
+// use App\Http\Controllers\StockController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SaleItemController;
 
@@ -55,6 +55,7 @@ Route::post('/category/update/{id}', [CategoryController::class, 'update'])->nam
 
 // 'delete' রুটটি 'destroy' মেথডকে কল করবে এবং ID বহন করবে
 Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
+Route::put('category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
 
 
 Route::get('/product_units', [ProductUnitController::class, 'index'])->name('productUnitIndex');
@@ -100,14 +101,19 @@ Route::get('/vendors/{vendor}/edit', [VendorController::class, 'edit'])->name('v
 Route::put('/vendors/{vendor}', [VendorController::class, 'update'])->name('vendorUpdate');
 Route::delete('/vendors/{vendor}', [VendorController::class, 'destroy'])->name('vendorDelete');
 
-// Customer CRUD Routes
+// Customer CRUD Routes (স্ট্যান্ডার্ড Laravel পদ্ধতি)
 Route::get('/customers', [CustomerController::class, 'index'])->name('customerIndex');
 Route::get('/customers/create', [CustomerController::class, 'create'])->name('customerCreate');
 Route::post('/customers', [CustomerController::class, 'store'])->name('customerStore');
+
+// {id} এর পরিবর্তে {customer} ব্যবহার করুন
 Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customerShow');
 Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customerEdit');
 Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customerUpdate');
 Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customerDelete');
+
+
+
 
 
 // 🧾 Purchases Routes
@@ -152,13 +158,13 @@ Route::post('/purchase_returns/fetch_purchase_data', [PurchaseReturnController::
 
 
 
-Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
-Route::get('/stocks/create', [StockController::class, 'create'])->name('stocks.create');
-Route::post('/stocks', [StockController::class, 'store'])->name('stocks.store');
-Route::get('/stocks/{stock}', [StockController::class, 'show'])->name('stocks.show');
-Route::get('/stocks/{stock}/edit', [StockController::class, 'edit'])->name('stocks.edit');
-Route::put('/stocks/{stock}', [StockController::class, 'update'])->name('stocks.update');
-Route::delete('/stocks/{stock}', [StockController::class, 'destroy'])->name('stocks.destroy');
+// Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
+// Route::get('/stocks/create', [StockController::class, 'create'])->name('stocks.create');
+// Route::post('/stocks', [StockController::class, 'store'])->name('stocks.store');
+// Route::get('/stocks/{stock}', [StockController::class, 'show'])->name('stocks.show');
+// Route::get('/stocks/{stock}/edit', [StockController::class, 'edit'])->name('stocks.edit');
+// Route::put('/stocks/{stock}', [StockController::class, 'update'])->name('stocks.update');
+// Route::delete('/stocks/{stock}', [StockController::class, 'destroy'])->name('stocks.destroy');
 
 
 

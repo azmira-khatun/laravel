@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Customer;
-use Illuminate\Support\Facades\Auth; // Auth Facade ব্যবহার করতে এটি যোগ করা হয়েছে
+use App\Models\Customer; // নিশ্চিত করুন মডেলটি ইম্পোর্ট করা আছে
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
     public function index()
     {
-        // For security and performance, only authenticated users can view the index
         if (!Auth::check()) {
             return redirect('/login');
         }
 
-        $customers = Customer::paginate(10);
+        // N+1 সমস্যা সমাধানের জন্য with('user') ব্যবহার করা হয়েছে
+        $customers = Customer::with('user')->latest()->paginate(10);
         return view('pages.customers.index', compact('customers'));
     }
 
@@ -26,56 +26,56 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-        // 1. Validation updated to use 'phone' and database constraints
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:customers,email|max:100',
-            'phone' => 'nullable|string|max:20', // 'contact' থেকে 'phone' এ পরিবর্তন করা হয়েছে
+            'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string',
         ]);
 
-        // 2. Set the user_id to the currently authenticated user
         $validatedData['user_id'] = Auth::id();
-        // Note: For this to work, the Customer model must have 'user_id' in its $fillable array.
-
         Customer::create($validatedData);
 
         return redirect()->route('customerIndex')->with('message', 'Customer created successfully!');
     }
 
-    public function show($id)
+    /**
+     * রুট-মডেল বাইন্ডিং ব্যবহার করা হয়েছে:
+     * Laravel স্বয়ংক্রিয়ভাবে URL-এর {customer} আইডি দিয়ে Customer মডেলটি খুঁজে বের করবে।
+     * যদি খুঁজে না পায়, তবে এটি নিজেই 404 দেখাবে।
+     */
+    public function show(Customer $customer)
     {
-        $customer = Customer::findOrFail($id);
+        // $customer = Customer::findOrFail($id); // এই লাইনের আর প্রয়োজন নেই
         return view('pages.customers.viewCustomer', compact('customer'));
     }
 
-    public function edit($id)
+    public function edit(Customer $customer)
     {
-        $customer = Customer::findOrFail($id);
+        // $customer = Customer::findOrFail($id); // এই লাইনের আর প্রয়োজন নেই
         return view('pages.customers.editCustomer', compact('customer'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Customer $customer)
     {
-        $customer = Customer::findOrFail($id);
+        // $customer = Customer::findOrFail($id); // এই লাইনের আর প্রয়োজন নেই
 
-        // Validation updated to use 'phone'
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:customers,email,' . $customer->id . '|max:100',
-            'phone' => 'nullable|string|max:20', // 'contact' থেকে 'phone' এ পরিবর্তন করা হয়েছে
+            'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string',
         ]);
 
-        // user_id should not be updated after creation, so we only update validated fields
         $customer->update($validatedData);
 
         return redirect()->route('customerIndex')->with('message', 'Customer updated successfully!');
     }
 
-    public function destroy($id)
+    public function destroy(Customer $customer)
     {
-        $customer = Customer::findOrFail($id);
+        // $customer = Customer::findOrFail($id); // এই লাইনের আর প্রয়োজন নেই
+
         $customer->delete();
 
         return redirect()->route('customerIndex')->with('message', 'Customer deleted successfully!');

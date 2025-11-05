@@ -83,12 +83,12 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="{{ url('/customers') }}" class="nav-link">
-                        <i class="bi bi-people-fill"></i>
-                        <p>Customers</p>
-                    </a>
-                </li>
+            <li class="nav-item">
+                    <a href="{{ route('customerIndex') }}" class="nav-link">
+        <i class="bi bi-people-fill"></i>
+        <p>Customers</p>
+    </a>
+</li>
                 <li class="nav-item">
                     <a href="{{ route('purchasesHistory') }}" class="nav-link">
                         <i class="bi bi-people-fill"></i>
@@ -111,12 +111,6 @@
                 </li>
 
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('stocks.index') }}">
-                        <i class="bi bi-receipt"></i>
-                        <p>Stocks</p>
-                    </a>
-                </li>
 
 
 
