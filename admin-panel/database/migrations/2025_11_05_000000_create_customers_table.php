@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('customers', function (Blueprint $table) {
@@ -15,11 +14,12 @@ return new class extends Migration
             $table->string('email', 100)->nullable()->unique();
             $table->text('address')->nullable();
 
-            $table->foreignId('user_id')
-                  ->constrained('users')
-                  ->onUpdate('cascade')
-                  ->onDelete('set null'); // অথবা 'cascade' ব্যবহার করতে পারেন
-
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }

@@ -83,12 +83,12 @@
                     </a>
                 </li>
 
-            <li class="nav-item">
+                <li class="nav-item">
                     <a href="{{ route('customerIndex') }}" class="nav-link">
-        <i class="bi bi-people-fill"></i>
-        <p>Customers</p>
-    </a>
-</li>
+                        <i class="bi bi-people-fill"></i>
+                        <p>Customers</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('purchasesHistory') }}" class="nav-link">
                         <i class="bi bi-people-fill"></i>
@@ -115,16 +115,6 @@
 
 
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('sales.index') }}">
-                        <i class="bi bi-receipt"></i>
-                        <p>Sales</p>
-                    </a>
-                </li>
-                <a class="nav-link" href="{{ route('sales.items.index', ['sale' => 1]) }}">
-                    <i class="bi bi-receipt"></i>
-                    <p>Sale Items</p>
-                </a>
 
                 <li class="nav-item">
                     <a href="#" class="nav-link">
@@ -132,12 +122,7 @@
                         <p>Inventory <i class="right fas fa-angle-left"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ url('/stock') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Stock</p>
-                            </a>
-                        </li>
+
                         <li class="nav-item">
                             <a href="{{ url('/expired-products') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
