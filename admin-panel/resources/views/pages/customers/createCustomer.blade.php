@@ -1,52 +1,53 @@
 @extends('master')
 
 @section('content')
-<div class="container mx-auto p-4 sm:p-6 lg:p-8">
-    <div class="max-w-xl mx-auto bg-white shadow-xl rounded-lg p-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Create New Customer</h2>
+    <div class="container mt-5">
+        <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Create New Customer</h2><br>
 
-        <form action="{{ route('customerStore') }}" method="POST">
-            @csrf
+                <form action="{{ route('customerStore') }}" method="POST">
+                    @csrf
 
-            <div class="mb-4">
-                <label for="name" class="block text-sm font-medium text-gray-700">Name <span class="text-red-500">*</span></label>
-                <input type="text" name="name" id="name" value="{{ old('name') }}" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500">
-                @error('name')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+                        <input type="text" name="name" id="name" value="{{ old('name') }}" required class="form-control">
+                        @error('name')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                        <input type="email" name="email" id="email" value="{{ old('email') }}" required
+                            class="form-control">
+                        @error('email')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="text" name="phone" id="phone" value="{{ old('phone') }}" class="form-control">
+                        @error('phone')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea name="address" id="address" rows="3" class="form-control">{{ old('address') }}</textarea>
+                        @error('address')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ route('customerIndex') }}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save Customer</button>
+                    </div>
+                </form>
             </div>
-
-            <div class="mb-4">
-                <label for="email" class="block text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
-                <input type="email" name="email" id="email" value="{{ old('email') }}" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500">
-                @error('email')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="mb-4">
-                <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
-                <input type="text" name="phone" id="phone" value="{{ old('phone') }}" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500">
-                @error('phone')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="mb-6">
-                <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
-                <textarea name="address" id="address" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500">{{ old('address') }}</textarea>
-                @error('address')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="flex justify-end space-x-4">
-                <a href="{{ route('customerIndex') }}" class="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg font-semibold hover:bg-gray-300 transition duration-300">Cancel</a>
-                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-300">
-                    Save Customer
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 @endsection

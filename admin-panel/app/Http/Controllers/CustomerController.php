@@ -10,14 +10,12 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        if (!Auth::check()) {
-            return redirect('/login');
-        }
-
-        // N+1 সমস্যা সমাধানের জন্য with('user') ব্যবহার করা হয়েছে
+        // Auth check সরিয়ে দিলাম
         $customers = Customer::with('user')->latest()->paginate(10);
         return view('pages.customers.index', compact('customers'));
     }
+
+
 
     public function create()
     {
