@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\SubCategory;
 use App\Models\ProductUnit;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('category', 'productUnit')->get();
+        $products = Product::with(['category', 'subCategory', 'productUnit'])->paginate(10);
         return view('pages.products.index', compact('products'));
     }
 
@@ -24,8 +25,10 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        $units      = ProductUnit::all();
-        return view('pages.products.create', compact('categories', 'units'));
+        $subCategories = SubCategory::all();
+        $productUnits = ProductUnit::all();
+
+        return view('pages.products.create', compact('categories', 'subCategories', 'productUnits'));
     }
 
     /**
@@ -33,24 +36,27 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name'            => 'required|string|max:150',
-            'category_id'     => 'required|exists:categories,id',
-            'productunit_id'  => 'required|exists:product_units,id',
-            'barcode'         => 'required|string|unique:products,barcode',
-            'description'     => 'nullable|string',
-            'stock_quantity'  => 'nullable|integer|min:0',
+        $validated = $request->validate([
+            'name' => 'required|string|max:150',
+            'category_id' => 'required|integer|exists:categories,id',
+            'sub_category_id' => 'required|integer|exists:sub_categories,id',
+            'productunit_id' => 'required|integer|exists:product_units,id',
+            'barcode' => 'nullable|string|max:100|unique:products,barcode',
+            'description' => 'nullable|string',
         ]);
 
-        $data = $request->all();
-        // যদি stock_quantity না আসে, ডিফল্ট 0 হিসেবে সেট করা যেতে পারে
-        if (!isset($data['stock_quantity'])) {
-            $data['stock_quantity'] = 0;
-        }
+        Product::create($validated);
 
-        Product::create($data);
+        return redirect()->route('products.index')->with('success', 'Product created successfully!');
+    }
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully.');
+    /**
+     * Display the specified product.
+     */
+    public function show(Product $product)
+    {
+        $product->load(['category', 'subCategory', 'productUnit']);
+        return view('products.show', compact('product'));
     }
 
     /**
@@ -59,8 +65,10 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::all();
-        $units      = ProductUnit::all();
-        return view('pages.products.edit', compact('product', 'categories', 'units'));
+        $subCategories = SubCategory::all();
+        $productUnits = ProductUnit::all();
+
+        return view('pages.products.edit', compact('product', 'categories', 'subCategories', 'productUnits'));
     }
 
     /**
@@ -68,21 +76,18 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        $request->validate([
-            'name'            => 'required|string|max:150',
-            'category_id'     => 'required|exists:categories,id',
-            'productunit_id'  => 'required|exists:product_units,id',
-            'barcode'         => 'required|string|unique:products,barcode,' . $product->id,
-            'description'     => 'nullable|string',
-            'stock_quantity'  => 'nullable|integer|min:0',
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:150',
+            'category_id' => 'sometimes|required|integer|exists:categories,id',
+            'sub_category_id' => 'sometimes|required|integer|exists:sub_categories,id',
+            'productunit_id' => 'sometimes|required|integer|exists:product_units,id',
+            'barcode' => "nullable|string|max:100|unique:products,barcode,{$product->id}",
+            'description' => 'nullable|string',
         ]);
 
-        $data = $request->all();
-        // যদি needed হয়, এখানে mix পুরনো stock_quantity রাখা যাবে
+        $product->update($validated);
 
-        $product->update($data);
-
-        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
+        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
 
     /**
@@ -91,21 +96,6 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
-    }
-
-    /**
-     * Get specific product info (for ajax / api).
-     */
-    public function getProductInfo($id)
-    {
-        $product = Product::findOrFail($id);
-
-        return response()->json([
-            'price' => $product->price ?? 0,
-            'tax'   => $product->tax_amount ?? 0,
-            'shipping' => $product->shipping_cost ?? 0,
-            'stock_quantity' => $product->stock_quantity ?? 0,
-        ]);
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully!');
     }
 }

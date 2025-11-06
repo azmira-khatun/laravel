@@ -6,6 +6,7 @@ use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubCategoryController;
+use App\Http\Controllers\DiscountController;
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
@@ -103,6 +104,21 @@ Route::post('/products', [ProductController::class, 'store'])->name('products.st
 Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
 Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
 Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+// discount
+
+Route::get('/discounts',         [DiscountController::class, 'index'])->name('discounts.index');
+Route::get('/discounts/create',  [DiscountController::class, 'create'])->name('discounts.create');
+Route::post('/discounts',        [DiscountController::class, 'store'])->name('discounts.store');
+Route::get('/discounts/{discount}',       [DiscountController::class, 'show'])->name('discounts.show');
+Route::get('/discounts/{discount}/edit',  [DiscountController::class, 'edit'])->name('discounts.edit');
+Route::put('/discounts/{discount}',       [DiscountController::class, 'update'])->name('discounts.update');
+Route::delete('/discounts/{discount}',    [DiscountController::class, 'destroy'])->name('discounts.destroy');
+
+
+
+
+
 // vendor start
 
 

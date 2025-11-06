@@ -4,24 +4,27 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id(); // BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY
+            $table->bigIncrements('id');
             $table->string('name', 150);
             $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('sub_category_id');
             $table->unsignedBigInteger('productunit_id');
-            $table->string('barcode', 100)->unique();
+            $table->string('barcode', 100)->unique()->nullable();
             $table->text('description')->nullable();
-            $table->integer('stock_quantity')->default(0);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
 
-            // Foreign key constraints
+            // foreign keys
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('sub_category_id')->references('id')->on('sub_categories')->onDelete('cascade');
             $table->foreign('productunit_id')->references('id')->on('product_units')->onDelete('cascade');
         });
     }

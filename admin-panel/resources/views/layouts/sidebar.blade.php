@@ -128,7 +128,12 @@
                 </li>
 
 
-
+ <li class="nav-item">
+                    <a href="{{ route('discounts.index') }}" class="nav-link">
+                        <i class="bi bi-credit-card-2-front-fill"></i> <!-- Bootstrap Icons -->
+                        <span>Discounts</span>
+                    </a>
+                </li>
 
 
                 <li class="nav-item">
