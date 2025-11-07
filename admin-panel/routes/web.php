@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\StockController;
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
@@ -140,6 +141,18 @@ Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('
 Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customerEdit');
 Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customerUpdate');
 Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customerDelete');
+
+
+// Stock crud
+Route::get('/stocks',             [StockController::class, 'index'])->name('stockIndex');
+Route::get('/stocks/create',      [StockController::class, 'create'])->name('stockCreate');
+Route::post('/stocks',            [StockController::class, 'store'])->name('stockStore');
+Route::get('/stocks/{stock}/edit',[StockController::class, 'edit'])->name('stockEdit');
+Route::put('/stocks/{stock}',     [StockController::class, 'update'])->name('stockUpdate');
+Route::delete('/stocks/{stock}',  [StockController::class, 'destroy'])->name('stockDelete');
+
+
+
 
 
 

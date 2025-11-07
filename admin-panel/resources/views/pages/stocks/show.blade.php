@@ -1,23 +1,22 @@
 @extends('master')
 
 @section('content')
-<div class="container mt-4">
-    <h2>Stock Movement Details</h2>
+<div class="container">
+    <h1>Stock Details</h1>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Stock #{{ $stock->id }}</h5>
 
-    <table class="table table-bordered">
-        <tr><th>ID</th><td>{{ $stock->id }}</td></tr>
-        <tr><th>Product</th><td>{{ $stock->product->name ?? $stock->product_name }}</td></tr>
-        <tr><th>Transaction Type</th><td>{{ ucfirst($stock->transaction_type) }}</td></tr>
-        <tr><th>Quantity</th><td>{{ $stock->quantity }}</td></tr>
-        <tr><th>Stock After</th><td>{{ $stock->stock_after }}</td></tr>
-        <tr><th>Note</th><td>{{ $stock->note ?? '-' }}</td></tr>
-        <tr><th>Date</th><td>{{ $stock->movement_date }}</td></tr>
-    </table>
+            <p class="card-text"><strong>Product ID:</strong> {{ $stock->product_id }}</p>
+            <p class="card-text"><strong>Quantity:</strong> {{ $stock->quantity }}</p>
+            <p class="card-text"><strong>User:</strong> {{ optional($stock->user)->name ?? '-' }}</p>
+            <p class="card-text"><strong>Created At:</strong> {{ $stock->created_at->format('Y-m-d H:i') }}</p>
+            <p class="card-text"><strong>Updated At:</strong> {{ $stock->updated_at->format('Y-m-d H:i') }}</p>
 
-    <a href="{{ route('stocks.index') }}" class="btn btn-secondary">Back to List</a>
+            <a href="{{ route('stockEdit', $stock->id) }}" class="btn btn-warning">Edit</a>
+            <a href="{{ route('stockIndex') }}" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
 </div>
 @endsection

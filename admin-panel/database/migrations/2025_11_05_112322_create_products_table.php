@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('barcode', 100)->unique()->nullable();
             $table->text('description')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate(); // added useCurrentOnUpdate
 
             // foreign keys
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
@@ -34,6 +34,15 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // ফরেন কীগুলো ড্রপ করার জন্য প্রথমে Schema::table ব্যবহার করতে হয়
+        Schema::table('products', function (Blueprint $table) {
+            // সমস্ত ফরেন কী ড্রপ করুন
+            $table->dropForeign(['category_id']);
+            $table->dropForeign(['sub_category_id']);
+            $table->dropForeign(['productunit_id']);
+        });
+
+        // সব ফরেন কী ড্রপ করার পর টেবিলটি ড্রপ করুন
         Schema::dropIfExists('products');
     }
 };

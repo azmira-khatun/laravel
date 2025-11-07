@@ -14,15 +14,15 @@ class CreateSubCategoriesTable extends Migration
     public function up()
     {
         Schema::create('sub_categories', function (Blueprint $table) {
-            $table->bigIncrements('id');                          // id BIGINT [pk, increment]
-            $table->string('name', 150)->nullable(false);         // name VARCHAR(150) [not null]
-            $table->unsignedBigInteger('category_id');            // category_id BIGINT [not null]
-            $table->timestamps();                                 // created_at and updated_at with default now()
+            $table->bigIncrements('id');                        // id BIGINT [pk, increment]
+            $table->string('name', 150)->nullable(false);      // name VARCHAR(150) [not null]
+            $table->unsignedBigInteger('category_id');          // category_id BIGINT [not null]
+            $table->timestamps();                              // created_at and updated_at with default now()
 
             // Foreign key constraint
             $table->foreign('category_id')
-                  ->references('id')->on('categories')             // assuming table name is categories
-                  ->onDelete('cascade');                           // delete behaviour — আপনি চাইলেই change করতে পারেন
+                  ->references('id')->on('categories')         // assuming table name is categories
+                  ->onDelete('cascade');                       // delete behaviour
         });
     }
 
@@ -33,6 +33,12 @@ class CreateSubCategoriesTable extends Migration
      */
     public function down()
     {
+        // ফরেন কী জনিত ত্রুটি এড়াতে এই দুটি লাইন যোগ করা হয়েছে
+        Schema::disableForeignKeyConstraints();
+
         Schema::dropIfExists('sub_categories');
+
+        // রোলব্যাক হয়ে গেলে আবার ফরেন কী চেক চালু করা
+        Schema::enableForeignKeyConstraints();
     }
 }

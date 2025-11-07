@@ -3,50 +3,77 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stock;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class StockController extends Controller
 {
-    public function index()
+public function index()
+{
+    // Pagination যুক্ত করা হলো — প্রতি পেজে ১০ রেকর্ড দেখাবে
+    $stocks = Stock::with(['product','user'])
+                   ->paginate(10);
+
+    return view('pages.stocks.index', compact('stocks'));
+}
+
+
+
+
+    public function create()
     {
-        $stocks = Stock::with(['product', 'user'])->get();
-        return response()->json($stocks);
+        $products = Product::all();
+        $users = User::all();
+        return view('pages.stocks.create', compact('products', 'users'));
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'product_id' => 'required|exists:products,id|unique:stocks,product_id',
             'quantity'   => 'required|integer|min:0',
             'user_id'    => 'nullable|exists:users,id',
         ]);
 
-        $stock = Stock::create($validated);
+        Stock::create($request->only(['product_id','quantity','user_id']));
 
-        return response()->json($stock, 201);
+        return redirect()->route('stockIndex')
+                         ->with('success', 'Stock created successfully.');
     }
 
     public function show(Stock $stock)
     {
-        return response()->json($stock->load(['product', 'user']));
+        $stock->load(['product','user']);
+        return view('pages.stocks.show', compact('stock'));
+    }
+
+    public function edit(Stock $stock)
+    {
+        $products = Product::all();
+        $users = User::all();
+        return view('pages.stocks.edit', compact('stock','products','users'));
     }
 
     public function update(Request $request, Stock $stock)
     {
-        $validated = $request->validate([
-            'product_id' => 'sometimes|required|exists:products,id|unique:stocks,product_id,'.$stock->id,
-            'quantity'   => 'sometimes|required|integer|min:0',
+        $request->validate([
+            'product_id' => 'required|exists:products,id|unique:stocks,product_id,'.$stock->id,
+            'quantity'   => 'required|integer|min:0',
             'user_id'    => 'nullable|exists:users,id',
         ]);
 
-        $stock->update($validated);
+        $stock->update($request->only(['product_id','quantity','user_id']));
 
-        return response()->json($stock);
+        return redirect()->route('stockIndex')
+                         ->with('success', 'Stock updated successfully.');
     }
 
     public function destroy(Stock $stock)
     {
         $stock->delete();
-        return response()->json(null, 204);
+
+        return redirect()->route('stockIndex')
+                         ->with('success', 'Stock deleted successfully.');
     }
 }
