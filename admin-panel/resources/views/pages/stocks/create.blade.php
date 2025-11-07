@@ -14,8 +14,16 @@
         @csrf
 
         <div class="mb-3">
-            <label for="product_id" class="form-label">Product ID</label>
-            <input type="number" name="product_id" id="product_id" class="form-control" value="{{ old('product_id') }}" required>
+            <label for="product_id" class="form-label">Product</label>
+            <select name="product_id" id="product_id" class="form-control" required>
+                <option value="">-- Select Product --</option>
+                @foreach($products as $product)
+                    <option value="{{ $product->id }}"
+                        {{ old('product_id') == $product->id ? 'selected' : '' }}>
+                        {{ $product->name }}
+                    </option>
+                @endforeach
+            </select>
             @error('product_id')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -23,7 +31,10 @@
 
         <div class="mb-3">
             <label for="quantity" class="form-label">Quantity</label>
-            <input type="number" name="quantity" id="quantity" class="form-control" value="{{ old('quantity', 0) }}" required min="0">
+            <input type="number" name="quantity" id="quantity"
+                   class="form-control"
+                   value="{{ old('quantity', 0) }}"
+                   required min="0">
             @error('quantity')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -31,7 +42,15 @@
 
         <div class="mb-3">
             <label for="user_id" class="form-label">User (optional)</label>
-            <input type="number" name="user_id" id="user_id" class="form-control" value="{{ old('user_id') }}">
+            <select name="user_id" id="user_id" class="form-control">
+                <option value="">-- Select User (or leave empty) --</option>
+                @foreach($users as $user)
+                    <option value="{{ $user->id }}"
+                        {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                        {{ $user->name }}
+                    </option>
+                @endforeach
+            </select>
             @error('user_id')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
