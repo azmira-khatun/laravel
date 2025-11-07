@@ -147,6 +147,15 @@
 
 
 
+
+                     <li class="nav-item">
+                        <a href="{{ route('expiredProductsIndex') }}" class="nav-link">
+                        <i class="bi bi-credit-card-2-front-fill"></i> <!-- Bootstrap Icons -->
+                        <span>Expired Product</span>
+                         </a>
+                           </li>
+
+
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-warehouse"></i>

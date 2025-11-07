@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\ExpiredProductController;
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
@@ -151,6 +152,13 @@ Route::get('/stocks/{stock}/edit',[StockController::class, 'edit'])->name('stock
 Route::put('/stocks/{stock}',     [StockController::class, 'update'])->name('stockUpdate');
 Route::delete('/stocks/{stock}',  [StockController::class, 'destroy'])->name('stockDelete');
 
+// Expired Products CRUD
+Route::get('/expired_products',             [ExpiredProductController::class, 'index'])->name('expiredProductsIndex');
+Route::get('/expired_products/create',      [ExpiredProductController::class, 'create'])->name('expiredProductsCreate');
+Route::post('/expired_products',            [ExpiredProductController::class, 'store'])->name('expiredProductsStore');
+Route::get('/expired_products/{expiredProduct}/edit',[ExpiredProductController::class, 'edit'])->name('expiredProductsEdit');
+Route::put('/expired_products/{expiredProduct}',     [ExpiredProductController::class, 'update'])->name('expiredProductsUpdate');
+Route::delete('/expired_products/{expiredProduct}',  [ExpiredProductController::class, 'destroy'])->name('expiredProductsDelete');
 
 
 

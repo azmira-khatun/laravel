@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('barcode', 100)->unique()->nullable();
             $table->text('description')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate(); // added useCurrentOnUpdate
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
-            // foreign keys
+            // Foreign keys
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('sub_category_id')->references('id')->on('sub_categories')->onDelete('cascade');
             $table->foreign('productunit_id')->references('id')->on('product_units')->onDelete('cascade');
@@ -32,17 +32,29 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+public function down(): void
     {
-        // ফরেন কীগুলো ড্রপ করার জন্য প্রথমে Schema::table ব্যবহার করতে হয়
+        // 1. Rollback সফল করার জন্য নির্ভরশীল টেবিলের সমস্যা এড়াতে এটি ব্যবহার করুন
+        Schema::disableForeignKeyConstraints();
+
         Schema::table('products', function (Blueprint $table) {
-            // সমস্ত ফরেন কী ড্রপ করুন
-            $table->dropForeign(['category_id']);
-            $table->dropForeign(['sub_category_id']);
-            $table->dropForeign(['productunit_id']);
+            // 2. প্রতিটি ফরেন কী ড্রপ করার চেষ্টা করুন।
+            // যদি কী না থাকে (ত্রুটি 1091), তবে তা উপেক্ষা করা হবে।
+            $foreignKeys = ['category_id', 'sub_category_id', 'productunit_id'];
+
+            foreach ($foreignKeys as $key) {
+                try {
+                    $table->dropForeign([$key]);
+                } catch (\Exception $e) {
+                    // Foreign key does not exist, ignore the error (ত্রুটি উপেক্ষা করুন)
+                }
+            }
         });
 
-        // সব ফরেন কী ড্রপ করার পর টেবিলটি ড্রপ করুন
+        // 3. টেবিলটি ড্রপ করুন
         Schema::dropIfExists('products');
+
+        // 4. কাজ শেষে আবার ফরেন কী চেক চালু করুন
+        Schema::enableForeignKeyConstraints();
     }
 };
