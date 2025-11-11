@@ -9,6 +9,7 @@ use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ExpiredProductController;
+use App\Http\Controllers\DamageProductController;
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
@@ -67,6 +68,14 @@ Route::get('/sub-categories/{subCategory}/edit', [SubCategoryController::class, 
 Route::put('/sub-categories/{subCategory}', [SubCategoryController::class, 'update'])->name('subCategory.update');
 Route::delete('/sub-categories/{subCategory}', [SubCategoryController::class, 'destroy'])->name('subCategory.destroy');
 
+// Damage Products
+Route::get('/damage-products', [DamageProductController::class, 'index'])->name('damageProduct.index');
+Route::get('/damage-products/create', [DamageProductController::class, 'create'])->name('damageProduct.create');
+Route::post('/damage-products', [DamageProductController::class, 'store'])->name('damageProduct.store');
+Route::get('/damage-products/{damageProduct}/edit', [DamageProductController::class, 'edit'])->name('damageProduct.edit');
+Route::put('/damage-products/{damageProduct}', [DamageProductController::class, 'update'])->name('damageProduct.update');
+Route::delete('/damage-products/{damageProduct}', [DamageProductController::class, 'destroy'])->name('damageProduct.destroy');
+Route::get('/damage-products/{damageProduct}', [DamageProductController::class, 'show'])->name('damageProduct.show');
 
 
 
@@ -109,13 +118,13 @@ Route::delete('/products/{product}', [ProductController::class, 'destroy'])->nam
 
 // discount
 
-Route::get('/discounts',         [DiscountController::class, 'index'])->name('discounts.index');
-Route::get('/discounts/create',  [DiscountController::class, 'create'])->name('discounts.create');
-Route::post('/discounts',        [DiscountController::class, 'store'])->name('discounts.store');
-Route::get('/discounts/{discount}',       [DiscountController::class, 'show'])->name('discounts.show');
-Route::get('/discounts/{discount}/edit',  [DiscountController::class, 'edit'])->name('discounts.edit');
-Route::put('/discounts/{discount}',       [DiscountController::class, 'update'])->name('discounts.update');
-Route::delete('/discounts/{discount}',    [DiscountController::class, 'destroy'])->name('discounts.destroy');
+Route::get('/discounts', [DiscountController::class, 'index'])->name('discounts.index');
+Route::get('/discounts/create', [DiscountController::class, 'create'])->name('discounts.create');
+Route::post('/discounts', [DiscountController::class, 'store'])->name('discounts.store');
+Route::get('/discounts/{discount}', [DiscountController::class, 'show'])->name('discounts.show');
+Route::get('/discounts/{discount}/edit', [DiscountController::class, 'edit'])->name('discounts.edit');
+Route::put('/discounts/{discount}', [DiscountController::class, 'update'])->name('discounts.update');
+Route::delete('/discounts/{discount}', [DiscountController::class, 'destroy'])->name('discounts.destroy');
 
 
 
@@ -145,20 +154,20 @@ Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->
 
 
 // Stock crud
-Route::get('/stocks',             [StockController::class, 'index'])->name('stockIndex');
-Route::get('/stocks/create',      [StockController::class, 'create'])->name('stockCreate');
-Route::post('/stocks',            [StockController::class, 'store'])->name('stockStore');
-Route::get('/stocks/{stock}/edit',[StockController::class, 'edit'])->name('stockEdit');
-Route::put('/stocks/{stock}',     [StockController::class, 'update'])->name('stockUpdate');
-Route::delete('/stocks/{stock}',  [StockController::class, 'destroy'])->name('stockDelete');
+Route::get('/stocks', [StockController::class, 'index'])->name('stockIndex');
+Route::get('/stocks/create', [StockController::class, 'create'])->name('stockCreate');
+Route::post('/stocks', [StockController::class, 'store'])->name('stockStore');
+Route::get('/stocks/{stock}/edit', [StockController::class, 'edit'])->name('stockEdit');
+Route::put('/stocks/{stock}', [StockController::class, 'update'])->name('stockUpdate');
+Route::delete('/stocks/{stock}', [StockController::class, 'destroy'])->name('stockDelete');
 
 // Expired Products CRUD
-Route::get('/expired_products',             [ExpiredProductController::class, 'index'])->name('expiredProductsIndex');
-Route::get('/expired_products/create',      [ExpiredProductController::class, 'create'])->name('expiredProductsCreate');
-Route::post('/expired_products',            [ExpiredProductController::class, 'store'])->name('expiredProductsStore');
-Route::get('/expired_products/{expiredProduct}/edit',[ExpiredProductController::class, 'edit'])->name('expiredProductsEdit');
-Route::put('/expired_products/{expiredProduct}',     [ExpiredProductController::class, 'update'])->name('expiredProductsUpdate');
-Route::delete('/expired_products/{expiredProduct}',  [ExpiredProductController::class, 'destroy'])->name('expiredProductsDelete');
+Route::get('/expired_products', [ExpiredProductController::class, 'index'])->name('expiredProductsIndex');
+Route::get('/expired_products/create', [ExpiredProductController::class, 'create'])->name('expiredProductsCreate');
+Route::post('/expired_products', [ExpiredProductController::class, 'store'])->name('expiredProductsStore');
+Route::get('/expired_products/{expiredProduct}/edit', [ExpiredProductController::class, 'edit'])->name('expiredProductsEdit');
+Route::put('/expired_products/{expiredProduct}', [ExpiredProductController::class, 'update'])->name('expiredProductsUpdate');
+Route::delete('/expired_products/{expiredProduct}', [ExpiredProductController::class, 'destroy'])->name('expiredProductsDelete');
 
 
 

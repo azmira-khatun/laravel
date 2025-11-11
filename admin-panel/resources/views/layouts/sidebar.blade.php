@@ -62,7 +62,7 @@
                     </a>
                 </li>
 
- <li class="nav-item">
+                <li class="nav-item">
                     <a href="{{ url('/sub-categories') }}" class="nav-link">
                         <i class="bi bi-tags"></i>
                         <p>Sub Category <span class="badge badge-info right">6</span></p>
@@ -83,6 +83,14 @@
                     <a href="{{ url('/products') }}" class="nav-link">
                         <i class="bi bi-cart-check-fill"></i>
                         <p>Product</p>
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a href="{{ route('damageProduct.index') }}" class="nav-link">
+                        <i class="bi bi-people-fill"></i>
+                        <p>Damage Products</p>
                     </a>
                 </li>
 
@@ -128,32 +136,32 @@
                 </li>
 
 
-                     <li class="nav-item">
-                         <a href="{{ route('discounts.index') }}" class="nav-link">
+                <li class="nav-item">
+                    <a href="{{ route('discounts.index') }}" class="nav-link">
                         <i class="bi bi-credit-card-2-front-fill"></i> <!-- Bootstrap Icons -->
                         <span>Discounts</span>
-                        </a>
-                         </li>
+                    </a>
+                </li>
 
 
 
-                     <li class="nav-item">
-                        <a href="{{ route('stockIndex') }}" class="nav-link">
+                <li class="nav-item">
+                    <a href="{{ route('stockIndex') }}" class="nav-link">
                         <i class="bi bi-credit-card-2-front-fill"></i> <!-- Bootstrap Icons -->
                         <span>Stocks</span>
-                         </a>
-                           </li>
+                    </a>
+                </li>
 
 
 
 
 
-                     <li class="nav-item">
-                        <a href="{{ route('expiredProductsIndex') }}" class="nav-link">
+                <li class="nav-item">
+                    <a href="{{ route('expiredProductsIndex') }}" class="nav-link">
                         <i class="bi bi-credit-card-2-front-fill"></i> <!-- Bootstrap Icons -->
                         <span>Expired Product</span>
-                         </a>
-                           </li>
+                    </a>
+                </li>
 
 
                 <li class="nav-item">
