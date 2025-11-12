@@ -177,14 +177,13 @@ Route::delete('/expired_products/{expiredProduct}', [ExpiredProductController::c
 
 // 🧾 Purchases Routes
 
-Route::get('/purchases/history', [PurchaseController::class, 'history'])->name('purchasesHistory');
-Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchasesCreate');
-Route::post('/purchases/store', [PurchaseController::class, 'store'])->name('purchasesStore');
-Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchasesShow');
-Route::get('/purchases/{purchase}/edit', [PurchaseController::class, 'edit'])->name('purchasesEdit');
-Route::put('/purchases/{purchase}', [PurchaseController::class, 'update'])->name('purchasesUpdate');
-Route::delete('/purchases/{purchase}', [PurchaseController::class, 'destroy'])->name('purchasesDelete');
-
+Route::get('/purchases/history', [PurchaseController::class, 'history'])->name('purchases.history');
+Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchases.create');
+Route::post('/purchases', [PurchaseController::class, 'store'])->name('purchases.store');
+Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchases.show');
+Route::get('/purchases/{purchase}/edit', [PurchaseController::class, 'edit'])->name('purchases.edit');
+Route::put('/purchases/{purchase}', [PurchaseController::class, 'update'])->name('purchases.update');
+Route::delete('/purchases/{purchase}', [PurchaseController::class, 'destroy'])->name('purchases.destroy');
 
 
 Route::get('/purchase-items', [PurchaseItemController::class, 'index'])->name('purchaseItems.index');

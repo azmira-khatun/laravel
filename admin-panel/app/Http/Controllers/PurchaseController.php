@@ -3,126 +3,116 @@
 namespace App\Http\Controllers;
 
 use App\Models\Purchase;
-use App\Models\Vendor;
-use App\Models\Product;
 use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
-    // Purchase History
+    /**
+     * Display all purchases (history view).
+     */
     public function history()
     {
-        // vendor এবং product উভয় সম্পর্কসহ লোড করা
-        $purchases = Purchase::with(['vendor', 'product'])
-            ->latest()
-            ->paginate(10);
+        $purchases = Purchase::with(['vendor', 'user', 'product', 'productUnit', 'paymentMethod'])
+                              ->orderBy('purchase_date', 'desc')
+                              ->get();
 
-        return view('pages.purchases.history', compact('purchases'));
+        return view('pages.purchases.index', compact('purchases'));
     }
 
-    // Show Create Form
+    /**
+     * Show the form for creating a new purchase.
+     */
     public function create()
     {
-        $vendors = Vendor::all();
-        $products = Product::all();
-
-        return view('pages.purchases.create', compact('vendors', 'products'));
+        // You should pass dropdown data here (vendors, products, units, payment methods)
+        return view('pages.purchases.create');
     }
 
-    // Store Purchase
+    /**
+     * Store a newly created purchase in storage.
+     */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'vendor_id' => 'required|exists:vendors,id',
-            'product_id' => 'required|exists:products,id',
-            'invoice_no' => 'required|unique:purchases,invoice_no',
-            'purchase_date' => 'required|date',
-            'product_quantity' => 'required|integer|min:1',
-            'product_price' => 'required|numeric|min:0',
-            'paid_amount' => 'required|numeric|min:0',
-            'discount_amount' => 'nullable|numeric|min:0',
-            'tax_amount' => 'nullable|numeric|min:0',
-            'shipping_cost' => 'nullable|numeric|min:0',
-            'payment_status' => 'required|string|in:pending,paid,partial',
-            'payment_method' => 'required|string|max:50',
-            'receive_date' => 'nullable|date',
-            'note' => 'nullable|string',
-            'status' => 'required|string|in:active,cancelled',
+        $data = $request->validate([
+            'vendor_id'         => 'required|integer|exists:vendors,id',
+            'user_id'           => 'nullable|integer|exists:users,id',
+            'product_id'        => 'required|integer|exists:products,id|unique:purchases,product_id',
+            'subtotal_amount'   => 'required|numeric',
+            'productunit_id'    => 'required|integer|exists:product_units,id',
+            'discount_amount'   => 'nullable|numeric',
+            'tax_amount'        => 'nullable|numeric',
+            'shipping_cost'     => 'nullable|numeric',
+            'total_cost'        => 'required|numeric',
+            'paid_amount'       => 'nullable|numeric',
+            'due_amount'        => 'required|numeric',
+            'payment_method_id' => 'required|integer|exists:payment_methods,id',
+            'payment_status'    => 'required|string|max:100',
+            'purchase_date'     => 'nullable|date',
+            'receive_date'      => 'nullable|date',
         ]);
 
-        // হিসাব করা হচ্ছে
-        $validated['subtotal_amount'] = $validated['product_price'] * $validated['product_quantity'];
-        $validated['total_cost'] = $validated['subtotal_amount']
-            + ($validated['tax_amount'] ?? 0)
-            + ($validated['shipping_cost'] ?? 0)
-            - ($validated['discount_amount'] ?? 0);
-        $validated['due_amount'] = $validated['total_cost'] - $validated['paid_amount'];
+        Purchase::create($data);
 
-        Purchase::create($validated);
-
-        return redirect()->route('purchasesHistory')
-            ->with('message', 'Purchase added successfully!');
+        return redirect()->route('purchases.history')
+                         ->with('success', 'Purchase successfully created.');
     }
 
-    // Show Purchase
+    /**
+     * Display the specified purchase.
+     */
     public function show(Purchase $purchase)
     {
-        // vendor ও product লোড আছে যদি না থাকে
-        $purchase->load(['vendor', 'product']);
+        $purchase->load(['vendor', 'user', 'product', 'productUnit', 'paymentMethod']);
 
-        return view('pages.purchases.show', compact('purchase'));
+        return view('purchases.show', compact('purchase'));
     }
 
-    // Edit Purchase
+    /**
+     * Show the form for editing the specified purchase.
+     */
     public function edit(Purchase $purchase)
     {
-        $vendors = Vendor::all();
-        $products = Product::all();
-
-        return view('pages.purchases.edit', compact('purchase', 'vendors', 'products'));
+        // Pass the purchase and dropdown data to the view
+        return view('purchases.edit', compact('purchase'));
     }
 
-    // Update Purchase
+    /**
+     * Update the specified purchase in storage.
+     */
     public function update(Request $request, Purchase $purchase)
     {
-        $validated = $request->validate([
-            'vendor_id' => 'required|exists:vendors,id',
-            'product_id' => 'required|exists:products,id',
-            'invoice_no' => 'required|unique:purchases,invoice_no,' . $purchase->id,
-            'purchase_date' => 'required|date',
-            'product_quantity' => 'required|integer|min:1',
-            'product_price' => 'required|numeric|min:0',
-            'paid_amount' => 'required|numeric|min:0',
-            'discount_amount' => 'nullable|numeric|min:0',
-            'tax_amount' => 'nullable|numeric|min:0',
-            'shipping_cost' => 'nullable|numeric|min:0',
-            'payment_status' => 'required|string|in:pending,paid,partial',
-            'payment_method' => 'required|string|max:50',
-            'receive_date' => 'nullable|date',
-            'note' => 'nullable|string',
-            'status' => 'required|string|in:active,cancelled',
+        $data = $request->validate([
+            'vendor_id'         => 'required|integer|exists:vendors,id',
+            'user_id'           => 'nullable|integer|exists:users,id',
+            'product_id'        => 'required|integer|exists:products,id|unique:purchases,product_id,'.$purchase->id,
+            'subtotal_amount'   => 'required|numeric',
+            'productunit_id'    => 'required|integer|exists:product_units,id',
+            'discount_amount'   => 'nullable|numeric',
+            'tax_amount'        => 'nullable|numeric',
+            'shipping_cost'     => 'nullable|numeric',
+            'total_cost'        => 'required|numeric',
+            'paid_amount'       => 'nullable|numeric',
+            'due_amount'        => 'required|numeric',
+            'payment_method_id' => 'required|integer|exists:payment_methods,id',
+            'payment_status'    => 'required|string|max:100',
+            'purchase_date'     => 'nullable|date',
+            'receive_date'      => 'nullable|date',
         ]);
 
-        // রি‑হিসাব
-        $validated['subtotal_amount'] = $validated['product_price'] * $validated['product_quantity'];
-        $validated['total_cost'] = $validated['subtotal_amount']
-            + ($validated['tax_amount'] ?? 0)
-            + ($validated['shipping_cost'] ?? 0)
-            - ($validated['discount_amount'] ?? 0);
-        $validated['due_amount'] = $validated['total_cost'] - $validated['paid_amount'];
+        $purchase->update($data);
 
-        $purchase->update($validated);
-
-        return redirect()->route('purchasesHistory')
-            ->with('message', 'Purchase updated successfully!');
+        return redirect()->route('purchases.history')
+                         ->with('success', 'Purchase successfully updated.');
     }
 
-    // Delete Purchase
+    /**
+     * Remove the specified purchase from storage.
+     */
     public function destroy(Purchase $purchase)
     {
         $purchase->delete();
 
-        return redirect()->route('purchasesHistory')
-            ->with('message', 'Purchase deleted successfully!');
+        return redirect()->route('purchases.history')
+                         ->with('success', 'Purchase successfully deleted.');
     }
 }
