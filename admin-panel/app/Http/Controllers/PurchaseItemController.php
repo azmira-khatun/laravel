@@ -7,87 +7,62 @@ use Illuminate\Http\Request;
 
 class PurchaseItemController extends Controller
 {
-    // Display all purchase items
     public function index()
     {
-        $purchaseItems = PurchaseItem::all();
-        return view('pages.purchase_items.index', compact('purchaseItems'));
+        $items = PurchaseItem::with(['purchase','product'])->orderBy('id','desc')->paginate(10);
+        return view('pages.purchase_items.index', compact('items'));
     }
 
-    // Show the form to create a new purchase item
     public function create()
     {
-        $purchases = \App\Models\Purchase::all();
-        $products = \App\Models\Product::all();
-        $units = \App\Models\ProductUnit::all();
-
-        return view('pages.purchase_items.create', compact('purchases', 'products', 'units'));
+        return view('pages.purchase_items.create');
     }
 
-    // Store a new purchase item
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'purchase_id' => 'required|integer|exists:purchases,id',
-            'product_id' => 'required|integer|exists:products,id',
-            'unit_id' => 'required|integer|exists:product_units,id',
-            'quantity' => 'required|numeric|min:0.01',
-            'unit_price' => 'required|numeric|min:0',
-            'purchased_date' => 'required|date',
+        $data = $request->validate([
+            'purchase_id'   => 'required|integer|exists:purchases,id',
+            'product_id'    => 'required|integer|exists:products,id',
+            'quantity'      => 'required|integer|min:1',
+            'unit_price'    => 'required|numeric',
+            'line_discount' => 'nullable|numeric',
+            'line_total'    => 'required|numeric',
         ]);
 
-        $validated['total_price'] = $validated['quantity'] * $validated['unit_price'];
+        PurchaseItem::create($data);
 
-        PurchaseItem::create($validated);
-
-        return redirect()->route('purchaseItems.index')->with('success', 'Purchase Item added successfully.');
+        return redirect()->route('purchase_items.index')->with('success','Purchase item added.');
     }
 
-    // Show a single purchase item
-    public function show($id)
+    public function show(PurchaseItem $purchaseItem)
     {
-        $item = PurchaseItem::with(['purchase', 'product', 'unit'])->findOrFail($id);
-        return view('pages.purchase_items.show', compact('item'));
+        return view('purchase_items.show', compact('purchaseItem'));
     }
 
-    // Show the form to edit an existing purchase item
-    public function edit($id)
+    public function edit(PurchaseItem $purchaseItem)
     {
-        $item = PurchaseItem::findOrFail($id);
-        $purchases = \App\Models\Purchase::all();
-        $products = \App\Models\Product::all();
-        $units = \App\Models\ProductUnit::all();
-
-        return view('pages.purchase_items.edit', compact('item', 'purchases', 'products', 'units'));
+        return view('pages.purchase_items.edit', compact('purchaseItem'));
     }
 
-    // Update an existing purchase item
-    public function update(Request $request, $id)
+    public function update(Request $request, PurchaseItem $purchaseItem)
     {
-        $item = PurchaseItem::findOrFail($id);
-
-        $validated = $request->validate([
-            'purchase_id' => 'required|integer|exists:purchases,id',
-            'product_id' => 'required|integer|exists:products,id',
-            'unit_id' => 'required|integer|exists:product_units,id',
-            'quantity' => 'required|numeric|min:0.01',
-            'unit_price' => 'required|numeric|min:0',
-            'purchased_date' => 'required|date',
+        $data = $request->validate([
+            'purchase_id'   => 'required|integer|exists:purchases,id',
+            'product_id'    => 'required|integer|exists:products,id',
+            'quantity'      => 'required|integer|min:1',
+            'unit_price'    => 'required|numeric',
+            'line_discount' => 'nullable|numeric',
+            'line_total'    => 'required|numeric',
         ]);
 
-        $validated['total_price'] = $validated['quantity'] * $validated['unit_price'];
+        $purchaseItem->update($data);
 
-        $item->update($validated);
-
-        return redirect()->route('purchaseItems.index')->with('success', 'Purchase Item updated successfully.');
+        return redirect()->route('purchase_items.index')->with('success','Purchase item updated.');
     }
 
-    // Delete a purchase item
-    public function destroy($id)
+    public function destroy(PurchaseItem $purchaseItem)
     {
-        $item = PurchaseItem::findOrFail($id);
-        $item->delete();
-
-        return redirect()->route('purchaseItems.index')->with('success', 'Purchase Item deleted successfully.');
+        $purchaseItem->delete();
+        return redirect()->route('purchase_items.index')->with('success','Purchase item deleted.');
     }
 }

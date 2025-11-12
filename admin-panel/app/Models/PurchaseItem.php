@@ -6,45 +6,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class PurchaseItem extends Model
 {
-    protected $table = 'purchase_items';
+    protected $table   = 'purchase_items';
+    public    $timestamps = false;  // যদি শুধু created_at থাকে, updated_at না থাকে
 
     protected $fillable = [
         'purchase_id',
         'product_id',
-        'unit_id',
         'quantity',
         'unit_price',
-        'total_price',
-        'purchased_date',
-    ];
-
-    // Cast purchased_date to a Carbon instance
-    protected $casts = [
-        'purchased_date' => 'datetime',
+        'line_discount',
+        'line_total',
     ];
 
     // Relationships
-
-    // Belongs to a purchase
     public function purchase()
     {
-        return $this->belongsTo(Purchase::class, 'purchase_id');
+        return $this->belongsTo(Purchase::class);
     }
 
-    // Belongs to a product
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Product::class);
     }
-    public function items()
-    {
-        return $this->hasMany(PurchaseItem::class);
-    }
-
-    // Belongs to a unit
-    public function unit()
-    {
-        return $this->belongsTo(ProductUnit::class, 'unit_id');
-    }
-
 }

@@ -1,48 +1,21 @@
 @extends('master')
 
 @section('content')
-    <div class="container mt-4">
-        <div class="card">
-            <div class="card-header">
-                <h2>Purchase Item Details</h2>
-            </div>
-            <div class="card-body">
-                <table class="table table-bordered">
-                    <tr>
-                        <th>ID</th>
-                        <td>{{ $item->id }}</td>
-                    </tr>
-                    <tr>
-                        <th>Purchase</th>
-                        <td>{{ $item->purchase->invoice_no ?? '-' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Product</th>
-                        <td>{{ $item->product->name ?? '-' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Unit</th>
-                        <td>{{ $item->unit->name ?? '-' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Quantity</th>
-                        <td>{{ $item->quantity }}</td>
-                    </tr>
-                    <tr>
-                        <th>Unit Price</th>
-                        <td>{{ number_format($item->unit_price, 2) }}</td>
-                    </tr>
-                    <tr>
-                        <th>Total Price</th>
-                        <td>{{ number_format($item->total_price, 2) }}</td>
-                    </tr>
-                    <tr>
-                        <th>Purchased Date</th>
-                        <td>{{ $item->purchased_date->format('Y-m-d') }}</td>
-                    </tr>
-                </table>
-                <a href="{{ route('purchaseItems.index') }}" class="btn btn-secondary">Back</a>
-            </div>
+<div class="container mt-4">
+    <h2>Purchase Item Details #{{ $purchaseItem->id }}</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Purchase ID:</strong> {{ $purchaseItem->purchase_id }}</p>
+            <p><strong>Product:</strong> {{ $purchaseItem->product->name ?? '-' }}</p>
+            <p><strong>Quantity:</strong> {{ $purchaseItem->quantity }}</p>
+            <p><strong>Unit Price:</strong> {{ number_format($purchaseItem->unit_price,2) }}</p>
+            <p><strong>Line Discount:</strong> {{ number_format($purchaseItem->line_discount,2) }}</p>
+            <p><strong>Line Total:</strong> {{ number_format($purchaseItem->line_total,2) }}</p>
+            <p><strong>Created At:</strong> {{ $purchaseItem->created_at }}</p>
         </div>
     </div>
+
+    <a href="{{ route('purchaseItems.index') }}" class="btn btn-secondary mt-3">Back to List</a>
+</div>
 @endsection
