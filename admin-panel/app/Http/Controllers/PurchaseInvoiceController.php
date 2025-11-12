@@ -8,61 +8,44 @@ use Illuminate\Http\Request;
 
 class PurchaseInvoiceController extends Controller
 {
+    // List all invoices
     public function index()
     {
-        $invoices = PurchaseInvoice::with('purchase')->latest()->paginate(10);
-        return view('purchase_invoices.index', compact('invoices'));
+        $purchaseInvoices = PurchaseInvoice::orderBy('id', 'desc')->paginate(10);
+        return view('pages.purchase_invoices.index', compact('purchaseInvoices'));
     }
 
+    // Show form to create a new invoice
     public function create()
     {
-        $purchases = Purchase::all();
-        return view('purchase_invoices.create', compact('purchases'));
+        $purchases = Purchase::all(); // For selecting purchase
+        return view('pages.purchase_invoices.create', compact('purchases'));
     }
 
+    // Store a new invoice
     public function store(Request $request)
     {
-        $request->validate([
-            'invoice_number' => 'required|string|max:100|unique:purchase_invoices',
-            'purchase_id' => 'required|exists:purchases,id|unique:purchase_invoices',
+        $data = $request->validate([
+            'purchase_id' => 'required|integer|exists:purchases,id',
+            'invoice_number' => 'required|unique:purchase_invoices,invoice_number',
             'invoice_date' => 'required|date',
             'total_amount' => 'required|numeric',
             'due_amount' => 'nullable|numeric',
             'payment_status' => 'nullable|string|max:50',
         ]);
 
-        PurchaseInvoice::create($request->all());
+        PurchaseInvoice::create($data);
 
-        return redirect()->route('purchaseInvoices.index')->with('success', 'Purchase invoice created successfully.');
+        return redirect()->route('purchaseInvoices.index')->with('success', 'Invoice created successfully.');
     }
 
+    // Show a single invoice
     public function show(PurchaseInvoice $purchaseInvoice)
     {
         return view('purchase_invoices.show', compact('purchaseInvoice'));
     }
 
-    public function edit(PurchaseInvoice $purchaseInvoice)
-    {
-        $purchases = Purchase::all();
-        return view('purchase_invoices.edit', compact('purchaseInvoice', 'purchases'));
-    }
-
-    public function update(Request $request, PurchaseInvoice $purchaseInvoice)
-    {
-        $request->validate([
-            'invoice_number' => 'required|string|max:100|unique:purchase_invoices,invoice_number,' . $purchaseInvoice->id,
-            'purchase_id' => 'required|exists:purchases,id|unique:purchase_invoices,purchase_id,' . $purchaseInvoice->id,
-            'invoice_date' => 'required|date',
-            'total_amount' => 'required|numeric',
-            'due_amount' => 'nullable|numeric',
-            'payment_status' => 'nullable|string|max:50',
-        ]);
-
-        $purchaseInvoice->update($request->all());
-
-        return redirect()->route('purchaseInvoices.index')->with('success', 'Invoice updated successfully.');
-    }
-
+    // Optional: delete an invoice
     public function destroy(PurchaseInvoice $purchaseInvoice)
     {
         $purchaseInvoice->delete();

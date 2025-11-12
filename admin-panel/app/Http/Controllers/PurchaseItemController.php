@@ -7,17 +7,24 @@ use Illuminate\Http\Request;
 
 class PurchaseItemController extends Controller
 {
+    // Display a paginated list of purchase items
     public function index()
     {
-        $items = PurchaseItem::with(['purchase','product'])->orderBy('id','desc')->paginate(10);
+        // Eager load purchase, product, and product unit
+        $items = PurchaseItem::with(['purchase', 'product', 'productunit'])
+                             ->orderBy('id', 'desc')
+                             ->paginate(10);
+
         return view('pages.purchase_items.index', compact('items'));
     }
 
+    // Show form to create a new purchase item
     public function create()
     {
         return view('pages.purchase_items.create');
     }
 
+    // Store a new purchase item in the database
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -31,19 +38,23 @@ class PurchaseItemController extends Controller
 
         PurchaseItem::create($data);
 
-        return redirect()->route('purchase_items.index')->with('success','Purchase item added.');
+        return redirect()->route('purchase_items.index')
+                         ->with('success', 'Purchase item added successfully.');
     }
 
+    // Show details of a single purchase item
     public function show(PurchaseItem $purchaseItem)
     {
-        return view('purchase_items.show', compact('purchaseItem'));
+        return view('pages.purchase_items.show', compact('purchaseItem'));
     }
 
+    // Show form to edit an existing purchase item
     public function edit(PurchaseItem $purchaseItem)
     {
         return view('pages.purchase_items.edit', compact('purchaseItem'));
     }
 
+    // Update an existing purchase item
     public function update(Request $request, PurchaseItem $purchaseItem)
     {
         $data = $request->validate([
@@ -57,12 +68,16 @@ class PurchaseItemController extends Controller
 
         $purchaseItem->update($data);
 
-        return redirect()->route('purchase_items.index')->with('success','Purchase item updated.');
+        return redirect()->route('purchase_items.index')
+                         ->with('success', 'Purchase item updated successfully.');
     }
 
+    // Delete a purchase item
     public function destroy(PurchaseItem $purchaseItem)
     {
         $purchaseItem->delete();
-        return redirect()->route('purchase_items.index')->with('success','Purchase item deleted.');
+
+        return redirect()->route('purchase_items.index')
+                         ->with('success', 'Purchase item deleted successfully.');
     }
 }

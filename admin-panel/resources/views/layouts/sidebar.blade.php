@@ -148,6 +148,17 @@
                     </a>
                 </li>
 
+
+ <li class="nav-item">
+                    <a class="nav-link" href="{{ route('purchaseInvoices.index') }}">
+                        Purchase Invoice
+                    </a>
+                </li>
+
+
+
+
+
                 <li class="nav-item">
                     <a href="{{ route('paymentMethodIndex') }}" class="nav-link">
                         <i class="bi bi-credit-card-2-front-fill"></i> <!-- Bootstrap Icons -->

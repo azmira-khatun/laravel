@@ -210,15 +210,13 @@ Route::delete('/sales-items/{salesItem}', [SalesItemController::class, 'destroy'
 
 
 // 🧾 Purchase Invoices Routes
+// Purchase Invoices Routes
+
 Route::get('/purchase-invoices', [PurchaseInvoiceController::class, 'index'])->name('purchaseInvoices.index');
 Route::get('/purchase-invoices/create', [PurchaseInvoiceController::class, 'create'])->name('purchaseInvoices.create');
 Route::post('/purchase-invoices', [PurchaseInvoiceController::class, 'store'])->name('purchaseInvoices.store');
 Route::get('/purchase-invoices/{purchaseInvoice}', [PurchaseInvoiceController::class, 'show'])->name('purchaseInvoices.show');
-Route::get('/purchase-invoices/{purchaseInvoice}/edit', [PurchaseInvoiceController::class, 'edit'])->name('purchaseInvoices.edit');
-Route::put('/purchase-invoices/{purchaseInvoice}', [PurchaseInvoiceController::class, 'update'])->name('purchaseInvoices.update');
 Route::delete('/purchase-invoices/{purchaseInvoice}', [PurchaseInvoiceController::class, 'destroy'])->name('purchaseInvoices.destroy');
-
-
 
 
 
