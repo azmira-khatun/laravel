@@ -11,6 +11,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\ExpiredProductController;
 use App\Http\Controllers\DamageProductController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SalesItemController;
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
@@ -195,6 +196,21 @@ Route::get('/sales/{sale}', [SaleController::class, 'show'])->name('sales.show')
 Route::get('/sales/{sale}/edit', [SaleController::class, 'edit'])->name('sales.edit');
 Route::put('/sales/{sale}', [SaleController::class, 'update'])->name('sales.update');
 Route::delete('/sales/{sale}', [SaleController::class, 'destroy'])->name('sales.destroy');
+
+
+Route::get('/sales-items', [SalesItemController::class, 'index'])->name('salesItems.index');
+Route::get('/sales-items/create', [SalesItemController::class, 'create'])->name('salesItems.create');
+Route::post('/sales-items', [SalesItemController::class, 'store'])->name('salesItems.store');
+Route::get('/sales-items/{salesItem}', [SalesItemController::class, 'show'])->name('salesItems.show');
+Route::get('/sales-items/{salesItem}/edit', [SalesItemController::class, 'edit'])->name('salesItems.edit');
+Route::put('/sales-items/{salesItem}', [SalesItemController::class, 'update'])->name('salesItems.update');
+Route::delete('/sales-items/{salesItem}', [SalesItemController::class, 'destroy'])->name('salesItems.destroy');
+
+
+
+
+
+
 
 
 Route::get('/purchase-items', [PurchaseItemController::class, 'index'])->name('purchaseItems.index');

@@ -123,6 +123,17 @@
                 </li>
 
 
+
+<li class="nav-item">
+                    <a href="{{ route('salesItems.index') }}" class="nav-link">
+                        <i class="bi bi-people-fill"></i>
+                        <p>Sale Items</p>
+                    </a>
+                </li>
+
+
+
+
                 <li class="nav-item">
                     <a href="{{ route('purchaseItems.index') }}" class="nav-link">
                         <i class="bi bi-people-fill"></i>
