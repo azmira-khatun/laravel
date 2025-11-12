@@ -10,6 +10,7 @@ use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ExpiredProductController;
 use App\Http\Controllers\DamageProductController;
+use App\Http\Controllers\SaleController;
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
@@ -184,6 +185,16 @@ Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])->name('
 Route::get('/purchases/{purchase}/edit', [PurchaseController::class, 'edit'])->name('purchases.edit');
 Route::put('/purchases/{purchase}', [PurchaseController::class, 'update'])->name('purchases.update');
 Route::delete('/purchases/{purchase}', [PurchaseController::class, 'destroy'])->name('purchases.destroy');
+
+
+
+Route::get('/sales', [SaleController::class, 'index'])->name('sales.index');
+Route::get('/sales/create', [SaleController::class, 'create'])->name('sales.create');
+Route::post('/sales', [SaleController::class, 'store'])->name('sales.store');
+Route::get('/sales/{sale}', [SaleController::class, 'show'])->name('sales.show');
+Route::get('/sales/{sale}/edit', [SaleController::class, 'edit'])->name('sales.edit');
+Route::put('/sales/{sale}', [SaleController::class, 'update'])->name('sales.update');
+Route::delete('/sales/{sale}', [SaleController::class, 'destroy'])->name('sales.destroy');
 
 
 Route::get('/purchase-items', [PurchaseItemController::class, 'index'])->name('purchaseItems.index');

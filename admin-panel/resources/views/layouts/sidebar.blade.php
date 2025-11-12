@@ -114,6 +114,15 @@
                     </a>
                 </li>
 
+
+<li class="nav-item">
+                    <a href="{{ route('sales.index') }}" class="nav-link">
+                        <i class="bi bi-people-fill"></i>
+                        <p>Sales</p>
+                    </a>
+                </li>
+
+
                 <li class="nav-item">
                     <a href="{{ route('purchaseItems.index') }}" class="nav-link">
                         <i class="bi bi-people-fill"></i>
